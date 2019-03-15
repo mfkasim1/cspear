@@ -2,6 +2,7 @@
 #define CSPEAR_TOOLS_ASSERT_H
 
 #include <iostream>
+#include <stdexcept>
 #define _cspear_assert(i,c) if(!(i)) throw std::runtime_error(c);
 
 namespace csp {

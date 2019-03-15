@@ -43,11 +43,33 @@ namespace csp {
     const std::vector<I>& shape() const { return shape_; }
 
     // casting and device movement
-    template <typename T2> array<T2,I> astype() const;
+    template <typename T2> array<T2,I> astype() const; // ???
 
     // reshape and resize
     array<T,I>& resize(I sz);
     array<T,I>& reshape(std::initializer_list<I> shape);
+
+    // binary operations
+    array<T,I> operator+(const array<T,I>& a);
+    array<T,I> operator-(const array<T,I>& a);
+    array<T,I> operator*(const array<T,I>& a);
+    array<T,I> operator/(const array<T,I>& a);
+    array<T,I> operator+(T a);
+    array<T,I> operator-(T a);
+    array<T,I> operator*(T a);
+    array<T,I> operator/(T a);
+    array<T,I> rdiv(T a);
+
+    // binary operations (inplace)
+    array<T,I>& operator+=(const array<T,I>& a);
+    array<T,I>& operator-=(const array<T,I>& a);
+    array<T,I>& operator*=(const array<T,I>& a);
+    array<T,I>& operator/=(const array<T,I>& a);
+    array<T,I>& operator+=(T a);
+    array<T,I>& operator-=(T a);
+    array<T,I>& operator*=(T a);
+    array<T,I>& operator/=(T a);
+    array<T,I>& rdiv_(T a);
 
     private:
     void _realloc();

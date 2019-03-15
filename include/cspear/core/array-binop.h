@@ -1,0 +1,173 @@
+#ifndef CSPEAR_CORE_ARRAY_BINOP_H
+#define CSPEAR_CORE_ARRAY_BINOP_H
+
+#include <cspear/core/array.h>
+#include <cspear/tools/assert.h>
+
+namespace csp {
+  // binary operations
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator+(const array<T,I>& a) {
+    _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = data_[i] + a.data_[i];
+    }
+    return res;
+  }
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator-(const array<T,I>& a) {
+    _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = data_[i] - a.data_[i];
+    }
+    return res;
+  }
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator*(const array<T,I>& a) {
+    _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = data_[i] * a.data_[i];
+    }
+    return res;
+  }
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator/(const array<T,I>& a) {
+    _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = data_[i] / a.data_[i];
+    }
+    return res;
+  }
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator+(T a) {
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = data_[i] + a;
+    }
+    return res;
+  }
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator-(T a) {
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = data_[i] - a;
+    }
+    return res;
+  }
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator*(T a) {
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = data_[i] * a;
+    }
+    return res;
+  }
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator/(T a) {
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = data_[i] / a;
+    }
+    return res;
+  }
+  template <typename T, typename I>
+  array<T,I> array<T,I>::rdiv(T a) {
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = a / data_[i];
+    }
+    return res;
+  }
+
+  // binary operations (inplace)
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::operator+=(const array<T,I>& a) {
+    _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] += a.data_[i];
+    }
+    return *this;
+  }
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::operator-=(const array<T,I>& a) {
+    _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] -= a.data_[i];
+    }
+    return *this;
+  }
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::operator*=(const array<T,I>& a) {
+    _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] *= a.data_[i];
+    }
+    return *this;
+  }
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::operator/=(const array<T,I>& a) {
+    _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] /= a.data_[i];
+    }
+    return *this;
+  }
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::operator+=(T a) {
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] += a;
+    }
+    return *this;
+  }
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::operator-=(T a) {
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] -= a;
+    }
+    return *this;
+  }
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::operator*=(T a) {
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] *= a;
+    }
+    return *this;
+  }
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::operator/=(T a) {
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] /= a;
+    }
+    return *this;
+  }
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::rdiv_(T a) {
+    for (I i = 0; i < sz_; ++i) {
+      data_[i] = a / data_[i];
+    }
+    return *this;
+  }
+}
+
+#endif

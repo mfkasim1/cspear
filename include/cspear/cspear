@@ -2,6 +2,7 @@
 #define CSPEAR_ARRAY_H
 
 #include <cspear/core/array.h>
+#include <cspear/core/array-binop.h>
 #include <cspear/lib/init.h>
 
 #endif
