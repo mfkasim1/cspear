@@ -1,0 +1,10 @@
+#ifndef CSPEAR_ARRAY_H
+#define CSPEAR_ARRAY_H
+
+#include <cspear/core/array.h>
+#include <cspear/core/array_init.h>
+#include <cspear/core/array_reshape_resize.h>
+
+#include <cspear/lib/init.h>
+
+#endif
