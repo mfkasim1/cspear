@@ -3,9 +3,10 @@
 
 #include <cstring>
 #include <vector>
+#include <stdexcept>
 #include <initializer_list>
 #include <cspear/core/utils.h>
-#include <cspear/core/assert.h>
+#include <cspear/tools/assert.h>
 #include <cspear/tools/misc.h>
 #include <cspear/tools/types.h>
 
@@ -109,7 +110,7 @@ namespace csp {
   void array<T,I>::_realloc() {
     if (allocated_) std::free(data_);
     data_ = (T*) std::malloc(sz_*sizeof(*data_));
-    assert_cpu(data_, "CPU memory allocation failed.");
+    tools::_assert_cpu(data_, "CPU memory allocation failed.");
     allocated_ = true;
   }
 
@@ -128,8 +129,8 @@ namespace csp {
 
   template <typename T, typename I>
   array<T,I>& array<T,I>::reshape(std::initializer_list<I> shape) {
-    I sz = _calculate_size(shape);
-    assert(sz == sz_);
+    I sz = tools::_prod_init_list(shape);
+    _cspear_assert(sz == sz_, "The size must stay the same");
     shape_ = shape;
     return *this;
   }
