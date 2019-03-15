@@ -74,6 +74,11 @@ namespace csp {
     array<T,I>& operator/=(T a);
     array<T,I>& rdiv_(T a);
 
+    // reduction operator
+    T sum();
+    array<T,I> sum(I axis);
+    array<T,I> sum(std::initializer_list<I> axes);
+
     private:
     void _realloc();
     void _copy(const array<T,I>& a);
