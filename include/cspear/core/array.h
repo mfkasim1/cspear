@@ -14,9 +14,10 @@ namespace csp {
   template <typename T, typename I=tools::Int>
   class array {
     T* data_;
-    I sz_; // total number of elements
+    I sz_ = 0; // total number of elements
+    I prev_allocated_size_ = 0;
     std::vector<I> shape_;
-    bool allocated_; // flag to indicate if the data is allocated by us
+    bool allocated_ = false; // flag to indicate if the data is allocated by us
 
     public:
     // constructors and destructor
@@ -55,10 +56,7 @@ namespace csp {
 
   // constructors and destructor
   template <typename T, typename I>
-  array<T,I>::array() {
-    sz_ = 0;
-    allocated_ = false;
-  }
+  array<T,I>::array() {}
 
   template <typename T, typename I>
   array<T,I>::array(std::initializer_list<T> elmts) {
@@ -72,9 +70,14 @@ namespace csp {
   }
 
   template <typename T, typename I>
-  array<T,I>::array(const T* a, I sz) : array(sz) {
+  array<T,I>::array(const T* a, I sz) {
     // copy the data
+    sz_ = sz;
+    _realloc();
     std::copy(a, a+sz, data_);
+
+    // set the shape
+    shape_ = {sz_};
   }
 
   template <typename T, typename I>
@@ -141,10 +144,15 @@ namespace csp {
   // private functions
   template <typename T, typename I>
   void array<T,I>::_realloc() {
+    if (sz_ == prev_allocated_size_) {
+      return;
+    }
+
     if (allocated_) std::free(data_);
     data_ = (T*) std::malloc(sz_*sizeof(*data_));
     tools::_assert_cpu(data_, "CPU memory allocation failed.");
     allocated_ = true;
+    prev_allocated_size_ = sz_;
   }
 
   template <typename T, typename I>
