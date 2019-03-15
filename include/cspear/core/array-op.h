@@ -1,10 +1,21 @@
-#ifndef CSPEAR_CORE_ARRAY_BINOP_H
-#define CSPEAR_CORE_ARRAY_BINOP_H
+#ifndef CSPEAR_CORE_ARRAY_OP_H
+#define CSPEAR_CORE_ARRAY_OP_H
 
 #include <cspear/core/array.h>
 #include <cspear/tools/assert.h>
 
 namespace csp {
+  // unary operations
+  template <typename T, typename I>
+  array<T,I> array<T,I>::operator-() {
+    array<T,I> res;
+    res.resize(sz_);
+    for (I i = 0; i < sz_; ++i) {
+      res.data_[i] = -data_[i];
+    }
+    return res;
+  }
+
   // binary operations
   template <typename T, typename I>
   array<T,I> array<T,I>::operator+(const array<T,I>& a) {

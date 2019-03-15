@@ -49,6 +49,9 @@ namespace csp {
     array<T,I>& resize(I sz);
     array<T,I>& reshape(std::initializer_list<I> shape);
 
+    // unary operations
+    array<T,I> operator-();
+
     // binary operations
     array<T,I> operator+(const array<T,I>& a);
     array<T,I> operator-(const array<T,I>& a);
