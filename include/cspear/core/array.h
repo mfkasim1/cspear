@@ -50,8 +50,10 @@ namespace csp {
 
     private:
     void _realloc();
+    void _copy(const array<T,I>& a);
   };
 
+  // constructors and destructor
   template <typename T, typename I>
   array<T,I>::array() {
     sz_ = 0;
@@ -90,13 +92,8 @@ namespace csp {
 
   template <typename T, typename I>
   array<T,I>::array(const array<T,I>& a) {
-    // copy the data
-    sz_ = a.size();
-    _realloc();
-    std::copy(a.data(), a.data()+sz_, data_);
-
-    // copy the shape as well
-    shape_ = a.shape();
+    // copy the array to self
+    _copy(a);
   }
 
   template <typename T, typename I>
@@ -106,14 +103,20 @@ namespace csp {
     }
   }
 
+  // assignment operator and copy
   template <typename T, typename I>
-  void array<T,I>::_realloc() {
-    if (allocated_) std::free(data_);
-    data_ = (T*) std::malloc(sz_*sizeof(*data_));
-    tools::_assert_cpu(data_, "CPU memory allocation failed.");
-    allocated_ = true;
+  array<T,I>& array<T,I>::operator=(const array<T,I>& a) {
+    _copy(a);
+    return *this;
   }
 
+  template <typename T, typename I>
+  array<T,I> array<T,I>::copy() const {
+    array<T,I> res(*this);
+    return res;
+  }
+
+  // resize and reshaped
   template <typename T, typename I>
   array<T,I>& array<T,I>::resize(I sz) {
     if (sz_ == sz) {
@@ -133,6 +136,26 @@ namespace csp {
     _cspear_assert(sz == sz_, "The size must stay the same");
     shape_ = shape;
     return *this;
+  }
+
+  // private functions
+  template <typename T, typename I>
+  void array<T,I>::_realloc() {
+    if (allocated_) std::free(data_);
+    data_ = (T*) std::malloc(sz_*sizeof(*data_));
+    tools::_assert_cpu(data_, "CPU memory allocation failed.");
+    allocated_ = true;
+  }
+
+  template <typename T, typename I>
+  void array<T,I>::_copy(const array<T,I>& a) {
+    // copy the data
+    sz_ = a.size();
+    _realloc();
+    std::copy(a.data(), a.data()+sz_, data_);
+
+    // copy the shape as well
+    shape_ = a.shape();
   }
 }
 
