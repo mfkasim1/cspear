@@ -20,6 +20,7 @@ namespace csp {
   template <typename T, typename I>
   array<T,I> array<T,I>::operator+(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+    _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
     array<T,I> res;
     res.resize(sz_);
@@ -31,6 +32,7 @@ namespace csp {
   template <typename T, typename I>
   array<T,I> array<T,I>::operator-(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+    _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
     array<T,I> res;
     res.resize(sz_);
@@ -42,6 +44,7 @@ namespace csp {
   template <typename T, typename I>
   array<T,I> array<T,I>::operator*(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+    _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
     array<T,I> res;
     res.resize(sz_);
@@ -53,6 +56,7 @@ namespace csp {
   template <typename T, typename I>
   array<T,I> array<T,I>::operator/(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+    _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
     array<T,I> res;
     res.resize(sz_);
@@ -111,6 +115,7 @@ namespace csp {
   template <typename T, typename I>
   array<T,I>& array<T,I>::operator+=(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+    _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
     for (I i = 0; i < sz_; ++i) {
       data_[i] += a.data_[i];
@@ -120,6 +125,7 @@ namespace csp {
   template <typename T, typename I>
   array<T,I>& array<T,I>::operator-=(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+    _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
     for (I i = 0; i < sz_; ++i) {
       data_[i] -= a.data_[i];
@@ -129,6 +135,7 @@ namespace csp {
   template <typename T, typename I>
   array<T,I>& array<T,I>::operator*=(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+    _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
     for (I i = 0; i < sz_; ++i) {
       data_[i] *= a.data_[i];
@@ -138,6 +145,7 @@ namespace csp {
   template <typename T, typename I>
   array<T,I>& array<T,I>::operator/=(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
+    _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
     for (I i = 0; i < sz_; ++i) {
       data_[i] /= a.data_[i];
