@@ -39,3 +39,4 @@ CMakeFiles/*
 
 # templated source file
 include/cspear/core/array-op.h
+include/cspear/core/array-reduce.h
