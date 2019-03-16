@@ -11,28 +11,30 @@ namespace csp {
   vectype = ["const std::vector<I>&", "std::initializer_list<I>"];
   */
   template <typename T, typename I=tools::Int>
-  array<T,I> zeros(@vectype@ shape) {
+  array<T,I> empty(@vectype@ shape) {
     array<T,I> res;
     I sz = tools::_prod_init_list(shape);
     res.resize(sz).reshape(shape);
+    return res;
+  }
+
+  template <typename T, typename I=tools::Int>
+  array<T,I> zeros(@vectype@ shape) {
+    array<T,I> res = empty(shape);
     std::memset(res.data(), 0, res.size()*sizeof(T));
     return res;
   }
 
   template <typename T, typename I=tools::Int>
   array<T,I> ones(@vectype@ shape) {
-    array<T,I> res;
-    I sz = tools::_prod_init_list(shape);
-    res.resize(sz).reshape(shape);
+    array<T,I> res = empty(shape);
     std::fill(res.data(), res.data()+res.size(), (T)1);
     return res;
   }
 
   template <typename T, typename I=tools::Int>
   array<T,I> full(@vectype@ shape, T value) {
-    array<T,I> res;
-    I sz = tools::_prod_init_list(shape);
-    res.resize(sz).reshape(shape);
+    array<T,I> res = empty(shape);
     std::fill(res.data(), res.data()+res.size(), (T)value);
     return res;
   }
