@@ -3,7 +3,7 @@ import re
 import ast
 import argparse
 
-fext = ".template"
+fext = ".hh"
 
 def main():
     parser = argparse.ArgumentParser("Writing a file with template for "\
