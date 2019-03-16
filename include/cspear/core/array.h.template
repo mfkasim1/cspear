@@ -53,11 +53,10 @@ namespace csp {
     array<T,I>& expand_dims(I idx);
     array<T,I>& ravel();
 
-    // unary operations
+    // unary (arithmetic) operations
     array<T,I> operator-();
 
-    // binary operations
-
+    // binary (arithmetic) operations
     /**begin repeatop
     opname = ["operator+", "operator-", "operator*", "operator/"];
     */
@@ -69,8 +68,7 @@ namespace csp {
     /**end repeatop**/
     array<T,I> rdiv(T a);
 
-    // binary operations (inplace)
-
+    // binary (arithmetic) operations (inplace)
     /**begin repeatop
     opname = ["operator+=", "operator-=", "operator*=", "operator/="];
     */
@@ -83,7 +81,6 @@ namespace csp {
     array<T,I>& rdiv_(T a);
 
     // comparison operations
-
     /**begin repeatop
     cmpopname = ["operator>", "operator<", "operator>=", "operator<=",
                   "operator==", "operator!="];
@@ -98,7 +95,6 @@ namespace csp {
     // logical operations (only for array<bool,I>)
 
     // binary logical operations
-
     /**begin repeatop
     boolopname = ["operator&&", "operator||"];
     */
@@ -110,7 +106,6 @@ namespace csp {
     /**end repeatop**/
 
     // unary logical operations
-
     /**begin repeatop
     boolopname = ["operator!"];
     */
