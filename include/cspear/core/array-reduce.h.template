@@ -2,18 +2,29 @@
 #define CSPEAR_CORE_ARRAY_REDUCE_H
 
 #include <initializer_list>
+#include <limits>
 #include <cspear/core/array.h>
 #include <cspear/tools/assert.h>
 
 namespace csp {
+  /**begin repeatop
+  opname = ["sum", "max", "min"];
+  rinit_val = ["0",
+               "std::numeric_limits<T>::lowest()",
+               "std::numeric_limits<T>::max()"];
+  op_r_data_i = ["r += data_[i]",
+                 "r = std::max(r, data_[i])",
+                 "r = std::min(r, data_[i])"];
+  */
   template <typename T, typename I>
-  T sum() {
-    T r = 0;
+  T array<T,I>::@opname@() {
+    T r = @rinit_val@;
     for (I i = 0; i < sz_; ++i) {
-      r += data_[i];
+      @op_r_data_i@;
     }
     return r;
   }
+  /**end repeatop**/
 
   template <typename T, typename I>
   array<T,I> sum(I axis) {

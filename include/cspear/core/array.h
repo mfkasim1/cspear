@@ -76,8 +76,14 @@ namespace csp {
 
     // reduction operator
     T sum();
+    T max();
+    T min();
     array<T,I> sum(I axis);
+    array<T,I> max(I axis);
+    array<T,I> min(I axis);
     array<T,I> sum(std::initializer_list<I> axes);
+    array<T,I> max(std::initializer_list<I> axes);
+    array<T,I> sin(std::initializer_list<I> axes);
 
     private:
     void _realloc();

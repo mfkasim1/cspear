@@ -3,6 +3,7 @@
 
 #include <cspear/core/array.h>
 #include <cspear/core/array-op.h>
+#include <cspear/core/array-reduce.h>
 #include <cspear/lib/init.h>
 
 #endif
