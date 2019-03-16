@@ -95,6 +95,28 @@ namespace csp {
     /**end repeattype**/
     /**end repeatop**/
 
+    // logical operations (only for array<bool,I>)
+
+    // binary logical operations
+
+    /**begin repeatop
+    boolopname = ["operator&&", "operator||"];
+    */
+    /**begin repeattype
+    tpename = ["const array<T,I>&", "T"];
+    */
+    array<bool,I> @boolopname@(@tpename@);
+    /**end repeattype**/
+    /**end repeatop**/
+
+    // unary logical operations
+
+    /**begin repeatop
+    boolopname = ["operator!"];
+    */
+    array<bool,I> @boolopname@();
+    /**end repeatop**/
+
     // reduction operator
     /**begin repeat
     reducefn = ["sum", "max", "min", "mean", "std"];
