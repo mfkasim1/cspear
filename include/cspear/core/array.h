@@ -48,6 +48,8 @@ namespace csp {
     // reshape and resize
     array<T,I>& resize(I sz);
     array<T,I>& reshape(std::initializer_list<I> shape);
+    array<T,I>& squeeze();
+    array<T,I>& expand_dims(I idx);
 
     // unary operations
     array<T,I> operator-();
@@ -174,6 +176,33 @@ namespace csp {
     I sz = tools::_prod_init_list(shape);
     _cspear_assert(sz == sz_, "The size must stay the same");
     shape_ = shape;
+    return *this;
+  }
+
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::squeeze() {
+    I nd = ndim();
+    if (nd <= 1) {
+      return *this;
+    }
+
+    // get the new shape
+    std::vector<I> newshape;
+    newshape.reserve(nd);
+    for (I i = 0; i < nd; ++i) {
+      if (shape_[i] == 1) continue;
+      newshape.push_back(shape_[i]);
+    }
+    shape_ = newshape;
+
+    return *this;
+  }
+
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::expand_dims(I idx) {
+    _cspear_assert((idx >= 0) && (idx <= ndim()),
+                   "Expanded index must be between [0,ndim()]");
+    shape_.insert(idx, 1);
     return *this;
   }
 
