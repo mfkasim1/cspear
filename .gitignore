@@ -40,3 +40,5 @@ CMakeFiles/*
 # templated source file
 include/cspear/core/array-op.h
 include/cspear/core/array-reduce.h
+include/cspear/lib/init.h
+include/cspear/random/init.h
