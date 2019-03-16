@@ -1,8 +1,15 @@
 shape
 array:
-  * reduce (sum, max, min)
-  * contiguous slicing
+  * clip
+  * filter
+  * interp
   * broadcast
+  * histogram
+  * operator_bool
+  * reduce with given axis/axes
+
+  * reduce (mean, std)
+  * contiguous slicing
   * matmul
   * expand_dims
   * non-contiguous slicing
