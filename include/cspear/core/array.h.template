@@ -51,6 +51,7 @@ namespace csp {
     array<T,I>& reshape(const std::vector<I>& shape);
     array<T,I>& squeeze();
     array<T,I>& expand_dims(I idx);
+    array<T,I>& ravel();
 
     // unary operations
     array<T,I> operator-();
@@ -227,6 +228,13 @@ namespace csp {
     _cspear_assert((idx >= 0) && (idx <= ndim()),
                    "Expanded index must be between [0,ndim()]");
     shape_.insert(idx, 1);
+    return *this;
+  }
+
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::ravel() {
+    I sz = tools::_prod_init_list(shape_);
+    shape_ = {sz};
     return *this;
   }
 
