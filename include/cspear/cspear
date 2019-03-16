@@ -5,6 +5,7 @@
 #include <cspear/core/array-op.h>
 #include <cspear/core/array-reduce.h>
 #include <cspear/core/array-math.h>
+#include <cspear/core/array-bool-op.h>
 #include <cspear/lib/init.h>
 #include <cspear/lib/math.h>
 #include <cspear/random/init.h>

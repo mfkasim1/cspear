@@ -40,6 +40,7 @@ CMakeFiles/*
 # templated source file
 include/cspear/core/array.h
 include/cspear/core/array-op.h
+include/cspear/core/array-bool-op.h
 include/cspear/core/array-reduce.h
 include/cspear/core/array-math.h
 include/cspear/lib/init.h
