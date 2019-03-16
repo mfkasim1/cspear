@@ -48,6 +48,7 @@ namespace csp {
     // reshape and resize
     array<T,I>& resize(I sz);
     array<T,I>& reshape(std::initializer_list<I> shape);
+    array<T,I>& reshape(const std::vector<I>& shape);
     array<T,I>& squeeze();
     array<T,I>& expand_dims(I idx);
 
@@ -173,6 +174,14 @@ namespace csp {
 
   template <typename T, typename I>
   array<T,I>& array<T,I>::reshape(std::initializer_list<I> shape) {
+    I sz = tools::_prod_init_list(shape);
+    _cspear_assert(sz == sz_, "The size must stay the same");
+    shape_ = shape;
+    return *this;
+  }
+
+  template <typename T, typename I>
+  array<T,I>& array<T,I>::reshape(const std::vector<I>& shape) {
     I sz = tools::_prod_init_list(shape);
     _cspear_assert(sz == sz_, "The size must stay the same");
     shape_ = shape;
