@@ -134,6 +134,14 @@ namespace csp {
     array<T,I>& @mathfn@_(); // in-place
     /**end repeat**/
 
+    // misc functions
+    array<T,I> clip_lb(T lb) const;
+    array<T,I> clip_ub(T ub) const;
+    array<T,I> clip(T lb, T ub) const;
+    array<T,I>& clip_lb_(T lb);
+    array<T,I>& clip_ub_(T ub);
+    array<T,I>& clip_(T lb, T ub);
+
     private:
     void _realloc();
     void _copy(const array<T,I>& a);

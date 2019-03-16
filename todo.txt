@@ -1,6 +1,5 @@
 shape
 array:
-  * clip
   * filter
   * interp
   * broadcast

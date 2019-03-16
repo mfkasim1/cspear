@@ -7,6 +7,7 @@
 #include <cspear/core/array-math.h>
 #include <cspear/core/array-cmp-op.h>
 #include <cspear/core/array-logical-op.h>
+#include <cspear/core/array-misc.h>
 #include <cspear/lib/init.h>
 #include <cspear/lib/math.h>
 #include <cspear/random/init.h>
