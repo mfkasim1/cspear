@@ -9,6 +9,5 @@ array:
   * reduce (mean, std)
   * contiguous slicing
   * matmul
-  * expand_dims
   * non-contiguous slicing
   * casting
