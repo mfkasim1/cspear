@@ -82,15 +82,16 @@ namespace csp {
     /**end repeatop**/
     array<T,I>& rdiv_(T a);
 
-    // boolean binary operations
+    // comparison operations
+
     /**begin repeatop
-    boolopname = ["operator>", "operator<", "operator>=", "operator<=",
+    cmpopname = ["operator>", "operator<", "operator>=", "operator<=",
                   "operator==", "operator!="];
     */
     /**begin repeattype
     tpename = ["const array<T,I>&", "T"];
     */
-    array<bool,I> @boolopname@(@tpename@);
+    array<bool,I> @cmpopname@(@tpename@);
     /**end repeattype**/
     /**end repeatop**/
 

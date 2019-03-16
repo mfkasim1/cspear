@@ -1,24 +1,24 @@
-#ifndef CSPEAR_CORE_ARRAY_BOOL_OP_H
-#define CSPEAR_CORE_ARRAY_BOOL_OP_H
+#ifndef CSPEAR_CORE_ARRAY_CMP_OP_H
+#define CSPEAR_CORE_ARRAY_CMP_OP_H
 
 #include <cspear/core/array.h>
+#include <cspear/lib/init.h>
 #include <cspear/tools/assert.h>
 
 namespace csp {
-  // binary boolean operations
+  // binary comparison operations
 
   /**begin repeatop
-  boolopname = ["operator>", "operator<", "operator>=", "operator<=",
+  cmpopname = ["operator>", "operator<", "operator>=", "operator<=",
                 "operator==", "operator!="];
   op = [">", "<", ">=", "<=", "==", "!="];
   */
   template <typename T, typename I>
-  array<bool,I> array<T,I>::@boolopname@(const array<T,I>& a) {
+  array<bool,I> array<T,I>::@cmpopname@(const array<T,I>& a) {
     _cspear_assert(sz_ == a.size(), "The operand must have the same size.");
     _cspear_assert(shape_ == a.shape_, "The operand must have the same shape.");
 
-    array<bool,I> res;
-    res.resize(sz_);
+    array<bool,I> res = empty<bool,I>(shape_);
     for (I i = 0; i < sz_; ++i) {
       res.data_[i] = data_[i] @op@ a.data_[i];
     }
@@ -27,14 +27,13 @@ namespace csp {
   /**end repeatop**/
 
   /**begin repeatop
-  boolopname = ["operator>", "operator<", "operator>=", "operator<=",
+  cmpopname = ["operator>", "operator<", "operator>=", "operator<=",
                 "operator==", "operator!="];
   op = [">", "<", ">=", "<=", "==", "!="];
   */
   template <typename T, typename I>
-  array<bool,I> array<T,I>::@boolopname@(T a) {
-    array<T,I> res;
-    res.resize(sz_);
+  array<bool,I> array<T,I>::@cmpopname@(T a) {
+    array<bool,I> res = empty<bool,I>(shape_);
     for (I i = 0; i < sz_; ++i) {
       res.data_[i] = data_[i] @op@ a;
     }
