@@ -29,7 +29,7 @@ namespace csp {
     ~array();
 
     // indexing
-    T& operator[](I idx) { return data_[idx]; }
+    inline T& operator[](I idx) { return data_[idx]; }
 
     // assignment operator and copy
     array<T,I>& operator=(const array<T,I>& a);
@@ -56,37 +56,52 @@ namespace csp {
     array<T,I> operator-();
 
     // binary operations
-    array<T,I> operator+(const array<T,I>& a);
-    array<T,I> operator-(const array<T,I>& a);
-    array<T,I> operator*(const array<T,I>& a);
-    array<T,I> operator/(const array<T,I>& a);
-    array<T,I> operator+(T a);
-    array<T,I> operator-(T a);
-    array<T,I> operator*(T a);
-    array<T,I> operator/(T a);
+
+    /**begin repeatop
+    opname = ["operator+", "operator-", "operator*", "operator/"];
+    */
+    /**begin repeattype
+    tpename = ["const array<T,I>&", "T"];
+    */
+    array<T,I> @opname@(@tpename@ a);
+    /**end repeattype**/
+    /**end repeatop**/
     array<T,I> rdiv(T a);
 
     // binary operations (inplace)
-    array<T,I>& operator+=(const array<T,I>& a);
-    array<T,I>& operator-=(const array<T,I>& a);
-    array<T,I>& operator*=(const array<T,I>& a);
-    array<T,I>& operator/=(const array<T,I>& a);
-    array<T,I>& operator+=(T a);
-    array<T,I>& operator-=(T a);
-    array<T,I>& operator*=(T a);
-    array<T,I>& operator/=(T a);
+
+    /**begin repeatop
+    opname = ["operator+=", "operator-=", "operator*=", "operator/="];
+    */
+    /**begin repeattype
+    tpename = ["const array<T,I>&", "T"];
+    */
+    array<T,I>& @opname@(@tpename@ a);
+    /**end repeattype**/
+    /**end repeatop**/
     array<T,I>& rdiv_(T a);
 
     // reduction operator
-    T sum();
-    T max();
-    T min();
-    array<T,I> sum(I axis);
-    array<T,I> max(I axis);
-    array<T,I> min(I axis);
-    array<T,I> sum(std::initializer_list<I> axes);
-    array<T,I> max(std::initializer_list<I> axes);
-    array<T,I> sin(std::initializer_list<I> axes);
+    /**begin repeat
+    reducefn = ["sum", "max", "min", "mean", "std"];
+    */
+    T @reducefn@();
+    array<T,I> @reducefn@(I axis);
+    array<T,I> @reducefn@(std::initializer_list<I> axes);
+    /**end repeat**/
+
+    // math functions
+    /**begin repeat
+    mathfn = ["sin", "cos", "tan", "asin", "acos", "atan", "atan2",
+              "sinh", "cosh", "tanh", "asinh", "acosh", "atanh",
+              "exp", "log", "log10", "exp2", "expm1", "log1p", "log2",
+              "sqrt", "cbrt", "sqr", "cube",
+              "erf", "erfc", "tgamma", "lgamma",
+              "ceil", "floor", "round", "fabs"];
+    */
+    array<T,I> @mathfn@() const;
+    array<T,I>& @mathfn@_(); // in-place
+    /**end repeat**/
 
     private:
     void _realloc();

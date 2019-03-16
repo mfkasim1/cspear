@@ -20,6 +20,7 @@ int main() {
   auto b = csp::random::randn<double>(a.shape());
   a += 12;
   a.rdiv_(2);
+  b.exp_();
   // b = -a;
 
   p<std::vector<double> > ({1,2,3,4,5});
