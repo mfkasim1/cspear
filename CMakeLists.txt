@@ -5,6 +5,12 @@ project(radopt)
 # * NOOPENMP: if set to 1, it forces to not using OpenMP
 # * PROFILING: if set to 1, set the profiling flag for gprof
 
+# run the srcgen in Python to generate some source files before compiling
+find_package(PythonInterp)
+if (PYTHONINTERP_FOUND)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} tools/srcgen/main.py . -r)
+endif()
+
 # set the default build type as debug
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE DEBUG)
