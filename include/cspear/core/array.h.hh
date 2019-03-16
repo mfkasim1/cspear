@@ -271,8 +271,7 @@ namespace csp {
 
   template <typename T, typename I>
   array<T,I>& array<T,I>::ravel() {
-    I sz = tools::_prod_init_list(shape_);
-    shape_ = {sz};
+    shape_ = {sz_};
     return *this;
   }
 
