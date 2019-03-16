@@ -1,12 +1,17 @@
 #ifndef CSPEAR_LIB_INIT_H
 #define CSPEAR_LIB_INIT_H
 
+#include <vector>
+#include <initializer_list>
 #include <cspear/core/array.h>
 #include <cspear/tools/misc.h>
 
 namespace csp {
+  /**begin repeat
+  vectype = ["const std::vector<I>&", "std::initializer_list<I>"];
+  */
   template <typename T, typename I=tools::Int>
-  array<T,I> zeros(std::initializer_list<I> shape) {
+  array<T,I> zeros(@vectype@ shape) {
     array<T,I> res;
     I sz = tools::_prod_init_list(shape);
     res.resize(sz).reshape(shape);
@@ -15,7 +20,7 @@ namespace csp {
   }
 
   template <typename T, typename I=tools::Int>
-  array<T,I> ones(std::initializer_list<I> shape) {
+  array<T,I> ones(@vectype@ shape) {
     array<T,I> res;
     I sz = tools::_prod_init_list(shape);
     res.resize(sz).reshape(shape);
@@ -24,14 +29,14 @@ namespace csp {
   }
 
   template <typename T, typename I=tools::Int>
-  array<T,I> full(std::initializer_list<I> shape,
-                              T value) {
+  array<T,I> full(@vectype@ shape, T value) {
     array<T,I> res;
     I sz = tools::_prod_init_list(shape);
     res.resize(sz).reshape(shape);
     std::fill(res.data(), res.data()+res.size(), (T)value);
     return res;
   }
+  /**end repeat**/
 
   template <typename T, typename I=tools::Int>
   array<T,I> arange(T begin, T end, T range) {
