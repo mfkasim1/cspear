@@ -22,11 +22,26 @@ namespace csp {
                      std::chrono::system_clock::now().time_since_epoch()).count();
     rng_type rng(seed);
 
-    // uniform random
+    // single number random generator
+    template <typename T, typename I=tools::Int>
+    T random(T lb=0, T ub=1) {
+      typename std::conditional<std::is_integral<T>::value,
+          std::uniform_int_distribution<T>,
+          std::uniform_real_distribution<T> >::type dist(lb, ub);
+      return dist(rng);
+    }
+
+    template <typename T, typename I=tools::Int>
+    array<T,I> randn(T mean=0, T std=1) {
+      std::normal_distribution<T> dist(mean, std);
+      return dist(rng);
+    }
+
     /**begin repeat
     tpename = ["const std::vector<I>&",
                "std::initializer_list<T>"];
     */
+    // uniform random
     template <typename T, typename I=tools::Int>
     array<T,I> _random(@tpename@ shape, T lb=0, T ub=1) {
       array<T,I> res = empty<T,I>(shape);
