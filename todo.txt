@@ -5,7 +5,6 @@ array:
   * interp
   * broadcast
   * histogram
-  * operator_bool
   * reduce with given axis/axes
 
   * reduce (mean, std)
