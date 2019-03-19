@@ -61,6 +61,24 @@ namespace csp {
   template <typename T, typename I,
             template<typename> typename InpView1,
             template<typename> typename InpView2,
+            typename F>
+  inline array<T,I,InpView1>& ewise_inplace_binary_op(F&& f,
+                                    array<T,I,InpView1>& arr1,
+                                    const array<T,I,InpView2>& arr2) {
+    // shape and size checking should be done outside this
+
+    // performing the iteration
+    auto it1 = EWiseIterator<T,I,InpView1>((T*)arr1.data(), arr1.view());
+    auto it2 = EWiseIterator<T,I,InpView2>((T*)arr2.data(), arr2.view());
+    for (; it1; ++it1, ++it2) {
+      f(*it1, *it2);
+    }
+    return arr1;
+  }
+
+  template <typename T, typename I,
+            template<typename> typename InpView1,
+            template<typename> typename InpView2,
             template<typename> typename ResView,
             typename F>
   array<T,I,ResView> binary_op(F&& f,
@@ -70,6 +88,23 @@ namespace csp {
     if (arr1.shape() == arr2.shape()) {
       // element wise
       return ewise_binary_op<T,I,InpView1,InpView2,ResView>(f, arr1, arr2);
+    }
+    else {
+      throw std::runtime_error("Invalid shape of the operator.\n");
+    }
+  }
+
+  template <typename T, typename I,
+            template<typename> typename InpView1,
+            template<typename> typename InpView2,
+            typename F>
+  array<T,I,InpView1>& inplace_binary_op(F&& f,
+                               array<T,I,InpView1>& arr1,
+                               const array<T,I,InpView2>& arr2) {
+    // check the shape and decide if it is element-wise or broadcases
+    if (arr1.shape() == arr2.shape()) {
+      // element wise
+      return ewise_inplace_binary_op<T,I,InpView1,InpView2>(f, arr1, arr2);
     }
     else {
       throw std::runtime_error("Invalid shape of the operator.\n");

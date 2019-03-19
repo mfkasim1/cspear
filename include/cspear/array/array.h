@@ -92,6 +92,16 @@ namespace csp {
     template <template<typename> typename View2>
     array<T,I,ContiguousView> operator/(const array<T,I,View2>& a);
 
+    // inplace binary operators
+    template <template<typename> typename View2>
+    array<T,I,View>& operator+=(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<T,I,View>& operator-=(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<T,I,View>& operator*=(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<T,I,View>& operator/=(const array<T,I,View2>& a);
+
     private:
     void _realloc();
     void _copy(const array<T,I,View>& a);
