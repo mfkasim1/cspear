@@ -2,8 +2,8 @@
 #define CSPEAR_LIB_MATH_H
 
 #include <cmath>
-#include <cspear/core/array.h>
-#include <cspear/core/array-math.h>
+#include <cspear/array/array.h>
+#include <cspear/array/array-math.h>
 #include <cspear/lib/init.h>
 
 namespace csp {

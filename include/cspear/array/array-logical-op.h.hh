@@ -1,8 +1,8 @@
-#ifndef CSPEAR_CORE_ARRAY_LOGICAL_OP_H
-#define CSPEAR_CORE_ARRAY_LOGICAL_OP_H
+#ifndef CSPEAR_ARRAY_ARRAY_LOGICAL_OP_H
+#define CSPEAR_ARRAY_ARRAY_LOGICAL_OP_H
 
 #include <type_traits>
-#include <cspear/core/array.h>
+#include <cspear/array/array.h>
 #include <cspear/lib/init.h>
 #include <cspear/tools/assert.h>
 

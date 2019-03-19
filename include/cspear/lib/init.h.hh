@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <initializer_list>
-#include <cspear/core/array.h>
+#include <cspear/array/array.h>
 #include <cspear/tools/misc.h>
 
 namespace csp {

@@ -1,9 +1,9 @@
-#ifndef CSPEAR_CORE_ARRAY_REDUCE_H
-#define CSPEAR_CORE_ARRAY_REDUCE_H
+#ifndef CSPEAR_ARRAY_ARRAY_REDUCE_H
+#define CSPEAR_ARRAY_ARRAY_REDUCE_H
 
 #include <initializer_list>
 #include <limits>
-#include <cspear/core/array.h>
+#include <cspear/array/array.h>
 #include <cspear/tools/assert.h>
 
 namespace csp {

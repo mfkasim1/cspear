@@ -7,7 +7,7 @@
 #include <vector>
 #include <type_traits>
 #include <initializer_list>
-#include <cspear/core/array.h>
+#include <cspear/array/array.h>
 #include <cspear/lib/init.h>
 #include <cspear/tools/types.h>
 #include <cspear/tools/misc.h>

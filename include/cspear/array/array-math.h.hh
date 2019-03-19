@@ -1,8 +1,8 @@
-#ifndef CSPEAR_CORE_MATH_H
-#define CSPEAR_CORE_MATH_H
+#ifndef CSPEAR_ARRAY_MATH_H
+#define CSPEAR_ARRAY_MATH_H
 
 #include <cmath>
-#include <cspear/core/array.h>
+#include <cspear/array/array.h>
 #include <cspear/lib/init.h>
 
 namespace csp {

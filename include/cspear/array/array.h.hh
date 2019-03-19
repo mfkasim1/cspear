@@ -1,11 +1,11 @@
-#ifndef CSPEAR_CORE_ARRAY_H
-#define CSPEAR_CORE_ARRAY_H
+#ifndef CSPEAR_ARRAY_ARRAY_H
+#define CSPEAR_ARRAY_ARRAY_H
 
 #include <cstring>
 #include <vector>
 #include <stdexcept>
 #include <initializer_list>
-#include <cspear/core/utils.h>
+#include <cspear/array/utils.h>
 #include <cspear/tools/assert.h>
 #include <cspear/tools/misc.h>
 #include <cspear/tools/types.h>

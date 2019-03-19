@@ -1,7 +1,7 @@
-#ifndef CSPEAR_CORE_ARRAY_OP_H
-#define CSPEAR_CORE_ARRAY_OP_H
+#ifndef CSPEAR_ARRAY_ARRAY_OP_H
+#define CSPEAR_ARRAY_ARRAY_OP_H
 
-#include <cspear/core/array.h>
+#include <cspear/array/array.h>
 #include <cspear/tools/assert.h>
 
 namespace csp {

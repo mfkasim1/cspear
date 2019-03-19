@@ -1,13 +1,13 @@
 #ifndef CSPEAR_ARRAY_H
 #define CSPEAR_ARRAY_H
 
-#include <cspear/core/array.h>
-#include <cspear/core/array-op.h>
-#include <cspear/core/array-reduce.h>
-#include <cspear/core/array-math.h>
-#include <cspear/core/array-cmp-op.h>
-#include <cspear/core/array-logical-op.h>
-#include <cspear/core/array-misc.h>
+#include <cspear/array/array.h>
+#include <cspear/array/array-op.h>
+#include <cspear/array/array-reduce.h>
+#include <cspear/array/array-math.h>
+#include <cspear/array/array-cmp-op.h>
+#include <cspear/array/array-logical-op.h>
+#include <cspear/array/array-misc.h>
 #include <cspear/lib/init.h>
 #include <cspear/lib/math.h>
 #include <cspear/random/init.h>
