@@ -1,0 +1,158 @@
+#ifndef CSPEAR_ARRAY_ARRAY_OP_H
+#define CSPEAR_ARRAY_ARRAY_OP_H
+
+// implementation of the array operations
+
+#include <cspear/array/array.h>
+#include <cspear/array/op.h>
+
+namespace csp {
+  // non inplace unary operators
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::operator-() {
+    return unary_op<T,I,View,ContiguousView>([&](T b) {return -b;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::operator+(T a) {
+    return unary_op<T,I,View,ContiguousView>([&](T b) {return b+a;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::operator-(T a) {
+    return unary_op<T,I,View,ContiguousView>([&](T b) {return b-a;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::operator*(T a) {
+    return unary_op<T,I,View,ContiguousView>([&](T b) {return b*a;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::operator/(T a) {
+    return unary_op<T,I,View,ContiguousView>([&](T b) {return b/a;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::reciprocal(T a) {
+    return unary_op<T,I,View,ContiguousView>([&](T b) {return a/b;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::clip_lb(T lb) {
+    return unary_op<T,I,View,ContiguousView>(
+      [&](T b) {return (b < lb) ? lb : b;},
+      *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::clip_ub(T ub) {
+    return unary_op<T,I,View,ContiguousView>(
+      [&](T b) {return (b > ub) ? ub : b;},
+      *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::clip(T lb, T ub) {
+    return unary_op<T,I,View,ContiguousView>(
+      [&](T b) {return (b < lb) ? lb : ((b > ub) ? ub : b);},
+      *this);
+  }
+
+  // inplace unary operators
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>& array<T,I,View>::operator+=(T a) {
+    return inplace_unary_op<T,I,View>([&](T& b) {b+=a;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>& array<T,I,View>::operator-=(T a) {
+    return inplace_unary_op<T,I,View>([&](T& b) {b-=a;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>& array<T,I,View>::operator*=(T a) {
+    return inplace_unary_op<T,I,View>([&](T& b) {b*=a;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>& array<T,I,View>::operator/=(T a) {
+    return inplace_unary_op<T,I,View>([&](T& b) {b/=a;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>& array<T,I,View>::reciprocal_(T a) {
+    return inplace_unary_op<T,I,View>([&](T& b) {b=a/b;}, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>& array<T,I,View>::clip_lb_(T lb) {
+    return inplace_unary_op<T,I,View>(
+      [&](T& b) {
+        b = (b < lb) ? lb : b;
+      }, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>& array<T,I,View>::clip_ub_(T ub) {
+    return inplace_unary_op<T,I,View>(
+      [&](T& b) {
+        b = (b > ub) ? ub : b;
+      }, *this);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>& array<T,I,View>::clip_(T lb, T ub) {
+    return inplace_unary_op<T,I,View>(
+      [&](T& b) {
+        b = (b < lb) ? lb : (b > ub ? ub : b);
+      }, *this);
+  }
+
+  // binary operators (non inplace)
+  template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
+  array<T,I,ContiguousView> array<T,I,View>::operator+(const array<T,I,View2>& a) {
+    return binary_op<T,I,View,View2,ContiguousView>(
+      [](T& b1, const T& b2) {
+        return b1 + b2;
+      },
+      *this, a
+    );
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
+  array<T,I,ContiguousView> array<T,I,View>::operator-(const array<T,I,View2>& a) {
+    return binary_op<T,I,View,View2,ContiguousView>(
+      [](T& b1, const T& b2) {
+        return b1 - b2;
+      },
+      *this, a
+    );
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
+  array<T,I,ContiguousView> array<T,I,View>::operator*(const array<T,I,View2>& a) {
+    return binary_op<T,I,View,View2,ContiguousView>(
+      [](T& b1, const T& b2) {
+        return b1 * b2;
+      },
+      *this, a
+    );
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
+  array<T,I,ContiguousView> array<T,I,View>::operator/(const array<T,I,View2>& a) {
+    return binary_op<T,I,View,View2,ContiguousView>(
+      [](T& b1, const T& b2) {
+        return b1 / b2;
+      },
+      *this, a
+    );
+  }
+}
+
+#endif

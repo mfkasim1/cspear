@@ -38,8 +38,6 @@ Makefile
 CMakeFiles/*
 
 # templated source file
-include/cspear/array/array.h
-include/cspear/array/array-op.h
 include/cspear/array/array-cmp-op.h
 include/cspear/array/array-logical-op.h
 include/cspear/array/array-reduce.h

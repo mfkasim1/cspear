@@ -4,7 +4,7 @@
 #include <cspear/views/contiguous-view.h>
 
 namespace csp {
-  template <typename T, typename I, typename View>
+  template <typename T, typename I, template<typename> typename View>
   class EWiseIterator {
     public:
     // constructor
@@ -13,7 +13,10 @@ namespace csp {
     // iterator operator
     T& operator*();
     EWiseIterator& operator++();
-    bool isvalid();
+    operator bool() const;
+
+    // indexing
+    I idx(I i);
   };
 
   // partial template specialization for different views
@@ -33,7 +36,7 @@ namespace csp {
 
     // iterator operator
     inline T& operator*() {
-      return *data;
+      return *data_;
     }
 
     inline EWiseIterator& operator++() {
@@ -42,8 +45,12 @@ namespace csp {
       return *this;
     }
 
-    inline bool isvalid() {
+    inline operator bool() const {
       return offset_ < sz_;
+    }
+
+    inline I idx(I i) {
+      return i;
     }
   };
 }

@@ -14,30 +14,34 @@ void p(const vec& v) {
 }
 
 int main() {
-  // auto a = csp::array<double>({1,2,3});
-  auto a = csp::arange<double>(10);
-  a.reshape({2,5});
-  auto b = csp::random::randn<double>(a.shape());
-  a += 12;
-  a.rdiv_(2);
-  b.exp_();
-  // b = -a;
+  auto b = csp::array<double>({1,2,3});
+  // auto a = csp::arange<double>(10);
+  // a.reshape({2,5});
+  // auto b = csp::random::randn<double>(a.shape());
+  // a += 12;
+  // a.rdiv_(2);
+  // b.exp_();
+  // // b = -a;
+  //
+  // p<std::vector<double> > ({1,2,3,4,5});
+  auto c = -b;
+  c.clip_lb_(-1);
 
-  p<std::vector<double> > ({1,2,3,4,5});
+  auto a = c / b;
 
   for (int i = 0; i < a.size(); ++i) {
     std::cout << a.data()[i] << " ";
   }
   std::cout << std::endl;
 
-  for (int i = 0; i < b.size(); ++i) {
-    std::cout << b.data()[i] << " ";
-  }
-  std::cout << std::endl;
-
-  std::cout << "max: " << a.max() << std::endl;
-  std::cout << "min: " << a.min() << std::endl;
-  std::cout << "sum: " << a.sum() << std::endl;
+  // for (int i = 0; i < b.size(); ++i) {
+  //   std::cout << b.data()[i] << " ";
+  // }
+  // std::cout << std::endl;
+  //
+  // std::cout << "max: " << a.max() << std::endl;
+  // std::cout << "min: " << a.min() << std::endl;
+  // std::cout << "sum: " << a.sum() << std::endl;
 
   return 0;
 }
