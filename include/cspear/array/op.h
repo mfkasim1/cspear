@@ -12,14 +12,15 @@ namespace csp {
 
   template <typename T, typename I,
             template<typename> typename InpView,
+            typename TR, typename IR,
             template<typename> typename ResView,
             typename F>
-  array<T,I,ResView> unary_op(F&& f, const array<T,I,InpView>& arr) {
-    array<T,I,ResView> res = array<T,I,ResView>::empty(arr.shape());
+  array<TR,IR,ResView> unary_op(F&& f, const array<T,I,InpView>& arr) {
+    array<TR,IR,ResView> res = array<T,I,ResView>::empty(arr.shape());
 
     // performing the iteration
-    auto it1 = EWiseIterator<T,I,InpView>((T*)arr.data(), arr.view());
-    auto itr = EWiseIterator<T,I,ResView>((T*)res.data(), res.view());
+    auto it1 = EWiseIterator<T ,I ,InpView>((T*)arr.data(), arr.view());
+    auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
     for (; it1; ++it1, ++itr) {
       *itr = f(*it1);
     }
@@ -39,19 +40,20 @@ namespace csp {
   template <typename T, typename I,
             template<typename> typename InpView1,
             template<typename> typename InpView2,
+            typename TR, typename IR,
             template<typename> typename ResView,
             typename F>
-  inline array<T,I,ResView> ewise_binary_op(F&& f,
+  inline array<TR,IR,ResView> ewise_binary_op(F&& f,
                                      const array<T,I,InpView1>& arr1,
                                      const array<T,I,InpView2>& arr2) {
     // shape and size checking should be done outside this
 
-    array<T,I,ResView> res = array<T,I,ResView>::empty(arr1.shape());
+    array<TR,IR,ResView> res = array<T,I,ResView>::empty(arr1.shape());
 
     // performing the iteration
     auto it1 = EWiseIterator<T,I,InpView1>((T*)arr1.data(), arr1.view());
     auto it2 = EWiseIterator<T,I,InpView2>((T*)arr2.data(), arr2.view());
-    auto itr = EWiseIterator<T,I,ResView>((T*)res.data(), res.view());
+    auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
     for (; it1; ++it1, ++it2, ++itr) {
       *itr = f(*it1, *it2);
     }
@@ -79,15 +81,16 @@ namespace csp {
   template <typename T, typename I,
             template<typename> typename InpView1,
             template<typename> typename InpView2,
+            typename TR, typename IR,
             template<typename> typename ResView,
             typename F>
-  array<T,I,ResView> binary_op(F&& f,
+  array<TR,IR,ResView> binary_op(F&& f,
                                const array<T,I,InpView1>& arr1,
                                const array<T,I,InpView2>& arr2) {
     // check the shape and decide if it is element-wise or broadcases
     if (arr1.shape() == arr2.shape()) {
       // element wise
-      return ewise_binary_op<T,I,InpView1,InpView2,ResView>(f, arr1, arr2);
+      return ewise_binary_op<T,I,InpView1,InpView2,TR,IR,ResView>(f, arr1, arr2);
     }
     else {
       throw std::runtime_error("Invalid shape of the operator.\n");
