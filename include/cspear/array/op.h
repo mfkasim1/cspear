@@ -10,26 +10,34 @@ namespace csp {
   template <typename T, typename I,
             template<typename> typename View> class array;
 
-  template <typename T, typename I,
-            template<typename> typename InpView,
-            typename TR, typename IR,
-            template<typename> typename ResView,
-            typename F>
-  array<TR,IR,ResView> unary_op(F&& f, const array<T,I,InpView>& arr) {
-    array<TR,IR,ResView> res = array<TR,IR,ResView>::empty(arr.shape());
+  template <typename ResType, typename InpType, typename F>
+  ResType unary_op(F&& f, const InpType& arr) {
+    using T = typename InpType::DataType;
+    using I = typename InpType::IndexType;
+    using View = typename InpType::ViewType;
+    using TR = typename ResType::DataType;
+    using IR = typename ResType::IndexType;
+    using ViewR = typename ResType::ViewType;
+
+    ResType res = ResType::empty(arr.shape());
 
     // performing the iteration
-    auto it1 = EWiseIterator<T ,I ,InpView>((T*)arr.data(), arr.view());
-    auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
+    auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
+    auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(),
+                               res.view());
+    // auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
     for (; it1; ++it1, ++itr) {
       *itr = f(*it1);
     }
     return res;
   }
 
-  template <typename T, typename I, template<typename> typename View,
-            typename F>
-  array<T,I,View>& inplace_unary_op(F&& f, array<T,I,View>& arr) {
+  template <typename InpType, typename F>
+  InpType& inplace_unary_op(F&& f, InpType& arr) {
+    using T = typename InpType::DataType;
+    using I = typename InpType::IndexType;
+    using View = typename InpType::ViewType;
+
     auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
     for (; it1; ++it1) {
       f(*it1);
@@ -37,77 +45,76 @@ namespace csp {
     return arr;
   }
 
-  template <typename T, typename I,
-            template<typename> typename InpView1,
-            template<typename> typename InpView2,
-            typename TR, typename IR,
-            template<typename> typename ResView,
-            typename F>
-  inline array<TR,IR,ResView> ewise_binary_op(F&& f,
-                                     const array<T,I,InpView1>& arr1,
-                                     const array<T,I,InpView2>& arr2) {
+  template <typename ResType, typename InpType1, typename InpType2, typename F>
+  inline ResType ewise_binary_op(F&& f,
+                                 const InpType1& arr1,
+                                 const InpType2& arr2) {
     // shape and size checking should be done outside this
 
-    array<TR,IR,ResView> res = array<TR,IR,ResView>::empty(arr1.shape());
+    ResType res = ResType::empty(arr1.shape());
+
+    using T1 = typename InpType1::DataType;
+    using I1 = typename InpType1::IndexType;
+    using View1 = typename InpType1::ViewType;
+    using T2 = typename InpType2::DataType;
+    using I2 = typename InpType2::IndexType;
+    using View2 = typename InpType2::ViewType;
+    using TR = typename ResType::DataType;
+    using IR = typename ResType::IndexType;
+    using ViewR = typename ResType::ViewType;
 
     // performing the iteration
-    auto it1 = EWiseIterator<T,I,InpView1>((T*)arr1.data(), arr1.view());
-    auto it2 = EWiseIterator<T,I,InpView2>((T*)arr2.data(), arr2.view());
-    auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
+    auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
+    auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
+    auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
     for (; it1; ++it1, ++it2, ++itr) {
       *itr = f(*it1, *it2);
     }
     return res;
   }
 
-  template <typename T, typename I,
-            template<typename> typename InpView1,
-            template<typename> typename InpView2,
-            typename F>
-  inline array<T,I,InpView1>& ewise_inplace_binary_op(F&& f,
-                                    array<T,I,InpView1>& arr1,
-                                    const array<T,I,InpView2>& arr2) {
+  template <typename InpType1, typename InpType2, typename F>
+  inline InpType1& ewise_inplace_binary_op(F&& f,
+                                           InpType1& arr1,
+                                           const InpType2& arr2) {
     // shape and size checking should be done outside this
 
+    using T1 = typename InpType1::DataType;
+    using I1 = typename InpType1::IndexType;
+    using View1 = typename InpType1::ViewType;
+    using T2 = typename InpType2::DataType;
+    using I2 = typename InpType2::IndexType;
+    using View2 = typename InpType2::ViewType;
+
     // performing the iteration
-    auto it1 = EWiseIterator<T,I,InpView1>((T*)arr1.data(), arr1.view());
-    auto it2 = EWiseIterator<T,I,InpView2>((T*)arr2.data(), arr2.view());
+    auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
+    auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
     for (; it1; ++it1, ++it2) {
       f(*it1, *it2);
     }
     return arr1;
   }
 
-  template <typename T, typename I,
-            template<typename> typename InpView1,
-            template<typename> typename InpView2,
-            typename TR, typename IR,
-            template<typename> typename ResView,
-            typename F>
-  array<TR,IR,ResView> binary_op(F&& f,
-                               const array<T,I,InpView1>& arr1,
-                               const array<T,I,InpView2>& arr2) {
+  template <typename ResType, typename InpType1, typename InpType2, typename F>
+  ResType binary_op(F&& f, const InpType1& arr1, const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
     if (arr1.shape() == arr2.shape()) {
       // element wise
-      return ewise_binary_op<T,I,InpView1,InpView2,TR,IR,ResView>(f, arr1, arr2);
+      return ewise_binary_op<ResType>(f, arr1, arr2);
     }
     else {
       throw std::runtime_error("Invalid shape of the operator.\n");
     }
   }
 
-  template <typename T, typename I,
-            template<typename> typename InpView1,
-            template<typename> typename InpView2,
-            typename F>
-  array<T,I,InpView1>& inplace_binary_op(F&& f,
-                               array<T,I,InpView1>& arr1,
-                               const array<T,I,InpView2>& arr2) {
+  template <typename InpType1, typename InpType2, typename F>
+  InpType1& inplace_binary_op(F&& f,
+                              InpType1& arr1,
+                              const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
     if (arr1.shape() == arr2.shape()) {
       // element wise
-      return ewise_inplace_binary_op<T,I,InpView1,InpView2>(f, arr1, arr2);
+      return ewise_inplace_binary_op(f, arr1, arr2);
     }
     else {
       throw std::runtime_error("Invalid shape of the operator.\n");

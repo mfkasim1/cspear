@@ -26,7 +26,7 @@ namespace csp {
     // define the datatype and expose it to public
     using DataType = T;
     using IndexType = I;
-    template <typename II> using ViewType = View<II>;
+    using ViewType = View<I>;
 
     // constructors and destructor
     array();

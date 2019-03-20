@@ -4,11 +4,11 @@
 #include <cspear/views/contiguous-view.h>
 
 namespace csp {
-  template <typename T, typename I, template<typename> typename View>
+  template <typename T, typename I, typename View>
   class EWiseIterator {
     public:
     // constructor
-    EWiseIterator(T* data, const View<I>& view);
+    EWiseIterator(T* data, const View& view);
 
     // iterator operator
     T& operator*();
@@ -21,7 +21,7 @@ namespace csp {
 
   // partial template specialization for different views
   template <typename T, typename I>
-  class EWiseIterator<T,I,ContiguousView> {
+  class EWiseIterator<T,I,ContiguousView<I> > {
     I sz_;
     T* data_;
     I offset_;
