@@ -20,7 +20,6 @@ namespace csp {
     View<I> view_;
 
     I prev_allocated_size_ = 0;
-    std::vector<I> shape_;
     bool allocated_ = false; // flag to indicate if the data is allocated by us
 
     public:
@@ -35,7 +34,13 @@ namespace csp {
     array(const T* a, I sz);
     array(const T* a, std::initializer_list<I> shape);
     array(const array<T,I,View>& a);
+    template <template <typename> typename View2>
+    array(const array<T,I,View2>& a);
     ~array();
+
+    // internal constructor that does not own the data
+    // (only for different memory view)
+    array(T* a, View<I>&& view);
 
     // static initializers
     static array<T,I,ContiguousView> empty(const std::vector<I>& shape);
@@ -48,11 +53,13 @@ namespace csp {
     static array<T,I,ContiguousView> linspace(T begin, T end, I n);
 
     // indexing
-    inline T& operator[](I idx) { return data_[view_.idx(idx)]; }
+    T& operator[](I idx);
+    const T& operator[](I idx) const;
+    array<T,I,FilterView> operator[](const array<bool,I,ContiguousView>& filter);
 
     // assignment operator and copy
-    array<T,I,View>& operator=(const array<T,I,View>& a);
-    array<T,I,View> copy() const;
+    array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
+    array<T,I,ContiguousView> copy() const;
 
     // parameters
     T* data() { return data_; }
@@ -140,6 +147,8 @@ namespace csp {
     private:
     void _realloc();
     void _copy(const array<T,I,View>& a);
+    template <template<typename> typename View2>
+    void _copy_different_view(const array<T,I,View2>& a);
   };
 
   // implementations
@@ -186,10 +195,24 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
+  array<T,I,View>::array(const array<T,I,View2>& a) {
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value);
+    _copy_different_view(a);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
   array<T,I,View>::~array() {
     if (allocated_) {
       std::free(data_);
     }
+  }
+
+  // internal constructor for memory view of the same data
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>::array(T* a, View<I>&& view) {
+    data_ = a;
+    view_ = view;
   }
 
   // static initializer
@@ -255,6 +278,45 @@ namespace csp {
       *it = i;
       i += di;
     }
+    return res;
+  }
+
+  // indexing
+  template <typename T, typename I, template<typename> typename View>
+  inline T& array<T,I,View>::operator[](I idx) {
+    return data_[view_.idx(idx)];
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  inline const T& array<T,I,View>::operator[](I idx) const {
+    return data_[view_.idx(idx)];
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  inline array<T,I,FilterView> array<T,I,View>::operator[](
+               const array<bool,I,ContiguousView>& filter) {
+    return array<T,I,FilterView>(data_, FilterView<I>(filter));
+  }
+
+  // assignment operator and copy
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView>& array<T,I,View>::operator=(const array<T,I,View>& a) {
+    if (this == &a) {
+      return *this;
+    }
+
+    if (std::is_same<ContiguousView<I>,View<I> >::value) {
+      _copy(a);
+    }
+    else {
+      _copy_different_view(a);
+    }
+    return *this;
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::copy() const {
+    array<T,I,ContiguousView> res(*this);
     return res;
   }
 
@@ -347,6 +409,21 @@ namespace csp {
     // copy the data
     _realloc();
     std::copy(a.data(), a.data()+sz, data_);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
+  void array<T,I,View>::_copy_different_view(const array<T,I,View2>& a) {
+    // set the view
+    view_.reshape(a.shape());
+
+    // copy the data
+    _realloc();
+    auto itr = EWiseIterator<T,I,View<I> >(data_, view_);
+    auto ita = EWiseIterator<T,I,View2<I> >((T*)a.data(), a.view());
+    for (; ita; ++ita, ++itr) {
+      *itr = *ita;
+    }
   }
 }
 //     // unary (arithmetic) operations

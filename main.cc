@@ -30,10 +30,11 @@ int main() {
   auto d = c / (b + 1);
   d += b;
 
-  auto a = d;// > 1;
+  auto a = d;
+  a[d > 1] += 1;
 
   for (int i = 0; i < a.size(); ++i) {
-    std::cout << a.data()[i] << " ";
+    std::cout << a[i] << " ";
   }
   std::cout << std::endl;
 

@@ -2,6 +2,7 @@
 #define CSPEAR_ITERATORS_EWISE_ITERATOR_H
 
 #include <cspear/views/contiguous-view.h>
+#include <cspear/views/filter-view.h>
 
 namespace csp {
   template <typename T, typename I, typename View>
@@ -48,9 +49,41 @@ namespace csp {
     inline operator bool() const {
       return offset_ < sz_;
     }
+  };
 
-    inline I idx(I i) {
-      return i;
+  template <typename T, typename I>
+  class EWiseIterator<T,I,FilterView<I> > {
+    I sz_;
+    T* data_;
+    T* origin_data_;
+    I offset_;
+    const I* all_idxs_;
+    const I* idxs_;
+
+    public:
+    EWiseIterator(T* data, const FilterView<I>& view) {
+      sz_ = view.size();
+      origin_data_ = data;
+      offset_ = 0;
+      idxs_ = view.idxs();
+      all_idxs_ = idxs_;
+      data_ = &origin_data_[*idxs_];
+    }
+
+    // iterator operator
+    inline T& operator*() {
+      return *data_;
+    }
+
+    inline EWiseIterator& operator++() {
+      idxs_++;
+      offset_++;
+      data_ = &origin_data_[*idxs_];
+      return *this;
+    }
+
+    inline operator bool() const {
+      return offset_ < sz_;
     }
   };
 }

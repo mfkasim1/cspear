@@ -16,6 +16,7 @@ namespace csp {
     void reshape(std::initializer_list<I> shape);
     I size() const;
     const std::vector<I>& shape() const;
+    I idx(I i) const;
 
     private:
     static I _compute_size(const std::vector<I>& shape);
@@ -45,6 +46,11 @@ namespace csp {
   template <typename I>
   inline const std::vector<I>& ContiguousView<I>::shape() const {
     return shape_;
+  }
+
+  template <typename I>
+  inline I ContiguousView<I>::idx(I i) const {
+    return i;
   }
 
   template <typename I>
