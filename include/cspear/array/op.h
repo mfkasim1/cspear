@@ -16,7 +16,7 @@ namespace csp {
             template<typename> typename ResView,
             typename F>
   array<TR,IR,ResView> unary_op(F&& f, const array<T,I,InpView>& arr) {
-    array<TR,IR,ResView> res = array<T,I,ResView>::empty(arr.shape());
+    array<TR,IR,ResView> res = array<TR,IR,ResView>::empty(arr.shape());
 
     // performing the iteration
     auto it1 = EWiseIterator<T ,I ,InpView>((T*)arr.data(), arr.view());
@@ -48,7 +48,7 @@ namespace csp {
                                      const array<T,I,InpView2>& arr2) {
     // shape and size checking should be done outside this
 
-    array<TR,IR,ResView> res = array<T,I,ResView>::empty(arr1.shape());
+    array<TR,IR,ResView> res = array<TR,IR,ResView>::empty(arr1.shape());
 
     // performing the iteration
     auto it1 = EWiseIterator<T,I,InpView1>((T*)arr1.data(), arr1.view());

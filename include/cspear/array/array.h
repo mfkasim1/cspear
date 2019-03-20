@@ -23,6 +23,11 @@ namespace csp {
     bool allocated_ = false; // flag to indicate if the data is allocated by us
 
     public:
+    // define the datatype and expose it to public
+    using DataType = T;
+    using IndexType = I;
+    template <typename II> using ViewType = View<II>;
+
     // constructors and destructor
     array();
     array(std::initializer_list<T> elmts);
@@ -71,6 +76,14 @@ namespace csp {
     array<T,I,ContiguousView> clip_lb(T lb);
     array<T,I,ContiguousView> clip_ub(T ub);
     array<T,I,ContiguousView> clip(T lb, T ub);
+    array<bool,I,ContiguousView> operator!();
+    array<bool,I,ContiguousView> operator>(T a);
+    array<bool,I,ContiguousView> operator>=(T a);
+    array<bool,I,ContiguousView> operator<(T a);
+    array<bool,I,ContiguousView> operator<=(T a);
+    array<bool,I,ContiguousView> operator==(T a);
+    array<bool,I,ContiguousView> operator&&(T a);
+    array<bool,I,ContiguousView> operator||(T a);
 
     // inplace unary operators
     array<T,I,View>& operator+=(T a);
@@ -91,6 +104,20 @@ namespace csp {
     array<T,I,ContiguousView> operator*(const array<T,I,View2>& a);
     template <template<typename> typename View2>
     array<T,I,ContiguousView> operator/(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<bool,I,ContiguousView> operator>(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<bool,I,ContiguousView> operator>=(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<bool,I,ContiguousView> operator<(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<bool,I,ContiguousView> operator<=(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<bool,I,ContiguousView> operator==(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<bool,I,ContiguousView> operator&&(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
+    array<bool,I,ContiguousView> operator||(const array<T,I,View2>& a);
 
     // inplace binary operators
     template <template<typename> typename View2>

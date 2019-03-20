@@ -27,8 +27,10 @@ int main() {
   auto c = -b;
   c.clip_lb_(-1);
 
-  auto a = c / b;
-  a += b;
+  auto d = c / b;
+  d += b;
+
+  auto a = d > 1;
 
   for (int i = 0; i < a.size(); ++i) {
     std::cout << a.data()[i] << " ";
