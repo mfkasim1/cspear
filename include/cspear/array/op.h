@@ -41,6 +41,46 @@ namespace csp {
     return arr;
   }
 
+  template <typename ResType, typename InpType, typename T, typename F>
+  inline ResType ewise_binary_op_with_val(F&& f,
+                                          const InpType& arr,
+                                          const T& val) {
+    // shape and size checking should be done outside this
+
+    ResType res = ResType::empty(arr.shape());
+
+    using T1 = typename InpType::DataType;
+    using I1 = typename InpType::IndexType;
+    using View1 = typename InpType::ViewType;
+    using TR = typename ResType::DataType;
+    using IR = typename ResType::IndexType;
+    using ViewR = typename ResType::ViewType;
+
+    auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
+    auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+    for (; it1; ++it1, ++itr) {
+      *itr = f(*it1, val);
+    }
+    return res;
+  }
+
+  template <typename InpType, typename T, typename F>
+  inline InpType& ewise_inplace_binary_op_with_val(F&& f,
+                                                   InpType& arr,
+                                                   const T& val) {
+    // shape and size checking should be done outside this
+
+    using T1 = typename InpType::DataType;
+    using I1 = typename InpType::IndexType;
+    using View1 = typename InpType::ViewType;
+
+    auto it = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
+    for (; it; ++it) {
+      f(*it, val);
+    }
+    return arr;
+  }
+
   template <typename ResType, typename InpType1, typename InpType2, typename F>
   inline ResType ewise_binary_op(F&& f,
                                  const InpType1& arr1,
