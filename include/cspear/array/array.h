@@ -9,6 +9,7 @@
 #include <cspear/tools/misc.h>
 #include <cspear/tools/types.h>
 #include <cspear/views/contiguous-view.h>
+#include <cspear/views/filter-view.h>
 #include <cspear/iterators/ewise-iterator.h>
 
 namespace csp {
