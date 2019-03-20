@@ -10,100 +10,100 @@ namespace csp {
   // non inplace unary operators
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::operator-() {
-    return unary_op< array<T,I,ContiguousView> >([&](T b) {return -b;}, *this);
+    return unary_op< array<T,I,ContiguousView> >([&](T& b) {return -b;}, *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::operator+(T a) {
-    return unary_op< array<T,I,ContiguousView> >([&](T b) {return b+a;}, *this);
+    return unary_op< array<T,I,ContiguousView> >([&](T& b) {return b+a;}, *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::operator-(T a) {
-    return unary_op< array<T,I,ContiguousView> >([&](T b) {return b-a;}, *this);
+    return unary_op< array<T,I,ContiguousView> >([&](T& b) {return b-a;}, *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::operator*(T a) {
-    return unary_op< array<T,I,ContiguousView> >([&](T b) {return b*a;}, *this);
+    return unary_op< array<T,I,ContiguousView> >([&](T& b) {return b*a;}, *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::operator/(T a) {
-    return unary_op< array<T,I,ContiguousView> >([&](T b) {return b/a;}, *this);
+    return unary_op< array<T,I,ContiguousView> >([&](T& b) {return b/a;}, *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::reciprocal(T a) {
-    return unary_op< array<T,I,ContiguousView> >([&](T b) {return a/b;}, *this);
+    return unary_op< array<T,I,ContiguousView> >([&](T& b) {return a/b;}, *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::clip_lb(T lb) {
     return unary_op< array<T,I,ContiguousView> >(
-      [&](T b) {return (b < lb) ? lb : b;},
+      [&](T& b) {return (b < lb) ? lb : b;},
       *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::clip_ub(T ub) {
     return unary_op< array<T,I,ContiguousView> >(
-      [&](T b) {return (b > ub) ? ub : b;},
+      [&](T& b) {return (b > ub) ? ub : b;},
       *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::clip(T lb, T ub) {
     return unary_op< array<T,I,ContiguousView> >(
-      [&](T b) {return (b < lb) ? lb : ((b > ub) ? ub : b);},
+      [&](T& b) {return (b < lb) ? lb : ((b > ub) ? ub : b);},
       *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator!() {
-    return unary_op< array<bool,I,ContiguousView> >([&](T b) {return !b;},
+    return unary_op< array<bool,I,ContiguousView> >([&](T& b) {return !b;},
            *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator>(T a) {
-    return unary_op< array<bool,I,ContiguousView> >([&](T b) {return b>a;},
+    return unary_op< array<bool,I,ContiguousView> >([&](T& b) {return b>a;},
            *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator>=(T a) {
-    return unary_op< array<bool,I,ContiguousView> >([&](T b) {return b>=a;},
+    return unary_op< array<bool,I,ContiguousView> >([&](T& b) {return b>=a;},
            *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator<(T a) {
-    return unary_op< array<bool,I,ContiguousView> >([&](T b) {return b<a;},
+    return unary_op< array<bool,I,ContiguousView> >([&](T& b) {return b<a;},
            *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator<=(T a) {
-    return unary_op< array<bool,I,ContiguousView> >([&](T b) {return b<=a;},
+    return unary_op< array<bool,I,ContiguousView> >([&](T& b) {return b<=a;},
            *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator==(T a) {
-    return unary_op< array<bool,I,ContiguousView> >([&](T b) {return b==a;},
+    return unary_op< array<bool,I,ContiguousView> >([&](T& b) {return b==a;},
            *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator&&(T a) {
-    return unary_op< array<bool,I,ContiguousView> >([&](T b) {return b&&a;},
+    return unary_op< array<bool,I,ContiguousView> >([&](T& b) {return b&&a;},
            *this);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator||(T a) {
-    return unary_op< array<bool,I,ContiguousView> >([&](T b) {return b||a;},
+    return unary_op< array<bool,I,ContiguousView> >([&](T& b) {return b||a;},
            *this);
   }
 
