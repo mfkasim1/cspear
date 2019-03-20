@@ -9,6 +9,7 @@
 #include <cspear/tools/misc.h>
 #include <cspear/tools/types.h>
 #include <cspear/views/contiguous-view.h>
+#include <cspear/iterators/ewise-iterator.h>
 
 namespace csp {
   template <typename T, typename I=tools::Int,
@@ -37,6 +38,13 @@ namespace csp {
 
     // static initializers
     static array<T,I,ContiguousView> empty(const std::vector<I>& shape);
+    static array<T,I,ContiguousView> zeros(const std::vector<I>& shape);
+    static array<T,I,ContiguousView> ones(const std::vector<I>& shape);
+    static array<T,I,ContiguousView> full(const std::vector<I>& shape, T value);
+    static array<T,I,ContiguousView> arange(T begin, T end, T range);
+    static array<T,I,ContiguousView> arange(T end);
+    static array<T,I,ContiguousView> arange(T begin, T end);
+    static array<T,I,ContiguousView> linspace(T begin, T end, I n);
 
     // indexing
     inline T& operator[](I idx) { return data_[view_.idx(idx)]; }
@@ -189,6 +197,63 @@ namespace csp {
     array<T,I,ContiguousView> res;
     I sz = tools::_prod_init_list(shape);
     res.resize(sz).reshape(shape);
+    return res;
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::zeros(const std::vector<I>& shape) {
+    array<T,I,ContiguousView> res = empty(shape);
+    std::memset(res.data(), 0, res.size()*sizeof(T));
+    return res;
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::ones(const std::vector<I>& shape) {
+    array<T,I,ContiguousView> res = empty(shape);
+    std::fill(res.data(), res.data()+res.size(), (T)1);
+    return res;
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::full(const std::vector<I>& shape, T value) {
+    array<T,I,ContiguousView> res = empty(shape);
+    std::fill(res.data(), res.data()+res.size(), (T)value);
+    return res;
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::arange(T begin, T end, T range) {
+    array<T,I,ContiguousView> res;
+    I sz = (end - begin) / range;
+    res.resize(sz);
+    auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
+    for (T i = begin; i < end; i+=range, ++it) {
+      *it = i;
+    }
+    return res;
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::arange(T end) {
+    return arange((T)0, end, (T)1);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::arange(T begin, T end) {
+    return arange(begin, end, (T)1);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::linspace(T begin, T end, I n) {
+    array<T,I,ContiguousView> res;
+    res.resize(n);
+    T di = n > 1 ? (end - begin) / (n - 1) : 1;
+    auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
+    T i = begin;
+    for (; it; ++it) {
+      *it = i;
+      i += di;
+    }
     return res;
   }
 

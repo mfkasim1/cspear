@@ -14,8 +14,8 @@ void p(const vec& v) {
 }
 
 int main() {
-  auto b = csp::array<double>({1,2,3});
-  // auto a = csp::arange<double>(10);
+  // auto b = csp::array<double>({1,2,3});
+  auto b = csp::array<double>::arange(10);
   // a.reshape({2,5});
   // auto b = csp::random::randn<double>(a.shape());
   // a += 12;
@@ -27,10 +27,10 @@ int main() {
   auto c = -b;
   c.clip_lb_(-1);
 
-  auto d = c / b;
+  auto d = c / (b + 1);
   d += b;
 
-  auto a = d > 1;
+  auto a = d;// > 1;
 
   for (int i = 0; i < a.size(); ++i) {
     std::cout << a.data()[i] << " ";
