@@ -15,7 +15,7 @@ void p(const vec& v) {
 
 int main() {
   // auto b = csp::array<double>({1,2,3});
-  auto b = csp::array<double>::arange(10);
+  auto b = csp::arange(10.0);
   // a.reshape({2,5});
   // auto b = csp::random::randn<double>(a.shape());
   // a += 12;

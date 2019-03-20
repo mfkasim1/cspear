@@ -4,6 +4,7 @@
 namespace csp {
   namespace tools {
     typedef int Int;
+    typedef double Real;
   }
 }
 
