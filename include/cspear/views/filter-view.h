@@ -14,7 +14,7 @@ namespace csp {
 
     public:
     FilterView() {}
-    FilterView(const bool* filter, const I sz);
+    FilterView(const bool* filter, I sz);
 
     void reshape(const std::vector<I>& shape);
     void reshape(std::initializer_list<I> shape);
@@ -24,12 +24,12 @@ namespace csp {
     const I* idxs() const;
 
     private:
-    void _get_indices(const bool* a, const I sz);
+    void _get_indices(const bool* a, I sz);
   };
 
   // implementations
   template <typename I>
-  FilterView<I>::FilterView(const bool* filter, const I sz) {
+  FilterView<I>::FilterView(const bool* filter, I sz) {
     _get_indices(filter, sz);
     sz_ = idxs_.size();
     shape_ = {sz_};
@@ -66,7 +66,7 @@ namespace csp {
   }
 
   template <typename I>
-  inline void FilterView<I>::_get_indices(const bool* a, const I sz) {
+  void FilterView<I>::_get_indices(const bool* a, I sz) {
     idxs_.reserve(sz);
 
     for (I i = 0; i < sz; ++i) {
