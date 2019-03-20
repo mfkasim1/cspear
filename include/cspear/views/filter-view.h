@@ -6,10 +6,6 @@
 #include <cspear/views/contiguous-view.h>
 
 namespace csp {
-  // forward declaration of array
-  template <typename T, typename I, template<typename> typename View>
-  class array;
-
   template <typename I>
   class FilterView : public ContiguousView<I> {
     std::vector<I> shape_;
@@ -18,8 +14,7 @@ namespace csp {
 
     public:
     FilterView() {}
-    FilterView(array<bool,I,ContiguousView>&& filter);
-    FilterView(const array<bool,I,ContiguousView>& filter);
+    FilterView(const bool* filter, const I sz);
 
     void reshape(const std::vector<I>& shape);
     void reshape(std::initializer_list<I> shape);
@@ -29,20 +24,13 @@ namespace csp {
     const I* idxs() const;
 
     private:
-    void _get_indices(const array<bool,I,ContiguousView>& filter);
+    void _get_indices(const bool* a, const I sz);
   };
 
   // implementations
   template <typename I>
-  FilterView<I>::FilterView(array<bool,I,ContiguousView>&& filter) {
-    _get_indices(filter);
-    sz_ = idxs_.size();
-    shape_ = {sz_};
-  }
-
-  template <typename I>
-  FilterView<I>::FilterView(const array<bool,I,ContiguousView>& filter) {
-    _get_indices(filter);
+  FilterView<I>::FilterView(const bool* filter, const I sz) {
+    _get_indices(filter, sz);
     sz_ = idxs_.size();
     shape_ = {sz_};
   }
@@ -74,14 +62,14 @@ namespace csp {
 
   template <typename I>
   inline const I* FilterView<I>::idxs() const {
-    return &idxs_[0]; //.begin();
+    return &idxs_[0];
   }
 
   template <typename I>
-  inline void FilterView<I>::_get_indices(const array<bool,I,ContiguousView>& a) {
-    idxs_.reserve(a.size());
+  inline void FilterView<I>::_get_indices(const bool* a, const I sz) {
+    idxs_.reserve(sz);
 
-    for (I i = 0; i < a.size(); ++i) {
+    for (I i = 0; i < sz; ++i) {
       if (a[i]) idxs_.push_back(i);
     }
   }

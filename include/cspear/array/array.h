@@ -295,7 +295,8 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   inline array<T,I,FilterView> array<T,I,View>::operator[](
                const array<bool,I,ContiguousView>& filter) {
-    return array<T,I,FilterView>(data_, FilterView<I>(filter));
+    return array<T,I,FilterView>(data_,
+                  FilterView<I>(filter.data(), filter.size()));
   }
 
   // assignment operator and copy
