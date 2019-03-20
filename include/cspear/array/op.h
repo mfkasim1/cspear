@@ -6,10 +6,6 @@
 #include <cspear/iterators/ewise-iterator.h>
 
 namespace csp {
-  // forward declaration of array
-  template <typename T, typename I,
-            template<typename> typename View> class array;
-
   template <typename ResType, typename InpType, typename F>
   ResType unary_op(F&& f, const InpType& arr) {
     using T = typename InpType::DataType;
