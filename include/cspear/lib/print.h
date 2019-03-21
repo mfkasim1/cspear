@@ -11,7 +11,7 @@ namespace csp {
     os << "(";
     for (auto i = 0; i < vec.size(); ++i) {
       os << vec[i];
-      if (i < vec.size()-1) {
+      if ((i < vec.size()-1) || (i == 0)) {
         os << ",";
       }
     }
