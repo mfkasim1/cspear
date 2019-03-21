@@ -73,12 +73,12 @@ namespace csp {
     template <typename T2> array<T2,I,View> astype() const; // ???
 
     // reshape and resize
-    array<T,I,View>& resize(I sz);
-    array<T,I,View>& reshape(std::initializer_list<I> shape);
-    array<T,I,View>& reshape(const std::vector<I>& shape);
-    array<T,I,View>& squeeze();
-    array<T,I,View>& expand_dims(I idx);
-    array<T,I,View>& ravel();
+    array<T,I,View>& resize_(I sz);
+    array<T,I,View>& reshape_(std::initializer_list<I> shape);
+    array<T,I,View>& reshape_(const std::vector<I>& shape);
+    array<T,I,View>& squeeze_();
+    array<T,I,View>& expand_dims_(I idx);
+    array<T,I,View>& ravel_();
 
     /*************** OPERATORS ***************/
     // unary operators (non inplace)
@@ -221,7 +221,7 @@ namespace csp {
   array<T,I,ContiguousView> array<T,I,View>::empty(const std::vector<I>& shape) {
     array<T,I,ContiguousView> res;
     I sz = tools::_prod_init_list(shape);
-    res.resize(sz).reshape(shape);
+    res.resize_(sz).reshape_(shape);
     return res;
   }
 
@@ -250,7 +250,7 @@ namespace csp {
   array<T,I,ContiguousView> array<T,I,View>::arange(T begin, T end, T range) {
     array<T,I,ContiguousView> res;
     I sz = (end - begin) / range;
-    res.resize(sz);
+    res.resize_(sz);
     auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
     for (T i = begin; i < end; i+=range, ++it) {
       *it = i;
@@ -271,7 +271,7 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::linspace(T begin, T end, I n) {
     array<T,I,ContiguousView> res;
-    res.resize(n);
+    res.resize_(n);
     T di = n > 1 ? (end - begin) / (n - 1) : 1;
     auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
     T i = begin;
@@ -324,7 +324,7 @@ namespace csp {
 
   // resize and reshaped
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>& array<T,I,View>::resize(I sz) {
+  array<T,I,View>& array<T,I,View>::resize_(I sz) {
     if (view_.size() == sz) {
       return *this;
     }
@@ -336,7 +336,7 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>& array<T,I,View>::reshape(std::initializer_list<I> shape) {
+  array<T,I,View>& array<T,I,View>::reshape_(std::initializer_list<I> shape) {
     I sz = tools::_prod_init_list(shape);
     _cspear_assert(sz == view_.size(), "The size must stay the same");
     view_.reshape(shape);
@@ -344,7 +344,7 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>& array<T,I,View>::reshape(const std::vector<I>& shape) {
+  array<T,I,View>& array<T,I,View>::reshape_(const std::vector<I>& shape) {
     I sz = tools::_prod_init_list(shape);
     _cspear_assert(sz == view_.size(), "The size must stay the same");
     view_.reshape(shape);
@@ -352,7 +352,7 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>& array<T,I,View>::squeeze() {
+  array<T,I,View>& array<T,I,View>::squeeze_() {
     I nd = ndim();
     if (nd <= 1) {
       return *this;
@@ -372,7 +372,7 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>& array<T,I,View>::expand_dims(I idx) {
+  array<T,I,View>& array<T,I,View>::expand_dims_(I idx) {
     _cspear_assert((idx >= 0) && (idx <= ndim()),
                    "Expanded index must be between [0,ndim()]");
     std::vector<I> newshape = shape();
@@ -382,7 +382,7 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>& array<T,I,View>::ravel() {
+  array<T,I,View>& array<T,I,View>::ravel_() {
     view_.reshape({view.size()});
     return *this;
   }

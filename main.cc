@@ -53,7 +53,7 @@ int test1() {
 int test_bcast() {
   auto a = csp::arange(10.0);
   auto b = csp::arange(10.0);
-  auto c = a.expand_dims(0) + b.expand_dims(1);
+  auto c = a.expand_dims_(0) + b.expand_dims_(1);
 
   std::cout << "Shapes:" << std::endl;
   std::cout << a.shape()[0] << "," << a.shape()[1] << std::endl;
