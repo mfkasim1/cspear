@@ -376,7 +376,7 @@ namespace csp {
     _cspear_assert((idx >= 0) && (idx <= ndim()),
                    "Expanded index must be between [0,ndim()]");
     std::vector<I> newshape = shape();
-    newshape.insert(&newshape[idx], (I)1);
+    newshape.insert(newshape.begin()+idx, (I)1);
     view_.reshape(newshape);
     return *this;
   }
