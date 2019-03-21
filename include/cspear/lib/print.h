@@ -86,7 +86,7 @@ namespace csp {
       os << " of bool";
 
     // print the view
-    os << " with " << arr.view() << " of memory.";
+    os << " with " << arr.view();
     os << std::endl;
 
     return os;
