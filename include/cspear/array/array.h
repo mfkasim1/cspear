@@ -80,6 +80,17 @@ namespace csp {
     array<T,I,View>& expand_dims_(I idx);
     array<T,I,View>& ravel_();
 
+    /**************** REDUCE ****************/
+    T sum();
+    array<T,I,ContiguousView> sum(I axis);
+    array<T,I,ContiguousView> sum(const std::vector<I>& axes);
+    T max();
+    array<T,I,ContiguousView> max(I axis);
+    array<T,I,ContiguousView> max(const std::vector<I>& axes);
+    T min();
+    array<T,I,ContiguousView> min(I axis);
+    array<T,I,ContiguousView> min(const std::vector<I>& axes);
+
     /*************** OPERATORS ***************/
     // unary operators (non inplace)
     array<T,I,ContiguousView> operator-();

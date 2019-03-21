@@ -69,6 +69,8 @@ int test_bcast() {
     std::cout << std::endl;
   }
   std::cout << std::endl;
+
+  std::cout << c.sum() << std::endl;
   return 0;
 }
 
