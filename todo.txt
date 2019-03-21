@@ -1,8 +1,6 @@
 shape
 array:
-  * filter
   * interp
-  * broadcast
   * histogram
   * reduce with given axis/axes
 
@@ -11,3 +9,6 @@ array:
   * matmul
   * non-contiguous slicing
   * casting
+
+optimize:
+* optimize filter view (not constructing the indices until it is necessary)
