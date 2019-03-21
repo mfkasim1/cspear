@@ -394,7 +394,7 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,View>& array<T,I,View>::ravel_() {
-    view_.reshape({view.size()});
+    view_.reshape({view_.size()});
     return *this;
   }
 
