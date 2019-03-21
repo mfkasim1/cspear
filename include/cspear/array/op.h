@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <cspear/tools/assert.h>
 #include <cspear/iterators/ewise-iterator.h>
+#include <cspear/iterators/bcast-iterator.h>
 
 namespace csp {
   template <typename ResType, typename InpType, typename F>
@@ -132,6 +133,30 @@ namespace csp {
   }
 
   template <typename ResType, typename InpType1, typename InpType2, typename F>
+  void bcast_binary_op(ResType& res, F&& f, const InpType1& arr1,
+                       const InpType2& arr2) {
+    // extract the types
+    using T1 = typename InpType1::DataType;
+    using I1 = typename InpType1::IndexType;
+    using View1 = typename InpType1::ViewType;
+    using T2 = typename InpType2::DataType;
+    using I2 = typename InpType2::IndexType;
+    using View2 = typename InpType2::ViewType;
+    using TR = typename ResType::DataType;
+    using IR = typename ResType::IndexType;
+    using ViewR = typename ResType::ViewType;
+
+    // do the iterations
+    auto itb = BCastIterator<T1,I1,View1,View2>(
+        (T1*)arr1.data(), arr1.view(),
+        (T2*)arr2.data(), arr2.view(),
+        (TR*)res.data(), res.view());
+    for (; itb; ++itb) {
+      itb.result() = f(itb.first(), itb.second());
+    }
+  }
+
+  template <typename ResType, typename InpType1, typename InpType2, typename F>
   ResType binary_op(F&& f, const InpType1& arr1, const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
     if (arr1.shape() == arr2.shape()) {
@@ -139,7 +164,17 @@ namespace csp {
       return ewise_binary_op<ResType>(f, arr1, arr2);
     }
     else {
-      throw std::runtime_error("Invalid shape of the operator.\n");
+      // check if they are broadcastable
+      auto resshape = bcast_output_shape(arr1.shape(), arr2.shape());
+      if (resshape.size() == 0) {
+        throw std::runtime_error("Invalid shape of the operator. "
+          "They cannot be broadcasted.\n");
+      }
+
+      // do the broadcast
+      ResType res = ResType::empty(resshape);
+      bcast_binary_op(res, f, arr1, arr2);
+      return res;
     }
   }
 

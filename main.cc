@@ -13,7 +13,7 @@ void p(const vec& v) {
   std::cout << std::endl;
 }
 
-int main() {
+int test1() {
   // auto b = csp::array<double>({1,2,3});
   auto b = csp::arange(10000000.0);
   // a.reshape({2,5});
@@ -48,6 +48,32 @@ int main() {
   // std::cout << "sum: " << a.sum() << std::endl;
 
   return 0;
+}
+
+int test_bcast() {
+  auto a = csp::arange(10.0);
+  auto b = csp::arange(10.0);
+  auto c = a.expand_dims(0) + b.expand_dims(1);
+
+  std::cout << "Shapes:" << std::endl;
+  std::cout << a.shape()[0] << "," << a.shape()[1] << std::endl;
+  std::cout << b.shape()[0] << "," << b.shape()[1] << std::endl;
+  std::cout << c.shape()[0] << "," << c.shape()[1] << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "Result:" << std::endl;
+  for (int i = 0; i < 10; ++i) {
+    for (int j = 0; j < 10; ++j) {
+      std::cout << c[i*10+j] << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  return 0;
+}
+
+int main() {
+  return test_bcast();
 }
 
 #endif

@@ -1,8 +1,10 @@
 #ifndef CSPEAR_ITERATORS_BCAST_ITERATOR_H
 #define CSPEAR_ITERATORS_BCAST_ITERATOR_H
 
+#include <vector>
 #include <cspear/views/contiguous-view.h>
 #include <cspear/views/filter-view.h>
+#include <cspear/iterators/stepback-iterator.h>
 
 namespace csp {
   // broadcast iterator
@@ -26,6 +28,7 @@ namespace csp {
 
   // obtain the broadcast output shape
   // (out.size() == 0) if it can't be broadcasted
+  template <typename I>
   std::vector<I> bcast_output_shape(const std::vector<I>& shape1,
                                     const std::vector<I>& shape2) {
     I ndim1 = shape1.size();
@@ -43,8 +46,11 @@ namespace csp {
     for (auto it1 = shape1.rbegin(); it1 != shape1.rend(); ++it1, ++itr) {
       // get the shorter shape's element (and set to 1 if there's no more)
       elmt2 = (I)1;
-      if (it2 != shape2.rend()) { elmt2 = *it2; }
-      I& elmt1 = *it1;
+      if (it2 != shape2.rend()) {
+        elmt2 = *it2;
+        ++it2;
+      }
+      I elmt1 = *it1;
 
       // decide the number of rows/cols in the given dimension
       I elmtr;
@@ -56,19 +62,74 @@ namespace csp {
       }
       else {
         // cannot be broadcasted, return zero element vector
-        std::vector<I> zero();
+        std::vector<I> zero;
         return zero;
       }
+      *itr = elmtr;
     }
     return res;
+  }
+
+  template <typename I>
+  void _get_nsteps_nrepeats(
+      const std::vector<I>& shape1,
+      const std::vector<I>& shape2,
+      std::vector<I>& nsteps1,
+      std::vector<I>& nsteps2,
+      std::vector<I>& nrepeats1,
+      std::vector<I>& nrepeats2) {
+    // it should be shape1.size() >= shape2.size()
+    I ndim1 = shape1.size();
+    I ndim2 = shape2.size();
+    if (ndim2 > ndim1) {
+      _get_nsteps_nrepeats(shape2, shape1,
+          nsteps2, nsteps1, nrepeats2, nrepeats1);
+      return;
+    }
+    // now ndim1 >= ndim2
+    // reserve some memory
+    nsteps1.reserve(ndim1);
+    nsteps2.reserve(ndim1);
+    nrepeats1.reserve(ndim1);
+    nrepeats2.reserve(ndim1);
+
+    // iterate from the end
+    auto it2 = shape2.rbegin();
+    for (auto it1 = shape1.rbegin(); it1 != shape1.rend(); ++it1) {
+      // get the shorter shape's element (and set to 1 if there's no more)
+      I elmt2 = (I)1;
+      if (it2 != shape2.rend()) {
+        elmt2 = *it2;
+        ++it2;
+      }
+      I elmt1 = *it1;
+
+      nsteps1.push_back(elmt1);
+      nsteps2.push_back(elmt2);
+      if (elmt1 == elmt2) {
+        nrepeats1.push_back(1);
+        nrepeats2.push_back(1);
+      }
+      else if ((elmt1 == 1) && (elmt2 != 1)) {
+        nrepeats1.push_back(elmt2);
+        nrepeats2.push_back(1);
+      }
+      else if ((elmt1 != 1) && (elmt2 == 1)) {
+        nrepeats1.push_back(1);
+        nrepeats2.push_back(elmt1);
+      }
+      else {
+        throw std::runtime_error("The shape cannot be broadcasted.");
+      }
+    }
   }
 
   // partial template specialization for different views
   template <typename T, typename I>
   class BCastIterator<T,I,ContiguousView<I>,ContiguousView<I> > {
     // iterators
-    T* it1_;
-    T* it2_;
+    StepBackIterator<T,I> sb1_;
+    StepBackIterator<T,I> sb2_;
     T* itr_;
     I offset_;
     I sz_;
@@ -77,24 +138,26 @@ namespace csp {
     // constructor
     BCastIterator(T* data1, const ContiguousView<I>& view1,
                   T* data2, const ContiguousView<I>& view2,
-                  T* resdata, const ContiguousView<I>& viewr) {
-      // ???
+                  T* rdata, const ContiguousView<I>& viewr) {
+      // get the nsteps and nrepeats
+      std::vector<I> nsteps1, nsteps2;
+      std::vector<I> nrepeats1, nrepeats2;
+      _get_nsteps_nrepeats(view1.shape(), view2.shape(),
+                           nsteps1, nsteps2, nrepeats1, nrepeats2);
 
       // set the default parameters
-      it1_ = data1;
-      it2_ = data2;
-      itr_ = datar;
+      sb1_ = StepBackIterator<T,I>(nsteps1, nrepeats1, data1);
+      sb2_ = StepBackIterator<T,I>(nsteps2, nrepeats2, data2);
+      itr_ = rdata;
       offset_ = 0;
       sz_ = viewr.size();
     }
 
-    inline T& first() { return *it1_; }
-    inline T& second() { return *it2_; }
+    inline T& first() { return *sb1_; }
+    inline T& second() { return *sb2_; }
     inline T& result() { return *itr_; }
     inline BCastIterator& operator++() {
-      // it1 and it2 ???
-      ++itr_;
-      ++offset_;
+      ++sb1_; ++sb2_; ++itr_; ++offset_;
     }
 
     inline operator bool() const {
