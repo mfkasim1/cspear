@@ -70,7 +70,11 @@ int test_bcast() {
   }
   std::cout << std::endl;
 
-  std::cout << c.sum() << std::endl;
+  auto d = c.sum(1);
+  for (int i = 0; i < 10; ++i) {
+    std::cout << d[i] << " ";
+  }
+  std::cout << std::endl;
   return 0;
 }
 

@@ -34,21 +34,21 @@ namespace csp {
   // reduce an axis
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::sum(I ax) {
-    return reduce_axis(
+    return reduce_axis<array<T,I,ContiguousView> >(
       [](T& r, const T& elmt) { r += elmt; },
       *this, ax, (T)0
     );
   }
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::max(I ax) {
-    return reduce_axis(
+    return reduce_axis<array<T,I,ContiguousView> >(
       [](T& r, const T& elmt) { r = elmt > r ? elmt : r; },
       *this, ax, std::numeric_limits<T>::lowest()
     );
   }
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::min(I ax) {
-    return reduce_axis(
+    return reduce_axis<array<T,I,ContiguousView> >(
       [](T& r, const T& elmt) { r = elmt > r ? elmt : r; },
       *this, ax, std::numeric_limits<T>::max()
     );
@@ -57,21 +57,21 @@ namespace csp {
   // reduce an axes
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::sum(const std::vector<I>& ax) {
-    return reduce_axes(
+    return reduce_axes<array<T,I,ContiguousView> >(
       [](T& r, const T& elmt) { r += elmt; },
       *this, ax, (T)0
     );
   }
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::max(const std::vector<I>& ax) {
-    return reduce_axes(
+    return reduce_axes<array<T,I,ContiguousView> >(
       [](T& r, const T& elmt) { r = elmt > r ? elmt : r; },
       *this, ax, std::numeric_limits<T>::lowest()
     );
   }
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::min(const std::vector<I>& ax) {
-    return reduce_axes(
+    return reduce_axes<array<T,I,ContiguousView> >(
       [](T& r, const T& elmt) { r = elmt > r ? elmt : r; },
       *this, ax, std::numeric_limits<T>::max()
     );
