@@ -56,25 +56,26 @@ int test_bcast() {
   auto c = a.expand_dims_(0) + b.expand_dims_(1);
 
   std::cout << "Shapes:" << std::endl;
-  std::cout << a.shape()[0] << "," << a.shape()[1] << std::endl;
-  std::cout << b.shape()[0] << "," << b.shape()[1] << std::endl;
-  std::cout << c.shape()[0] << "," << c.shape()[1] << std::endl;
+  std::cout << a.shape() << std::endl;
+  std::cout << b.shape() << std::endl;
+  std::cout << c.shape() << std::endl;
   std::cout << std::endl;
 
   std::cout << "Result:" << std::endl;
-  for (int i = 0; i < 10; ++i) {
-    for (int j = 0; j < 10; ++j) {
-      std::cout << c[i*10+j] << " ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
+  std::cout << c << std::endl;
 
   auto d = c.sum(1);
-  for (int i = 0; i < 10; ++i) {
-    std::cout << d[i] << " ";
-  }
-  std::cout << std::endl;
+  std::cout << d << std::endl;
+
+  std::cout << "Interpolation:" << std::endl;
+  a.ravel_();
+  d.ravel_();
+  auto e = csp::interp_sorted(a+0.5, a, d);
+  std::cout << a+0.5 << std::endl;
+  std::cout << a << std::endl;
+  std::cout << d << std::endl;
+  std::cout << "Res:" << std::endl;
+  std::cout << e << std::endl;
   return 0;
 }
 
