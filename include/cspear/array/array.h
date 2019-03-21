@@ -197,7 +197,8 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
   array<T,I,View>::array(const array<T,I,View2>& a) {
-    static_assert(std::is_same<View<I>,ContiguousView<I> >::value);
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+        "Copy operation can only be done to an array with ContiguousView.");
     _copy_different_view(a);
   }
 
