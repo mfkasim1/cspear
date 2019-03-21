@@ -1,8 +1,5 @@
 shape
 array:
-  * interp
-  * histogram
-
   * matmul
   * non-contiguous slicing
   * casting

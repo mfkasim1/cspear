@@ -76,6 +76,10 @@ int test_bcast() {
   std::cout << d << std::endl;
   std::cout << "Res:" << std::endl;
   std::cout << e << std::endl;
+
+  std::cout << "Histogram:" << std::endl;
+  auto f = csp::hist(c, a * 2.1);
+  std::cout << f << std::endl;
   return 0;
 }
 

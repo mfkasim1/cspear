@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cspear/array/array.h>
 #include <cspear/views/contiguous-view.h>
+#include <cspear/tools/assert.h>
 
 namespace csp {
   /*
