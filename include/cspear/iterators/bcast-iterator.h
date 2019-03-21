@@ -13,6 +13,8 @@ namespace csp {
   template <typename T, typename I, typename View1, typename View2>
   class BCastIterator {
     public:
+    static const bool is_implemented = false;
+
     // constructor
     BCastIterator(T* data1, const View1& view1,
                   T* data2, const View2& view2,
@@ -135,6 +137,8 @@ namespace csp {
     I sz_;
 
     public:
+    static const bool is_implemented = true;
+
     // constructor
     BCastIterator(T* data1, const ContiguousView<I>& view1,
                   T* data2, const ContiguousView<I>& view2,
