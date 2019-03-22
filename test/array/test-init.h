@@ -108,6 +108,78 @@ namespace {
     EXPECT_EQ(shape.size(), 2);
   }
 
+  TEST(InitArray,CopyOp) {
+    int sz = 6;
+    double* a = (double*) std::malloc(sz * sizeof(double));
+    a[0] = 1.3;
+    a[1] = 4.2;
+    a[2] = 9.7;
+    a[3] = 7.5;
+    a[4] = 6.4;
+    a[5] = 1.4;
+    csp::array<double> arr1(a, {3,2});
+    // free the memory
+    std::free(a);
+
+    // initialize arr with some arbitrary content
+    csp::array<double> arr = {1.0, 2.1};
+
+    // doing the copy operation
+    arr = arr1.copy();
+    // change one element in arr1 to make sure it makes a copy
+    arr1[0] = 0;
+
+    // check the content
+    EXPECT_DOUBLE_EQ(arr[0], 1.3);
+    EXPECT_DOUBLE_EQ(arr[1], 4.2);
+    EXPECT_DOUBLE_EQ(arr[2], 9.7);
+    EXPECT_DOUBLE_EQ(arr[3], 7.5);
+    EXPECT_DOUBLE_EQ(arr[4], 6.4);
+    EXPECT_DOUBLE_EQ(arr[5], 1.4);
+
+    // check the shape
+    auto shape = arr.shape();
+    EXPECT_EQ(shape[0], 3);
+    EXPECT_EQ(shape[1], 2);
+    EXPECT_EQ(shape.size(), 2);
+  }
+
+  TEST(InitArray,AssignOp) {
+    int sz = 6;
+    double* a = (double*) std::malloc(sz * sizeof(double));
+    a[0] = 1.3;
+    a[1] = 4.2;
+    a[2] = 9.7;
+    a[3] = 7.5;
+    a[4] = 6.4;
+    a[5] = 1.4;
+    csp::array<double> arr1(a, {3,2});
+    // free the memory
+    std::free(a);
+
+    // initialize arr with some arbitrary content
+    csp::array<double> arr = {1.0, 2.1};
+
+    // doing the assignment operation
+    arr = arr1;
+    // change one element in arr1 to make sure it makes a copy
+    arr1[0] = 0;
+
+    // check the content
+    EXPECT_DOUBLE_EQ(arr[0], 1.3);
+    EXPECT_DOUBLE_EQ(arr[1], 4.2);
+    EXPECT_DOUBLE_EQ(arr[2], 9.7);
+    EXPECT_DOUBLE_EQ(arr[3], 7.5);
+    EXPECT_DOUBLE_EQ(arr[4], 6.4);
+    EXPECT_DOUBLE_EQ(arr[5], 1.4);
+
+    // check the shape
+    auto shape = arr.shape();
+    EXPECT_EQ(shape[0], 3);
+    EXPECT_EQ(shape[1], 2);
+    EXPECT_EQ(shape.size(), 2);
+  }
+
   TEST(InitArray,EmptyInit) {
     csp::array<double> arr = csp::empty({4,6});
     EXPECT_EQ(arr.size(), 24);
