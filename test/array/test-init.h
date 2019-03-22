@@ -21,6 +21,24 @@ namespace {
     EXPECT_EQ(arr.ndim(), 1);
   }
 
+  TEST(InitArray,InitializerList2D) {
+    csp::array<double> arr = {{4.5, 1.2, 3.2},
+                              {6.4, 8.2, 7.1}};
+
+    // check the content
+    EXPECT_DOUBLE_EQ(arr[0], 4.5);
+    EXPECT_DOUBLE_EQ(arr[1], 1.2);
+    EXPECT_DOUBLE_EQ(arr[2], 3.2);
+    EXPECT_DOUBLE_EQ(arr[3], 6.4);
+    EXPECT_DOUBLE_EQ(arr[4], 8.2);
+    EXPECT_DOUBLE_EQ(arr[5], 7.1);
+
+    // check the shape
+    std::vector<int> sh = {2,3};
+    EXPECT_EQ(arr.shape(), sh);
+    EXPECT_EQ(arr.ndim(), 2);
+  }
+
   TEST(InitArray,MemoryWithSize) {
     int sz = 5;
     double* a = (double*) std::malloc(sz * sizeof(double));

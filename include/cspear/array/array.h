@@ -31,6 +31,7 @@ namespace csp {
     // constructors and destructor
     array();
     array(std::initializer_list<T> elmts);
+    array(std::initializer_list< std::initializer_list<T> > elmts);
     array(const T* a, I sz);
     array(const T* a, std::initializer_list<I> shape);
     array(const array<T,I,View>& a);
@@ -177,6 +178,29 @@ namespace csp {
     // copy the data
     _realloc();
     std::copy(elmts.begin(), elmts.end(), data_);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>::array(std::initializer_list< std::initializer_list<T> > elmts) {
+    // get the shape
+    I ndim0 = elmts.size();
+    I ndim1 = elmts.begin()->size();
+    for (auto it = elmts.begin() + 1; it != elmts.end(); ++it) {
+      if (it->size() != ndim1) {
+        throw std::runtime_error("The size must match.");
+      }
+    }
+    std::vector<I> shape = {ndim0, ndim1};
+    view_.reshape(shape);
+
+    // reallocate and copy the data
+    _realloc();
+    I k = 0;
+    for (auto it0 = elmts.begin(); it0 != elmts.end(); ++it0) {
+      for (auto it1 = it0->begin(); it1 != it0->end(); ++it1) {
+        data_[k++] = *it1;
+      }
+    }
   }
 
   template <typename T, typename I, template<typename> typename View>
