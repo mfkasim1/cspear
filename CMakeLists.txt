@@ -17,13 +17,13 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 # set flags
-set(CXX11_FLAGS "-std=c++11")
+set(CMAKE_CXX_STANDARD 11)
 set(OPT_FLAGS "-O2")
 set(DEBUG_FLAGS "-g")
 set(PROFILING_FLAGS "-pg -no-pie")
 
 # default flags to be used for all targets
-set(CMAKE_CXX_FLAGS "${CXX11_FLAGS} ${OPT_FLAGS}")
+set(CMAKE_CXX_FLAGS "${OPT_FLAGS}")
 
 # check for openmp
 find_package(OpenMP)
