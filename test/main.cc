@@ -2,7 +2,7 @@
 #define CSPEAR_TEST_MAIN_CC
 
 #include "gtest/gtest.h"
-#include "array/init.h"
+#include "array/test-init.h"
 
 int main() {
   testing::InitGoogleTest();
