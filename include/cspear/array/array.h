@@ -241,6 +241,7 @@ namespace csp {
   array<T,I,View>::~array() {
     if (allocated_) {
       std::free(data_);
+      allocated_ = false;
     }
   }
 
