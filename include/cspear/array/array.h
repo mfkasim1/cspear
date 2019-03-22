@@ -62,11 +62,11 @@ namespace csp {
     array<T,I,ContiguousView> copy() const;
 
     // parameters
-    T* data() { return data_; }
-    const T* data() const { return data_; }
-    const View<I>& view() const { return view_; }
+    inline T* data() { return data_; }
+    inline const T* data() const { return data_; }
+    inline const View<I>& view() const { return view_; }
     inline I size() const { return view_.size(); }
-    I ndim() const { return shape().size(); }
+    inline I ndim() const { return shape().size(); }
     inline const std::vector<I>& shape() const { return view_.shape(); }
 
     // casting and device movement
