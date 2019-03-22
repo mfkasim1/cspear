@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "array/test-init.h"
+#include "array/test-reshape.h"
 
 int main() {
   testing::InitGoogleTest();
