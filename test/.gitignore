@@ -1,0 +1,7 @@
+# CMakeFiles generated files and folders
+bin/*
+CMakeFiles/*
+googletest-build/*
+googletest-download/*
+googletest-src/*
+lib/*
