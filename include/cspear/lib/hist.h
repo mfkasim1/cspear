@@ -28,28 +28,34 @@ namespace csp {
 
     // data is already sorted
 
-    I2 ibin = 0; // pointer for xbins
+    // pointer for xbins
+    auto ibin = EWiseIterator<T2,I2,View2>((T2*)xbins.data(), xbins.view());
+    auto ibinr = EWiseIterator<T2,I2,View2>((T2*)xbins.data(), xbins.view());
+    ++ibinr;
+    // result pointer
+    auto ir = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+    // the data pointer
     auto ix = EWiseIterator<T1,I1,View1>((T1*)data.data(), data.view());
     for (; ix; ++ix) {
       auto& xi = *ix;
       // move the p pointer until xi < xbins[ibin+1]
-      while (xi >= xbins[ibin+1]) {
-        ibin++;
-        if (ibin == xbins.size()-1) break;
+      while (xi >= *ibinr) {
+        ++ibin;
+        ++ibinr;
+        ++ir;
+        if (!ibinr) break;
       }
 
       // break if it's already out of the bins
-      if (ibin == xbins.size()-1) {
-        break;
-      }
+      if (!ibinr) break;
 
       // get the interpolated elements
-      auto& xbinl = xbins[ibin];
-      auto& xbinr = xbins[ibin+1];
+      auto& xbinl = *ibin;
+      auto& xbinr = *ibinr;
 
       // increment the histogram
       if ((xi < xbinr) && (xbinl <= xi)) {
-        res[ibin] += (TR)1;
+        *ir += (TR)1;
       }
     }
     return res;
