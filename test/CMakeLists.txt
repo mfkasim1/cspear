@@ -31,6 +31,7 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
+set(CMAKE_CXX_STANDARD 11)
 include_directories("../include")
 
 add_executable(test main.cc)

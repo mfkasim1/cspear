@@ -5,8 +5,8 @@
 #include "array/test-init.h"
 #include "array/test-reshape.h"
 
-int main() {
-  testing::InitGoogleTest();
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
 
