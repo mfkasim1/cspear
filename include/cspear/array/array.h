@@ -93,6 +93,14 @@ namespace csp {
     array<T,I,ContiguousView> min(I axis);
     array<T,I,ContiguousView> min(const std::vector<I>& axes);
 
+    // boolean operations
+    T all();
+    array<T,I,ContiguousView> all(I axis);
+    array<T,I,ContiguousView> all(const std::vector<I>& axes);
+    T any();
+    array<T,I,ContiguousView> any(I axis);
+    array<T,I,ContiguousView> any(const std::vector<I>& axes);
+
     /*************** OPERATORS ***************/
     // unary operators (non inplace)
     array<T,I,ContiguousView> operator-();

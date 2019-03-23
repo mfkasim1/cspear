@@ -30,6 +30,20 @@ namespace csp {
       *this, std::numeric_limits<T>::max()
     );
   }
+  template <typename T, typename I, template<typename> typename View>
+  T array<T,I,View>::all() {
+    return reduce_all(
+      [](T& r, const T& elmt) { r = r && elmt; },
+      *this, true
+    );
+  }
+  template <typename T, typename I, template<typename> typename View>
+  T array<T,I,View>::any() {
+    return reduce_all(
+      [](T& r, const T& elmt) { r = r || elmt; },
+      *this, false
+    );
+  }
 
   // reduce an axis
   template <typename T, typename I, template<typename> typename View>
@@ -53,6 +67,20 @@ namespace csp {
       *this, ax, std::numeric_limits<T>::max()
     );
   }
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::all(I ax) {
+    return reduce_axis<array<T,I,ContiguousView> >(
+      [](T& r, const T& elmt) { r = elmt && r; },
+      *this, ax, true
+    );
+  }
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::any(I ax) {
+    return reduce_axis<array<T,I,ContiguousView> >(
+      [](T& r, const T& elmt) { r = elmt || r; },
+      *this, ax, false
+    );
+  }
 
   // reduce an axes
   template <typename T, typename I, template<typename> typename View>
@@ -74,6 +102,20 @@ namespace csp {
     return reduce_axes<array<T,I,ContiguousView> >(
       [](T& r, const T& elmt) { r = elmt < r ? elmt : r; },
       *this, ax, std::numeric_limits<T>::max()
+    );
+  }
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::all(const std::vector<I>& ax) {
+    return reduce_axes<array<T,I,ContiguousView> >(
+      [](T& r, const T& elmt) { r = elmt && r; },
+      *this, ax, true
+    );
+  }
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::any(const std::vector<I>& ax) {
+    return reduce_axes<array<T,I,ContiguousView> >(
+      [](T& r, const T& elmt) { r = elmt || r; },
+      *this, ax, false
     );
   }
 }

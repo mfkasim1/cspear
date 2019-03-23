@@ -131,6 +131,46 @@ namespace {
     EXPECT_EQ(arr0.size(), 1);
     EXPECT_DOUBLE_EQ(arr0[0], 21.0);
   }
+
+  TEST(ReduceTest,AllAnyAll) {
+    csp::array<bool> arr = {{false, true, true}, {true, true, true}};
+    EXPECT_EQ(arr.all(), false);
+    EXPECT_EQ(arr.any(), true);
+  }
+  TEST(ReduceTest,AllAnyAxis) {
+    csp::array<bool> arr = {{false, true, true}, {true, true, true}};
+    auto arrall0 = arr.all(0);
+    auto arrall1 = arr.all(1);
+    auto arrany0 = arr.any(0);
+    auto arrany1 = arr.any(1);
+
+    EXPECT_EQ(arrall0.size(), 3);
+    EXPECT_EQ(arrall1.size(), 2);
+    EXPECT_EQ(arrany0.size(), 3);
+    EXPECT_EQ(arrany1.size(), 2);
+
+    EXPECT_EQ(arrall0[0], false);
+    EXPECT_EQ(arrall0[1], true);
+    EXPECT_EQ(arrall0[2], true);
+    EXPECT_EQ(arrall1[0], false);
+    EXPECT_EQ(arrall1[1], true);
+
+    EXPECT_EQ(arrany0[0], true);
+    EXPECT_EQ(arrany0[1], true);
+    EXPECT_EQ(arrany0[2], true);
+    EXPECT_EQ(arrany1[0], true);
+    EXPECT_EQ(arrany1[1], true);
+  }
+
+  TEST(ReduceTest,AllAnyAxes1) {
+    csp::array<bool> arr = {{false, true, true}, {true, true, true}};
+    auto a1 = arr.all({0,1});
+    auto a2 = arr.any({0,1});
+    EXPECT_EQ(a1.size(), 1);
+    EXPECT_EQ(a2.size(), 1);
+    EXPECT_EQ(a1[0], false);
+    EXPECT_EQ(a2[0], true);
+  }
 }
 
 #endif
