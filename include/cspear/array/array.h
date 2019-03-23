@@ -110,6 +110,7 @@ namespace csp {
     array<bool,I,ContiguousView> operator<(T a);
     array<bool,I,ContiguousView> operator<=(T a);
     array<bool,I,ContiguousView> operator==(T a);
+    array<bool,I,ContiguousView> operator!=(T a);
     array<bool,I,ContiguousView> operator&&(T a);
     array<bool,I,ContiguousView> operator||(T a);
 

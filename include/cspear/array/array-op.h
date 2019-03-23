@@ -101,6 +101,12 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
+  array<bool,I,ContiguousView> array<T,I,View>::operator!=(T a) {
+    return ewise_binary_op_with_val< array<bool,I,ContiguousView> >(
+      [&](T& b, const T& a) {return b!=a;}, *this, a);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator&&(T a) {
     return ewise_binary_op_with_val< array<bool,I,ContiguousView> >(
       [&](T& b, const T& a) {return b&&a;}, *this, a);
