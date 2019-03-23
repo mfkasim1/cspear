@@ -61,6 +61,8 @@ namespace csp {
 
     // assignment operator and copy
     array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
+    template <template<typename> typename View2>
+    array<T,I,View>& operator=(const array<T,I,View2>& a);
     array<T,I,ContiguousView> copy() const;
 
     // parameters

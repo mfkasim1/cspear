@@ -97,6 +97,21 @@ namespace {
       FAIL() << "A runtime error should be thrown with mismatched filter shape.";
     }
   }
+  TEST(FilterView,Assign) {
+    csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
+    csp::array<double> b = {2.0, 6.0, 4.2};
+    a[a < 3.1] = b;
+
+    std::vector<int> shape = {2,3};
+    EXPECT_EQ(a.size(), 6);
+    EXPECT_EQ(a.shape(), shape);
+    EXPECT_DOUBLE_EQ(a[0], 2.0);
+    EXPECT_DOUBLE_EQ(a[1], 4.2);
+    EXPECT_DOUBLE_EQ(a[2], 6.0);
+    EXPECT_DOUBLE_EQ(a[3], 6.9);
+    EXPECT_DOUBLE_EQ(a[4], 4.2);
+    EXPECT_DOUBLE_EQ(a[5], 5.2);
+  }
 }
 
 #endif

@@ -295,6 +295,14 @@ namespace csp {
   // inplace binary operators
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
+  array<T,I,View>& array<T,I,View>::operator=(const array<T,I,View2>& a) {
+    return inplace_binary_op(
+      [](T& t, const T& at) { t = at; },
+      *this, a);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
   array<T,I,View>& array<T,I,View>::operator+=(const array<T,I,View2>& a) {
     return inplace_binary_op(
       [](T& b1, const T& b2) {
