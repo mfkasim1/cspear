@@ -24,7 +24,7 @@ namespace csp {
     _cspear_assert(xbins.ndim() == 1,
         "The second argument of hist must be a 1D array.");
 
-    array<TR,I> res = empty({xbins.size()-1});
+    array<TR,I> res = zeros({xbins.size()-1});
 
     // data is already sorted
 
@@ -47,7 +47,7 @@ namespace csp {
       auto& xbinr = xbins[ibin+1];
 
       // increment the histogram
-      if (xi < xbinr) {
+      if ((xi < xbinr) && (xbinl <= xi)) {
         res[ibin] += (TR)1;
       }
     }
