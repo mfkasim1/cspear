@@ -1,7 +1,9 @@
 shape
 array:
   * matmul
-  * non-contiguous slicing
+  * strided views
+  * indexed views
+  * transpose views
   * casting
 
 optimize:
