@@ -2,6 +2,7 @@
 #define CSPEAR_ARRAY_ARRAY_H
 
 #include <cstring>
+#include <cmath>
 #include <vector>
 #include <stdexcept>
 #include <initializer_list>
@@ -285,7 +286,7 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::arange(T begin, T end, T range) {
     array<T,I,ContiguousView> res;
-    I sz = (end - begin) / range;
+    I sz = (I)std::ceil((end - begin) / range);
     res.resize_(sz);
     auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
     for (T i = begin; i < end; i+=range, ++it) {
