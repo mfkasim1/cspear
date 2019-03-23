@@ -6,6 +6,7 @@
 #include "array/test-reshape.h"
 #include "array/test-reduce.h"
 #include "array/test-op.h"
+#include "array/test-bcast.h"
 
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);

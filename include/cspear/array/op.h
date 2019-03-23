@@ -188,7 +188,15 @@ namespace csp {
       return ewise_inplace_binary_op(f, arr1, arr2);
     }
     else {
-      throw std::runtime_error("Invalid shape of the operator.\n");
+      // check if they are broadcastable
+      auto resshape = bcast_output_shape(arr1.shape(), arr2.shape());
+      if (resshape.size() == 0) {
+        throw std::runtime_error("Invalid shape of the operator.");
+      }
+      else {
+        throw std::runtime_error("Inplace broadcast is disabled to avoid "
+                                 "aliasing.");
+      }
     }
   }
 }
