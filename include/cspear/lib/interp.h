@@ -7,26 +7,21 @@
 #include <cspear/tools/assert.h>
 
 namespace csp {
-  /*
-  */
-  template <typename T, typename I>
-  array<T,I> interp(
-            const array<T,I>& x,
-            const array<T,I>& xp,
-            const array<T,I>& yp) {
-    // sort the x first
-    array<T,I> xc = x;
-    std::sort(xc.data(), xc.data()+xc.size());
-
-    // do the sorted interpolation
-    return interp_sorted(xc, xp, yp);
-  }
-
-  template <typename T, typename I>
-  array<T,I> interp_sorted(
-            const array<T,I>& x,
-            const array<T,I>& xp,
-            const array<T,I>& yp) {
+  template <typename XType, typename XPType, typename YPType,
+            typename ResType=array<tools::Real,tools::Int,ContiguousView> >
+  ResType interp_sorted(const XType& x, const XPType& xp, const YPType& yp) {
+    using TX = typename XType::DataType;
+    using IX = typename XType::IndexType;
+    using ViewX = typename XType::ViewType;
+    using TXP = typename XPType::DataType;
+    using IXP = typename XPType::IndexType;
+    using ViewXP = typename XPType::ViewType;
+    using TYP = typename YPType::DataType;
+    using IYP = typename YPType::IndexType;
+    using ViewYP = typename YPType::ViewType;
+    using TR = typename XType::DataType;
+    using IR = typename XType::IndexType;
+    using ViewR = typename XType::ViewType;
 
     // the arguments xp and yp must be 1D
     _cspear_assert((xp.ndim() == 1) && (yp.ndim() == 1),
@@ -34,13 +29,17 @@ namespace csp {
     _cspear_assert(xp.size() == yp.size(),
       "The xp and yp must have the same length.");
 
-    array<T,I> y = array<T,I>::empty(x.shape());
-    T left = yp[0];
-    T right = yp[yp.size()-1];
+    ResType y = ResType::empty(x.shape());
+    TR left = (TR)yp[0];
+    TR right = (TR)yp[yp.size()-1];
 
-    I ipl = 0; // pointer for xp and yp
-    for (I ix = 0; ix < x.size(); ++ix) {
-      auto& xi = x[ix];
+    IXP ipl = 0; // pointer for xp and yp
+
+    auto ix = EWiseIterator<TX,IX,ViewX>((TX*)x.data(), x.view());
+    auto iy = EWiseIterator<TR,IR,ViewR>((TR*)y.data(), y.view());
+    for (; ix; ++ix, ++iy) {
+      auto& xi = *ix;
+
       // move the p pointer until xi < xp[ipl+1]
       while (xi >= xp[ipl+1]) {
         ipl++;
@@ -49,8 +48,8 @@ namespace csp {
 
       // extrapolate on the right
       if (ipl == xp.size()-1) {
-        for (I ix2 = ix; ix2 < x.size(); ++ix2) {
-          y[ix2] = right;
+        for (; iy; ++iy) {
+          *iy = right;
         }
         break;
       }
@@ -61,16 +60,31 @@ namespace csp {
 
       // extrapolate on the left
       if (xi < xpl) {
-        y[ix] = left;
+        *iy = left;
       }
       // linearly interpolate
       else if (xi < xpr) {
         auto& ypl = yp[ipl];
         auto& ypr = yp[ipl+1];
-        y[ix] = (ypr - ypl) * (xi - xpl) / (xpr - xpl) + ypl;
+        *iy = (ypr - ypl) * (xi - xpl) / (xpr - xpl) + ypl;
       }
     }
     return y;
+  }
+
+  template <typename XType, typename XPType, typename YPType,
+            typename ResType=array<tools::Real,tools::Int,ContiguousView> >
+  ResType interp(const XType& x, const XPType& xp, const YPType& yp) {
+    using TX = typename XType::DataType;
+    using IX = typename XType::IndexType;
+    using ViewX = typename XType::ViewType;
+
+    // sort the x first
+    array<TX,IX> xc = x;
+    std::sort(xc.data(), xc.data()+xc.size());
+
+    // do the sorted interpolation
+    return interp_sorted<XType,XPType,YPType,ResType>(xc, xp, yp);
   }
 }
 

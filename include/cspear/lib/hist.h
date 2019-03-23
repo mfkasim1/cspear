@@ -7,30 +7,31 @@
 #include <cspear/tools/types.h>
 
 namespace csp {
-  template <typename TR=tools::Int, typename T=tools::Real,
-            typename I=tools::Int>
-  array<TR,I> hist(const array<T,I>& data, const array<T,I>& xbins) {
-    // sort the data
-    array<T,I> cdata = data;
-    std::sort(cdata.data(), cdata.data()+cdata.size());
+  template <typename InpType1, typename InpType2,
+            typename ResType=array<tools::Real,tools::Int,ContiguousView> >
+  ResType hist_sorted(const InpType1& data, const InpType2& xbins) {
+    using T1 = typename InpType1::DataType;
+    using I1 = typename InpType1::IndexType;
+    using View1 = typename InpType1::ViewType;
+    using T2 = typename InpType2::DataType;
+    using I2 = typename InpType2::IndexType;
+    using View2 = typename InpType2::ViewType;
+    using TR = typename ResType::DataType;
+    using IR = typename ResType::IndexType;
+    using ViewR = typename ResType::ViewType;
 
-    return hist_sorted(cdata, xbins);
-  }
-
-  template <typename TR=tools::Int, typename T=tools::Real,
-            typename I=tools::Int>
-  array<TR,I> hist_sorted(const array<T,I>& data, const array<T,I>& xbins) {
     // xbins must be a 1D array
     _cspear_assert(xbins.ndim() == 1,
         "The second argument of hist must be a 1D array.");
 
-    array<TR,I> res = array<TR,I>::zeros({xbins.size()-1});
+    ResType res = ResType::zeros({xbins.size()-1});
 
     // data is already sorted
 
-    I ibin = 0; // pointer for xbins
-    for (I ix = 0; ix < data.size(); ++ix) {
-      auto& xi = data[ix];
+    I2 ibin = 0; // pointer for xbins
+    auto ix = EWiseIterator<T1,I1,View1>((T1*)data.data(), data.view());
+    for (; ix; ++ix) {
+      auto& xi = *ix;
       // move the p pointer until xi < xbins[ibin+1]
       while (xi >= xbins[ibin+1]) {
         ibin++;
@@ -52,6 +53,20 @@ namespace csp {
       }
     }
     return res;
+  }
+
+  template <typename InpType1, typename InpType2,
+            typename ResType=array<tools::Real,tools::Int,ContiguousView> >
+  ResType hist(const InpType1& data, const InpType2& xbins) {
+    using T1 = typename InpType1::DataType;
+    using I1 = typename InpType1::IndexType;
+    using View1 = typename InpType1::ViewType;
+
+    // sort the data
+    array<T1,I1> cdata = data;
+    std::sort(cdata.data(), cdata.data()+cdata.size());
+
+    return hist_sorted<InpType1,InpType2,ResType>(cdata, xbins);
   }
 }
 
