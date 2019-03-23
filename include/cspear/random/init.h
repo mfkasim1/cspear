@@ -23,7 +23,7 @@ namespace csp {
     rng_type rng(seed);
 
     // single number random generator
-    template <typename T, typename I=tools::Int>
+    template <typename T=tools::Real, typename I=tools::Int>
     T random(T lb=0, T ub=1) {
       typename std::conditional<std::is_integral<T>::value,
           std::uniform_int_distribution<T>,
@@ -31,19 +31,15 @@ namespace csp {
       return dist(rng);
     }
 
-    template <typename T, typename I=tools::Int>
+    template <typename T=tools::Real, typename I=tools::Int>
     array<T,I> randn(T mean=0, T std=1) {
       std::normal_distribution<T> dist(mean, std);
       return dist(rng);
     }
 
-    /**begin repeat
-    tpename = ["const std::vector<I>&",
-               "std::initializer_list<T>"];
-    */
     // uniform random
-    template <typename T, typename I=tools::Int>
-    array<T,I> _random(@tpename@ shape, T lb=0, T ub=1) {
+    template <typename T=tools::Real, typename I=tools::Int>
+    array<T,I> _random(const std::vector<I>& shape, T lb=0, T ub=1) {
       array<T,I> res = empty<T,I>(shape);
 
       // generate the random number
@@ -58,21 +54,21 @@ namespace csp {
       }
       return res;
     }
-    template <typename T, typename I=tools::Int>
-    array<T,I> random(@tpename@ shape) {
+    template <typename T=tools::Real, typename I=tools::Int>
+    array<T,I> random(const std::vector<I>& shape) {
       return _random(shape, (T)0, (T)1);
     }
-    template <typename T, typename I=tools::Int>
-    array<T,I> random(@tpename@ shape, T ub) {
+    template <typename T=tools::Real, typename I=tools::Int>
+    array<T,I> random(const std::vector<I>& shape, T ub) {
       return _random(shape, (T)0, ub);
     }
-    template <typename T, typename I=tools::Int>
-    array<T,I> random(@tpename@ shape, T lb, T ub) {
+    template <typename T=tools::Real, typename I=tools::Int>
+    array<T,I> random(const std::vector<I>& shape, T lb, T ub) {
       return _random(shape, lb, ub);
     }
 
-    template <typename T, typename I=tools::Int>
-    array<T,I> randn(@tpename@ shape, T mean=0, T std=1) {
+    template <typename T=tools::Real, typename I=tools::Int>
+    array<T,I> randn(const std::vector<I>& shape, T mean=0, T std=1) {
       array<T,I> res = empty<T,I>(shape);
 
       I sz = res.size();
@@ -82,7 +78,6 @@ namespace csp {
       }
       return res;
     }
-    /**end repeat**/
   }
 }
 

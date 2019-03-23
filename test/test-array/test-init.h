@@ -318,6 +318,19 @@ namespace {
     EXPECT_EQ(arr.size(), 4);
     EXPECT_EQ(arr.ndim(), 1);
   }
+
+  TEST(InitArray,RandomInit) {
+    csp::array<double> arr = csp::random::random({4,5});
+    EXPECT_EQ(arr.size(), 20);
+    EXPECT_EQ(arr.ndim(), 2);
+    EXPECT_EQ(arr.shape()[0], 4);
+    EXPECT_EQ(arr.shape()[1], 5);
+
+    for (int i = 0; i < arr.size(); ++i) {
+      EXPECT_TRUE(arr[i] < 1.0);
+      EXPECT_TRUE(arr[i] >= 0.0);
+    }
+  }
 }
 
 #endif
