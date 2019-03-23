@@ -7,7 +7,7 @@
 #include <cspear/tools/types.h>
 
 namespace csp {
-  template <typename TR=tools::Real, typename T=tools::Real,
+  template <typename TR=tools::Int, typename T=tools::Real,
             typename I=tools::Int>
   array<TR,I> hist(const array<T,I>& data, const array<T,I>& xbins) {
     // sort the data
@@ -17,14 +17,14 @@ namespace csp {
     return hist_sorted(cdata, xbins);
   }
 
-  template <typename TR=tools::Real, typename T=tools::Real,
+  template <typename TR=tools::Int, typename T=tools::Real,
             typename I=tools::Int>
   array<TR,I> hist_sorted(const array<T,I>& data, const array<T,I>& xbins) {
     // xbins must be a 1D array
     _cspear_assert(xbins.ndim() == 1,
         "The second argument of hist must be a 1D array.");
 
-    array<TR,I> res = zeros({xbins.size()-1});
+    array<TR,I> res = array<TR,I>::zeros({xbins.size()-1});
 
     // data is already sorted
 

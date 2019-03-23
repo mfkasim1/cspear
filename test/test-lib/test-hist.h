@@ -31,21 +31,21 @@ namespace {
     };
     csp::array<double> xbins =
       {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
-    auto count = csp::hist<double>(data, xbins);
-    std::vector<double> res = {12, 11, 12, 9, 11, 9, 6, 11, 12, 7};
+    auto count = csp::hist(data, xbins);
+    std::vector<int> res = {12, 11, 12, 9, 11, 9, 6, 11, 12, 7};
 
     EXPECT_EQ(res.size(), count.size());
     for (int i = 0; i < count.size(); ++i) {
-      EXPECT_DOUBLE_EQ(res[i], count[i]);
+      EXPECT_EQ(res[i], count[i]);
     }
 
     csp::array<double> xbins2 = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
-    auto count2 = csp::hist<double>(data, xbins2);
-    std::vector<double> res2 = {11, 12, 9, 11, 9, 6, 11, 12};
+    auto count2 = csp::hist(data, xbins2);
+    std::vector<int> res2 = {11, 12, 9, 11, 9, 6, 11, 12};
 
     EXPECT_EQ(res2.size(), count2.size());
     for (int i = 0; i < count2.size(); ++i) {
-      EXPECT_DOUBLE_EQ(res2[i], count2[i]);
+      EXPECT_EQ(res2[i], count2[i]);
     }
   }
   TEST(HistTest,HistSorted) {
@@ -73,21 +73,21 @@ namespace {
     };
     csp::array<double> xbins =
       {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
-    auto count = csp::hist_sorted<double>(data, xbins);
-    std::vector<double> res = {7, 8, 10, 8, 8, 12, 17, 10, 11, 9};
+    auto count = csp::hist_sorted(data, xbins);
+    std::vector<int> res = {7, 8, 10, 8, 8, 12, 17, 10, 11, 9};
 
     EXPECT_EQ(res.size(), count.size());
     for (int i = 0; i < count.size(); ++i) {
-      EXPECT_DOUBLE_EQ(res[i], count[i]);
+      EXPECT_EQ(res[i], count[i]);
     }
 
     csp::array<double> xbins2 = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
-    auto count2 = csp::hist_sorted<double>(data, xbins2);
-    std::vector<double> res2 = {8, 10, 8, 8, 12, 17, 10, 11};
+    auto count2 = csp::hist_sorted(data, xbins2);
+    std::vector<int> res2 = {8, 10, 8, 8, 12, 17, 10, 11};
 
     EXPECT_EQ(res2.size(), count2.size());
     for (int i = 0; i < count2.size(); ++i) {
-      EXPECT_DOUBLE_EQ(res2[i], count2[i]);
+      EXPECT_EQ(res2[i], count2[i]);
     }
   }
 }

@@ -34,7 +34,7 @@ namespace csp {
     _cspear_assert(xp.size() == yp.size(),
       "The xp and yp must have the same length.");
 
-    array<T,I> y = empty(x.shape());
+    array<T,I> y = array<T,I>::empty(x.shape());
     T left = yp[0];
     T right = yp[yp.size()-1];
 
