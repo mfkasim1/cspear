@@ -1,6 +1,7 @@
 #ifndef CSPEAR_TEST_TEST_LIB_TEST_HIST_H
 #define CSPEAR_TEST_TEST_LIB_TEST_HIST_H
 
+#include <vector>
 #include "gtest/gtest.h"
 #include <cspear/cspear>
 
