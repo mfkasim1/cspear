@@ -31,6 +31,8 @@ namespace csp {
     // the arguments xp and yp must be 1D
     _cspear_assert((xp.ndim() == 1) && (yp.ndim() == 1),
       "interp and interp_sorted only works for 1 dimensional xp and yp");
+    _cspear_assert(xp.size() == yp.size(),
+      "The xp and yp must have the same length.");
 
     array<T,I> y = empty(x.shape());
     T left = yp[0];
@@ -47,8 +49,10 @@ namespace csp {
 
       // extrapolate on the right
       if (ipl == xp.size()-1) {
-        y[ix] = right;
-        continue;
+        for (I ix2 = ix; ix2 < x.size(); ++ix2) {
+          y[ix2] = right;
+        }
+        break;
       }
 
       // get the interpolated elements
