@@ -2,6 +2,8 @@
 #define CSPEAR_ITERATORS_BCAST_ITERATOR_H
 
 #include <vector>
+#include <stdexcept>
+#include <iostream>
 #include <cspear/views/contiguous-view.h>
 #include <cspear/views/filter-view.h>
 #include <cspear/iterators/stepback-iterator.h>
@@ -19,14 +21,21 @@ namespace csp {
     // constructor
     BCastIterator(T1* data1, const View1& view1,
                   T2* data2, const View2& view2,
-                  TR* resdata, const ContiguousView<I>& viewr);
+                  TR* resdata, const ContiguousView<I>& viewr) {
+      std::cout << "The broadcast iteration for " << view1 << " and ";
+      std::cout << view2 << "have not been implemented. ";
+      std::cout << "Please apply the .copy() function of non-contiguous view ";
+      std::cout << "to convert it to contiguous view and put it on this ";
+      std::cout << "operation.";
+      throw std::runtime_error("The broadcast iteration is not implemented");
+    }
 
     // iterator operator
-    T1& first(); // reference to the element of the first data
-    T2& second(); // reference to the element of the second data
-    TR& result(); // reference to the element of the result data
-    BCastIterator& operator++();
-    operator bool() const;
+    T1& first() {} // reference to the element of the first data
+    T2& second() {} // reference to the element of the second data
+    TR& result() {} // reference to the element of the result data
+    BCastIterator& operator++() {}
+    operator bool() const {}
   };
 
   // obtain the broadcast output shape
