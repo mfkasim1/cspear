@@ -144,6 +144,8 @@ namespace csp {
     template <template<typename> typename View2>
     array<bool,I,ContiguousView> operator==(const array<T,I,View2>& a);
     template <template<typename> typename View2>
+    array<bool,I,ContiguousView> operator!=(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
     array<bool,I,ContiguousView> operator&&(const array<T,I,View2>& a);
     template <template<typename> typename View2>
     array<bool,I,ContiguousView> operator||(const array<T,I,View2>& a);

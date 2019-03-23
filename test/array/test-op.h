@@ -367,4 +367,239 @@ namespace {
   }
 }
 
+  // binary op with another array
+  TEST(BinaryOp,Add) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.1}, {0.0, 2.0, 2.0, 1.0}};
+    auto b = arr + ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], 4.0);
+    EXPECT_DOUBLE_EQ(b[1], 6.1);
+    EXPECT_DOUBLE_EQ(b[2], 0.0);
+    EXPECT_DOUBLE_EQ(b[3], 1.1);
+    EXPECT_DOUBLE_EQ(b[4], 0.1);
+    EXPECT_DOUBLE_EQ(b[5], 2.2);
+    EXPECT_DOUBLE_EQ(b[6], -2.1);
+    EXPECT_DOUBLE_EQ(b[7], 3.1);
+  }
+  TEST(BinaryOp,Sub) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.1}, {0.0, 2.0, 2.0, 1.0}};
+    auto b = arr - ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], 2.0);
+    EXPECT_DOUBLE_EQ(b[1], 2.1);
+    EXPECT_DOUBLE_EQ(b[2], -10.0);
+    EXPECT_DOUBLE_EQ(b[3], -1.1);
+    EXPECT_DOUBLE_EQ(b[4], 0.1);
+    EXPECT_DOUBLE_EQ(b[5], -1.8);
+    EXPECT_DOUBLE_EQ(b[6], -6.1);
+    EXPECT_DOUBLE_EQ(b[7], 1.1);
+  }
+  TEST(BinaryOp,Mult) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.1}, {0.0, 2.0, 2.0, 1.0}};
+    auto b = arr * ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], 3.0);
+    EXPECT_DOUBLE_EQ(b[1], 8.2);
+    EXPECT_DOUBLE_EQ(b[2], -25.0);
+    EXPECT_DOUBLE_EQ(b[3], 0.0);
+    EXPECT_DOUBLE_EQ(b[4], 0.0);
+    EXPECT_DOUBLE_EQ(b[5], 0.4);
+    EXPECT_DOUBLE_EQ(b[6], -8.2);
+    EXPECT_DOUBLE_EQ(b[7], 2.1);
+  }
+  TEST(BinaryOp,Div) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.0}, {1.0, 2.0, 2.0, 1.0}};
+    auto b = arr / ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], 3.0);
+    EXPECT_DOUBLE_EQ(b[1], 2.05);
+    EXPECT_DOUBLE_EQ(b[2], -1.0);
+    EXPECT_DOUBLE_EQ(b[3], 0.0);
+    EXPECT_DOUBLE_EQ(b[4], 0.1);
+    EXPECT_DOUBLE_EQ(b[5], 0.1);
+    EXPECT_DOUBLE_EQ(b[6], -2.05);
+    EXPECT_DOUBLE_EQ(b[7], 2.1);
+  }
+  TEST(BinaryOp,Gt) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, -5.0, 1.0}, {1.0, 2.0, 2.0, 1.0}};
+    auto b = arr > ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], true);
+    EXPECT_DOUBLE_EQ(b[1], true);
+    EXPECT_DOUBLE_EQ(b[2], false);
+    EXPECT_DOUBLE_EQ(b[3], false);
+    EXPECT_DOUBLE_EQ(b[4], false);
+    EXPECT_DOUBLE_EQ(b[5], false);
+    EXPECT_DOUBLE_EQ(b[6], false);
+    EXPECT_DOUBLE_EQ(b[7], true);
+  }
+  TEST(BinaryOp,GtEq) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, -5.0, 1.0}, {1.0, 2.0, 2.0, 1.0}};
+    auto b = arr >= ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], true);
+    EXPECT_DOUBLE_EQ(b[1], true);
+    EXPECT_DOUBLE_EQ(b[2], true);
+    EXPECT_DOUBLE_EQ(b[3], false);
+    EXPECT_DOUBLE_EQ(b[4], false);
+    EXPECT_DOUBLE_EQ(b[5], false);
+    EXPECT_DOUBLE_EQ(b[6], false);
+    EXPECT_DOUBLE_EQ(b[7], true);
+  }
+  TEST(BinaryOp,Lt) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, -5.0, 1.0}, {1.0, 2.0, 2.0, 1.0}};
+    auto b = arr < ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], false);
+    EXPECT_DOUBLE_EQ(b[1], false);
+    EXPECT_DOUBLE_EQ(b[2], false);
+    EXPECT_DOUBLE_EQ(b[3], true);
+    EXPECT_DOUBLE_EQ(b[4], true);
+    EXPECT_DOUBLE_EQ(b[5], true);
+    EXPECT_DOUBLE_EQ(b[6], true);
+    EXPECT_DOUBLE_EQ(b[7], false);
+  }
+  TEST(BinaryOp,LtEq) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, -5.0, 1.0}, {1.0, 2.0, 2.0, 1.0}};
+    auto b = arr <= ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], false);
+    EXPECT_DOUBLE_EQ(b[1], false);
+    EXPECT_DOUBLE_EQ(b[2], true);
+    EXPECT_DOUBLE_EQ(b[3], true);
+    EXPECT_DOUBLE_EQ(b[4], true);
+    EXPECT_DOUBLE_EQ(b[5], true);
+    EXPECT_DOUBLE_EQ(b[6], true);
+    EXPECT_DOUBLE_EQ(b[7], false);
+  }
+  TEST(BinaryOp,Eq) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, -5.0, 0.0}, {0.1, 2.0, 2.0, 1.0}};
+    auto b = arr == ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], false);
+    EXPECT_DOUBLE_EQ(b[1], false);
+    EXPECT_DOUBLE_EQ(b[2], true);
+    EXPECT_DOUBLE_EQ(b[3], true);
+    EXPECT_DOUBLE_EQ(b[4], true);
+    EXPECT_DOUBLE_EQ(b[5], false);
+    EXPECT_DOUBLE_EQ(b[6], false);
+    EXPECT_DOUBLE_EQ(b[7], false);
+  }
+  TEST(BinaryOp,NEq) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, -5.0, 0.0}, {0.1, 2.0, 2.0, 1.0}};
+    auto b = arr != ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], true);
+    EXPECT_DOUBLE_EQ(b[1], true);
+    EXPECT_DOUBLE_EQ(b[2], false);
+    EXPECT_DOUBLE_EQ(b[3], false);
+    EXPECT_DOUBLE_EQ(b[4], false);
+    EXPECT_DOUBLE_EQ(b[5], true);
+    EXPECT_DOUBLE_EQ(b[6], true);
+    EXPECT_DOUBLE_EQ(b[7], true);
+  }
+  TEST(BinaryOpBool,And) {
+    csp::array<bool> arr = {{true, true, false, false}, {true, true, false, false}};
+    csp::array<bool> ars = {{true, false, false, false}, {true, true, false, true}};
+    auto b = arr && ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], true);
+    EXPECT_DOUBLE_EQ(b[1], false);
+    EXPECT_DOUBLE_EQ(b[2], false);
+    EXPECT_DOUBLE_EQ(b[3], false);
+    EXPECT_DOUBLE_EQ(b[4], true);
+    EXPECT_DOUBLE_EQ(b[5], true);
+    EXPECT_DOUBLE_EQ(b[6], false);
+    EXPECT_DOUBLE_EQ(b[7], false);
+  }
+  TEST(BinaryOpBool,Or) {
+    csp::array<bool> arr = {{true, true, false, false}, {true, true, false, false}};
+    csp::array<bool> ars = {{true, false, false, false}, {true, true, false, true}};
+    auto b = arr || ars;
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_DOUBLE_EQ(b[0], true);
+    EXPECT_DOUBLE_EQ(b[1], true);
+    EXPECT_DOUBLE_EQ(b[2], false);
+    EXPECT_DOUBLE_EQ(b[3], false);
+    EXPECT_DOUBLE_EQ(b[4], true);
+    EXPECT_DOUBLE_EQ(b[5], true);
+    EXPECT_DOUBLE_EQ(b[6], false);
+    EXPECT_DOUBLE_EQ(b[7], true);
+  }
+
+  // inplace binary operator with another array
+  TEST(InplaceBinaryOp,Add) {
+    csp::array<double> b = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.1}, {0.0, 2.0, 2.0, 1.0}};
+    b += ars;
+    EXPECT_DOUBLE_EQ(b[0], 4.0);
+    EXPECT_DOUBLE_EQ(b[1], 6.1);
+    EXPECT_DOUBLE_EQ(b[2], 0.0);
+    EXPECT_DOUBLE_EQ(b[3], 1.1);
+    EXPECT_DOUBLE_EQ(b[4], 0.1);
+    EXPECT_DOUBLE_EQ(b[5], 2.2);
+    EXPECT_DOUBLE_EQ(b[6], -2.1);
+    EXPECT_DOUBLE_EQ(b[7], 3.1);
+  }
+  TEST(InplaceBinaryOp,Sub) {
+    csp::array<double> b = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.1}, {0.0, 2.0, 2.0, 1.0}};
+    b -= ars;
+    EXPECT_DOUBLE_EQ(b[0], 2.0);
+    EXPECT_DOUBLE_EQ(b[1], 2.1);
+    EXPECT_DOUBLE_EQ(b[2], -10.0);
+    EXPECT_DOUBLE_EQ(b[3], -1.1);
+    EXPECT_DOUBLE_EQ(b[4], 0.1);
+    EXPECT_DOUBLE_EQ(b[5], -1.8);
+    EXPECT_DOUBLE_EQ(b[6], -6.1);
+    EXPECT_DOUBLE_EQ(b[7], 1.1);
+  }
+  TEST(InplaceBinaryOp,Mult) {
+    csp::array<double> b = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.1}, {0.0, 2.0, 2.0, 1.0}};
+    b *= ars;
+    EXPECT_DOUBLE_EQ(b[0], 3.0);
+    EXPECT_DOUBLE_EQ(b[1], 8.2);
+    EXPECT_DOUBLE_EQ(b[2], -25.0);
+    EXPECT_DOUBLE_EQ(b[3], 0.0);
+    EXPECT_DOUBLE_EQ(b[4], 0.0);
+    EXPECT_DOUBLE_EQ(b[5], 0.4);
+    EXPECT_DOUBLE_EQ(b[6], -8.2);
+    EXPECT_DOUBLE_EQ(b[7], 2.1);
+  }
+  TEST(InplaceBinaryOp,Div) {
+    csp::array<double> b = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.0}, {1.0, 2.0, 2.0, 1.0}};
+    b /= ars;
+    EXPECT_DOUBLE_EQ(b[0], 3.0);
+    EXPECT_DOUBLE_EQ(b[1], 2.05);
+    EXPECT_DOUBLE_EQ(b[2], -1.0);
+    EXPECT_DOUBLE_EQ(b[3], 0.0);
+    EXPECT_DOUBLE_EQ(b[4], 0.1);
+    EXPECT_DOUBLE_EQ(b[5], 0.1);
+    EXPECT_DOUBLE_EQ(b[6], -2.05);
+    EXPECT_DOUBLE_EQ(b[7], 2.1);
+  }
 #endif

@@ -266,6 +266,15 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
+  array<bool,I,ContiguousView> array<T,I,View>::operator!=(const array<T,I,View2>& a) {
+    return binary_op< array<bool,I,ContiguousView> >(
+      [](T& b1, const T& b2) {
+        return b1!=b2;
+      }, *this, a);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
   array<bool,I,ContiguousView> array<T,I,View>::operator&&(const array<T,I,View2>& a) {
     return binary_op< array<bool,I,ContiguousView> >(
       [](T& b1, const T& b2) {

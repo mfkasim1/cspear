@@ -147,7 +147,7 @@ namespace csp {
     using ViewR = typename ResType::ViewType;
 
     // do the iterations
-    auto itb = BCastIterator<T1,I1,View1,View2>(
+    auto itb = BCastIterator<T1,T2,TR,I1,View1,View2>(
         (T1*)arr1.data(), arr1.view(),
         (T2*)arr2.data(), arr2.view(),
         (TR*)res.data(), res.view());
