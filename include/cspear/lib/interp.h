@@ -34,6 +34,12 @@ namespace csp {
     TR right = (TR)yp[yp.size()-1];
 
     IXP ipl = 0; // pointer for xp and yp
+    // pointer for xp and yp
+    auto ixpl = EWiseIterator<TXP,IXP,ViewXP>((TXP*)xp.data(), xp.view());
+    auto ixpr = EWiseIterator<TXP,IXP,ViewXP>((TXP*)xp.data(), xp.view());
+    auto iypl = EWiseIterator<TYP,IYP,ViewYP>((TYP*)yp.data(), yp.view());
+    auto iypr = EWiseIterator<TYP,IYP,ViewYP>((TYP*)yp.data(), yp.view());
+    ++ixpr; ++iypr;
 
     auto ix = EWiseIterator<TX,IX,ViewX>((TX*)x.data(), x.view());
     auto iy = EWiseIterator<TR,IR,ViewR>((TR*)y.data(), y.view());
@@ -41,13 +47,14 @@ namespace csp {
       auto& xi = *ix;
 
       // move the p pointer until xi < xp[ipl+1]
-      while (xi >= xp[ipl+1]) {
-        ipl++;
-        if (ipl == xp.size()-1) break;
+      while (xi >= *ixpr) {
+        ++ixpl; ++ixpr;
+        ++iypl; ++iypr;
+        if (!ixpr) break;
       }
 
       // extrapolate on the right
-      if (ipl == xp.size()-1) {
+      if (!ixpr) {
         for (; iy; ++iy) {
           *iy = right;
         }
@@ -55,8 +62,8 @@ namespace csp {
       }
 
       // get the interpolated elements
-      auto& xpl = xp[ipl];
-      auto& xpr = xp[ipl+1];
+      auto& xpl = *ixpl; // xp[ipl];
+      auto& xpr = *ixpr; // xp[ipl+1];
 
       // extrapolate on the left
       if (xi < xpl) {
@@ -64,8 +71,8 @@ namespace csp {
       }
       // linearly interpolate
       else if (xi < xpr) {
-        auto& ypl = yp[ipl];
-        auto& ypr = yp[ipl+1];
+        auto& ypl = *iypl;
+        auto& ypr = *iypr;
         *iy = (ypr - ypl) * (xi - xpl) / (xpr - xpl) + ypl;
       }
     }
