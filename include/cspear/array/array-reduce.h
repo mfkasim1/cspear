@@ -26,7 +26,7 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   T array<T,I,View>::min() {
     return reduce_all(
-      [](T& r, const T& elmt) { r = elmt > r ? elmt : r; },
+      [](T& r, const T& elmt) { r = elmt < r ? elmt : r; },
       *this, std::numeric_limits<T>::max()
     );
   }
@@ -49,7 +49,7 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::min(I ax) {
     return reduce_axis<array<T,I,ContiguousView> >(
-      [](T& r, const T& elmt) { r = elmt > r ? elmt : r; },
+      [](T& r, const T& elmt) { r = elmt < r ? elmt : r; },
       *this, ax, std::numeric_limits<T>::max()
     );
   }
@@ -72,7 +72,7 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::min(const std::vector<I>& ax) {
     return reduce_axes<array<T,I,ContiguousView> >(
-      [](T& r, const T& elmt) { r = elmt > r ? elmt : r; },
+      [](T& r, const T& elmt) { r = elmt < r ? elmt : r; },
       *this, ax, std::numeric_limits<T>::max()
     );
   }

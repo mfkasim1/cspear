@@ -48,6 +48,10 @@ namespace csp {
         shaper.push_back(*it1);
       }
     }
+    // if all axes are reduced, leave with one element
+    if (shaper.size() == 0) {
+      shaper.push_back(1);
+    }
     return shaper;
   }
 

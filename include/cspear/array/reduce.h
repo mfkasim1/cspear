@@ -48,12 +48,13 @@ namespace csp {
 
   template <typename ResType, typename TR, typename InpType, typename AxType,
             typename F>
-  ResType reduce_axes(F&& f, const InpType& arr, AxType& ax, TR initval) {
+  ResType reduce_axes(F&& f, const InpType& arr, const AxType& axes, TR initval) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
 
     // order ax
+    AxType ax = axes;
     std::sort(ax.begin(), ax.end());
 
     // get the shape of the result

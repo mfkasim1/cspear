@@ -32,6 +32,7 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") # debug mode
 include_directories("../include")
 
 add_executable(test main.cc)

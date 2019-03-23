@@ -4,6 +4,7 @@
 #include "gtest/gtest.h"
 #include "array/test-init.h"
 #include "array/test-reshape.h"
+#include "array/test-reduce.h"
 
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
