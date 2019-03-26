@@ -9,8 +9,8 @@ namespace {
   // test accessing the first dimension
   TEST(ContiguousViewSingleElmt,FromContiguous1D) {
     csp::array<double> a = {1.0, 4.2, 3.0};
-    auto b = a(0);
-    auto c = a(1);
+    auto b = a.at(0);
+    auto c = a.at(1);
 
     std::vector<int> shape = {1};
     EXPECT_EQ(b.size(), 1);
@@ -22,8 +22,8 @@ namespace {
   }
   TEST(ContiguousViewSingleElmt,FromContiguous2D) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    auto b = a(0);
-    auto c = a(1);
+    auto b = a.at(0);
+    auto c = a.at(1);
 
     std::vector<int> shape = {3};
     EXPECT_EQ(b.size(), 3);
@@ -40,7 +40,7 @@ namespace {
   TEST(ContiguousViewSingleElmt,FromContiguous2DError) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     try {
-      auto b = a(2);
+      auto b = a.at(2);
       FAIL() << "A runtime_error should be thrown for out-of-range index";
     }
     catch (const std::runtime_error& e) {
@@ -51,7 +51,7 @@ namespace {
     }
 
     try {
-      auto b = a(-1);
+      auto b = a.at(-1);
       FAIL() << "A runtime_error should be thrown for out-of-range index";
     }
     catch (const std::runtime_error& e) {
@@ -63,7 +63,7 @@ namespace {
   }
   TEST(ContiguousViewSingleElmt,InplaceAddAValue) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    a(0) += 1.0;
+    a.at(0) += 1.0;
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
@@ -78,7 +78,7 @@ namespace {
   TEST(ContiguousViewSingleElmt,InplaceAddArray) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     csp::array<double> b = {1.0, 2.0, 4.0};
-    a(0) += b;
+    a.at(0) += b;
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
@@ -92,7 +92,7 @@ namespace {
   }
   TEST(ContiguousViewSingleElmt,InplaceClip) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    a(0).clip_lb_(3.5);
+    a.at(0).clip_lb_(3.5);
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
@@ -106,7 +106,7 @@ namespace {
   }
   TEST(ContiguousViewSingleElmt,AddAValue) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    auto b = a(0) + 1.0;
+    auto b = a.at(0) + 1.0;
 
     std::vector<int> shape = {3};
     EXPECT_EQ(b.size(), 3);
@@ -118,7 +118,7 @@ namespace {
   TEST(ContiguousViewSingleElmt,AddArray) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     csp::array<double> c = {1.0, 2.0, 3.0};
-    auto b = a(0) + c;
+    auto b = a.at(0) + c;
 
     std::vector<int> shape = {3};
     EXPECT_EQ(b.size(), 3);
@@ -130,7 +130,7 @@ namespace {
   TEST(ContiguousViewSingleElmt,AddArrayBCast) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     csp::array<double> c = {1.0, 2.0, 3.0};
-    auto b = a(0) + c(0); // c(0) is {1.0}
+    auto b = a.at(0) + c.at(0); // c.at(0) is {1.0}
 
     std::vector<int> shape = {3};
     EXPECT_EQ(b.size(), 3);
@@ -142,7 +142,7 @@ namespace {
   TEST(ContiguousViewSingleElmt,Assignment) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     csp::array<double> c = {1.0, 2.0, 3.0};
-    a(0) = c;
+    a.at(0) = c;
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
@@ -156,7 +156,7 @@ namespace {
   }
   TEST(ContiguousViewSingleElmt,Aliasing1) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    a += a(0);
+    a += a.at(0);
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);

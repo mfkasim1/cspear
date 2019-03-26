@@ -62,8 +62,9 @@ namespace csp {
     // indexing
     T& operator[](I idx);
     const T& operator[](I idx) const;
-    array<T,I,FilterView> operator()(const array<bool,I,ContiguousView>& filter);
-    array<T,I,ContiguousView> operator()(I idx); // get the first dimension
+    array<T,I,FilterView> filter(const array<bool,I,ContiguousView>& f);
+    array<T,I,ContiguousView> at(I idx); // get the first dimension
+    T& at(std::initializer_list<I> idxs);
     T& at(const std::vector<I>& idxs);
 
     // assignment operator and copy
@@ -357,19 +358,19 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  inline array<T,I,FilterView> array<T,I,View>::operator()(
-               const array<bool,I,ContiguousView>& filter) {
+  inline array<T,I,FilterView> array<T,I,View>::filter(
+               const array<bool,I,ContiguousView>& fltr) {
     static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
       "Only array with contiguous view can do filtering. Please do .copy() to "
       "get the contiguous copy of this array.");
-    _cspear_assert(filter.shape() == shape(),
+    _cspear_assert(fltr.shape() == shape(),
       "Filter's shape mismatches");
     return array<T,I,FilterView>(data_,
-                  FilterView<I>(filter.data(), filter.size()), dataptr_);
+                  FilterView<I>(fltr.data(), fltr.size()), dataptr_);
   }
 
   template <typename T, typename I, template<typename> typename View>
-  inline array<T,I,ContiguousView> array<T,I,View>::operator()(I idx) {
+  inline array<T,I,ContiguousView> array<T,I,View>::at(I idx) {
     static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
       "Only array with contiguous view can do indexing. Please do .copy() to "
       "get the contiguous copy of this array.");
@@ -389,6 +390,12 @@ namespace csp {
     I stride = size() / sh[0];
     return array<T,I,ContiguousView>(data_ + idx * stride,
                      ContiguousView<I>(newshape), dataptr_);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  inline T& array<T,I,View>::at(std::initializer_list<I> idxs) {
+    std::vector<I> i = idxs;
+    return at(i);
   }
 
   template <typename T, typename I, template<typename> typename View>
