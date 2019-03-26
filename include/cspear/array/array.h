@@ -50,6 +50,7 @@ namespace csp {
     array(T* a, View<I>&& view, T* aptr);
 
     // static initializers
+    static array<T,I,ContiguousView> wrap(T* a, I sz);
     static array<T,I,ContiguousView> empty(const std::vector<I>& shape);
     static array<T,I,ContiguousView> zeros(const std::vector<I>& shape);
     static array<T,I,ContiguousView> ones(const std::vector<I>& shape);
@@ -282,6 +283,11 @@ namespace csp {
   }
 
   // static initializer
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,ContiguousView> array<T,I,View>::wrap(T* a, I sz) {
+    return array(a, ContiguousView<I>({sz}), a);
+  }
+
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::empty(const std::vector<I>& shape) {
     array<T,I,ContiguousView> res;
