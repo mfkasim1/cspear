@@ -61,6 +61,7 @@ namespace csp {
     const T& operator[](I idx) const;
     array<T,I,FilterView> operator()(const array<bool,I,ContiguousView>& filter);
     array<T,I,ContiguousView> operator()(I idx); // get the first dimension
+    T& at(const std::vector<I>& idxs);
 
     // assignment operator and copy
     array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
@@ -382,6 +383,26 @@ namespace csp {
     I stride = size() / sh[0];
     return array<T,I,ContiguousView>(data_ + idx * stride,
                      ContiguousView<I>(newshape), false);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  inline T& array<T,I,View>::at(const std::vector<I>& idxs) {
+    _cspear_assert(idxs.size() == ndim(),
+                  "The indices length must match the dimension");
+    // ravel indices
+    I idx = 0;
+    I stride = 1;
+    auto its = shape().rbegin();
+    auto it = idxs.rbegin();
+    for (; it != idxs.rend(); ++it, ++its) {
+      auto& i = *it;
+      _cspear_assert(i >= 0 && i < *its, "Index out-of-bounds");
+
+      idx += i * stride;
+      stride *= (*its);
+    }
+
+    return operator[](idx);
   }
 
   // assignment operator and copy

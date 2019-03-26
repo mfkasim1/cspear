@@ -6,6 +6,12 @@
 #include <cspear/cspear>
 
 namespace {
+  TEST(UnaryOp,Indexing) {
+    csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    EXPECT_DOUBLE_EQ(arr.at({0,1}), 4.1);
+    csp::array<double> arr2 = {3.0, 4.1, -5.0, 0.0};
+    EXPECT_DOUBLE_EQ(arr2.at({0,}), 3.0);
+  }
   TEST(UnaryOp,Neg) {
     csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
     auto b = -arr;
