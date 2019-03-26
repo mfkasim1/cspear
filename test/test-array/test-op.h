@@ -434,6 +434,21 @@ namespace {
     EXPECT_DOUBLE_EQ(b[6], -2.05);
     EXPECT_DOUBLE_EQ(b[7], 2.1);
   }
+  TEST(BinaryOp,Aliasing) {
+    csp::array<double> b = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    csp::array<double> ars = {{1.0, 2.0, 5.0, 1.1}, {0.0, 2.0, 2.0, 1.0}};
+    b = b + ars;
+    EXPECT_EQ(b.shape(), ars.shape());
+    EXPECT_EQ(b.size(), ars.size());
+    EXPECT_DOUBLE_EQ(b[0], 4.0);
+    EXPECT_DOUBLE_EQ(b[1], 6.1);
+    EXPECT_DOUBLE_EQ(b[2], 0.0);
+    EXPECT_DOUBLE_EQ(b[3], 1.1);
+    EXPECT_DOUBLE_EQ(b[4], 0.1);
+    EXPECT_DOUBLE_EQ(b[5], 2.2);
+    EXPECT_DOUBLE_EQ(b[6], -2.1);
+    EXPECT_DOUBLE_EQ(b[7], 3.1);
+  }
   TEST(BinaryOp,Gt) {
     csp::array<double> arr = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
     csp::array<double> ars = {{1.0, 2.0, -5.0, 1.0}, {1.0, 2.0, 2.0, 1.0}};

@@ -24,6 +24,9 @@ namespace csp {
     bool allocated_ = false; // flag to indicate if the data is allocated by us
     bool own_ = true; // flag to indicate if the array owns the memory
                       // (if the array is a view, own_ == false)
+    T* dataptr_; // the pointer to the beginning of the data in memory
+                 // this is to check if the operands and the assignee share
+                 // the same memory to avoid aliasing
 
     public:
     // define the datatype and expose it to public
@@ -44,7 +47,7 @@ namespace csp {
 
     // internal constructor that does not own the data
     // (only for different memory view)
-    array(T* a, View<I>&& view, bool copy);
+    array(T* a, View<I>&& view, T* aptr);
 
     // static initializers
     static array<T,I,ContiguousView> empty(const std::vector<I>& shape);
@@ -71,6 +74,8 @@ namespace csp {
 
     // parameters
     inline T* data() { return data_; }
+    inline T* dataptr() { return dataptr_; }
+    inline const T* dataptr() const { return dataptr_; }
     inline const T* data() const { return data_; }
     inline const View<I>& view() const { return view_; }
     inline I size() const { return view_.size(); }
@@ -267,10 +272,11 @@ namespace csp {
 
   // internal constructor for memory view of the same data
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>::array(T* a, View<I>&& view, bool copy) {
+  array<T,I,View>::array(T* a, View<I>&& view, T* aptr) {
     data_ = a;
     view_ = view;
     own_ = false;
+    dataptr_ = aptr;
   }
 
   // static initializer
@@ -359,7 +365,7 @@ namespace csp {
     _cspear_assert(filter.shape() == shape(),
       "Filter's shape mismatches");
     return array<T,I,FilterView>(data_,
-                  FilterView<I>(filter.data(), filter.size()), false);
+                  FilterView<I>(filter.data(), filter.size()), dataptr_);
   }
 
   template <typename T, typename I, template<typename> typename View>
@@ -382,7 +388,7 @@ namespace csp {
     }
     I stride = size() / sh[0];
     return array<T,I,ContiguousView>(data_ + idx * stride,
-                     ContiguousView<I>(newshape), false);
+                     ContiguousView<I>(newshape), dataptr_);
   }
 
   template <typename T, typename I, template<typename> typename View>
@@ -514,6 +520,7 @@ namespace csp {
 
     if (allocated_) std::free(data_);
     data_ = (T*) std::malloc(sz*sizeof(*data_));
+    dataptr_ = data_;
     tools::_assert_cpu(data_, "CPU memory allocation failed.");
     allocated_ = true;
     prev_allocated_size_ = sz;

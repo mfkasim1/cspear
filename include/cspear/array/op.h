@@ -156,6 +156,28 @@ namespace csp {
     }
   }
 
+  template <typename InpType1, typename InpType2, typename F>
+  InpType1& bcast_inplace_binary_op(F&& f, InpType1& arr1,
+                               const InpType2& arr2) {
+    // extract the types
+    using T1 = typename InpType1::DataType;
+    using I1 = typename InpType1::IndexType;
+    using View1 = typename InpType1::ViewType;
+    using T2 = typename InpType2::DataType;
+    using I2 = typename InpType2::IndexType;
+    using View2 = typename InpType2::ViewType;
+
+    // do the iterations
+    auto itb = BCastIterator<T1,T2,T1,I1,View1,View2>(
+        (T1*)arr1.data(), arr1.view(),
+        (T2*)arr2.data(), arr2.view(),
+        (T1*)arr1.data(), arr1.view());
+    for (; itb; ++itb) {
+      f(itb.first(), itb.second());
+    }
+    return arr1;
+  }
+
   template <typename ResType, typename InpType1, typename InpType2, typename F>
   ResType binary_op(F&& f, const InpType1& arr1, const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
@@ -183,9 +205,16 @@ namespace csp {
                               InpType1& arr1,
                               const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
-    if (arr1.shape() == arr2.shape()) {
-      // element wise
-      return ewise_inplace_binary_op(f, arr1, arr2);
+    if (arr1.shape() == arr2.shape()) { // element wise
+      // check aliasing
+      if (arr1.dataptr() == arr2.dataptr()) { // possible aliasing
+        auto res = arr1.copy();
+        arr1 = ewise_inplace_binary_op(f, res, arr2);
+        return arr1;
+      }
+      else {
+        return ewise_inplace_binary_op(f, arr1, arr2);
+      }
     }
     else {
       // check if they are broadcastable
@@ -193,9 +222,20 @@ namespace csp {
       if (resshape.size() == 0) {
         throw std::runtime_error("Invalid shape of the operator.");
       }
+      else if (resshape == arr1.shape()) {
+        // check aliasing
+        if (arr1.dataptr() == arr2.dataptr()) { // possible aliasing could happen
+          auto res = arr1.copy();
+          arr1 = bcast_inplace_binary_op(f, res, arr2);;
+          return arr1;
+        }
+        else {
+          return bcast_inplace_binary_op(f, arr1, arr2);
+        }
+      }
       else {
-        throw std::runtime_error("Inplace broadcast is disabled to avoid "
-                                 "aliasing.");
+        throw std::runtime_error("Inplace broadcasting with different result "
+                                 "shape is disabled to avoid aliasing.");
       }
     }
   }
