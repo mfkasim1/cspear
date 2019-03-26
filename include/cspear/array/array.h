@@ -57,7 +57,7 @@ namespace csp {
     // indexing
     T& operator[](I idx);
     const T& operator[](I idx) const;
-    array<T,I,FilterView> operator[](const array<bool,I,ContiguousView>& filter);
+    array<T,I,FilterView> operator()(const array<bool,I,ContiguousView>& filter);
 
     // assignment operator and copy
     array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
@@ -344,7 +344,7 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  inline array<T,I,FilterView> array<T,I,View>::operator[](
+  inline array<T,I,FilterView> array<T,I,View>::operator()(
                const array<bool,I,ContiguousView>& filter) {
     _cspear_assert(filter.shape() == shape(),
       "Filter's shape mismatches");

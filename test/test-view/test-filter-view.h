@@ -8,7 +8,7 @@
 namespace {
   TEST(FilterView,FromContiguous) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    auto b = a[a < 3.1];
+    auto b = a(a < 3.1);
 
     std::vector<int> shape = {3};
     EXPECT_EQ(b.size(), 3);
@@ -19,7 +19,7 @@ namespace {
   }
   TEST(FilterView,InplaceAddAValue) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    a[a < 3.1] += 2.0;
+    a(a < 3.1) += 2.0;
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
@@ -34,7 +34,7 @@ namespace {
   TEST(FilterView,InplaceAddArray) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     csp::array<double> b = {2.0, 6.0, 4.2};
-    a[a < 3.1] += b;
+    a(a < 3.1) += b;
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
@@ -48,7 +48,7 @@ namespace {
   }
   TEST(FilterView,InplaceClip) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    a[a < 3.1].clip_lb_(2.5);
+    a(a < 3.1).clip_lb_(2.5);
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
@@ -62,7 +62,7 @@ namespace {
   }
   TEST(FilterView,AddAValue) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    auto c = a[a < 3.1] + 2.0;
+    auto c = a(a < 3.1) + 2.0;
 
     std::vector<int> shape = {3};
     EXPECT_EQ(c.size(), 3);
@@ -74,7 +74,7 @@ namespace {
   TEST(FilterView,AddArray) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     csp::array<double> b = {2.0, 6.0, 4.2};
-    auto c = a[a < 3.1] + b;
+    auto c = a(a < 3.1) + b;
 
     std::vector<int> shape = {3};
     EXPECT_EQ(c.size(), 3);
@@ -87,7 +87,7 @@ namespace {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     csp::array<double> b = {2.0, 6.0, 4.2};
     try {
-      auto c = a[b > 2.1];
+      auto c = a(b > 2.1);
       FAIL() << "A runtime error should be thrown with mismatched filter shape.";
     }
     catch (const std::runtime_error& e) {
@@ -100,7 +100,7 @@ namespace {
   TEST(FilterView,Assign) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     csp::array<double> b = {2.0, 6.0, 4.2};
-    a[a < 3.1] = b;
+    a(a < 3.1) = b;
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
