@@ -64,6 +64,7 @@ namespace csp {
     const T& operator[](I idx) const;
     array<T,I,FilterView> filter(const array<bool,I,ContiguousView>& f);
     array<T,I,ContiguousView> at(I idx); // get the first dimension
+    array<T,I,ContiguousView> at(I idx0, I idx1); // get the first dimension slice
     T& at(std::initializer_list<I> idxs);
     T& at(const std::vector<I>& idxs);
 
@@ -389,6 +390,31 @@ namespace csp {
     }
     I stride = size() / sh[0];
     return array<T,I,ContiguousView>(data_ + idx * stride,
+                     ContiguousView<I>(newshape), dataptr_);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  inline array<T,I,ContiguousView> array<T,I,View>::at(I idx0, I idx1) {
+    // check the type
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Only array with contiguous view can do indexing. Please do .copy() to "
+      "get the contiguous copy of this array.");
+
+    // check the input index
+    auto& sh = shape();
+    _cspear_assert((idx0 >= 0) && (idx0 < sh[0]),
+      "Index is out of the range");
+    _cspear_assert((idx1 >= 0) && (idx1 <= sh[0]),
+      "Index is out of the range");
+    _cspear_assert(idx1 > idx0,
+      "The end index must be larger than the beginning index");
+
+    // get the newshape
+    std::vector<I> newshape = sh;
+    newshape[0] = idx1 - idx0;
+
+    I stride = size() / sh[0];
+    return array<T,I,ContiguousView>(data_ + idx0 * stride,
                      ContiguousView<I>(newshape), dataptr_);
   }
 
