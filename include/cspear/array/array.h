@@ -22,6 +22,8 @@ namespace csp {
 
     I prev_allocated_size_ = 0;
     bool allocated_ = false; // flag to indicate if the data is allocated by us
+    bool own_ = true; // flag to indicate if the array owns the memory
+                      // (if the array is a view, own_ == false)
 
     public:
     // define the datatype and expose it to public
@@ -163,6 +165,8 @@ namespace csp {
 
     // inplace binary operators
     template <template<typename> typename View2>
+    array<T,I,View>& assign_(const array<T,I,View2>& a);
+    template <template<typename> typename View2>
     array<T,I,View>& operator+=(const array<T,I,View2>& a);
     template <template<typename> typename View2>
     array<T,I,View>& operator-=(const array<T,I,View2>& a);
@@ -265,6 +269,7 @@ namespace csp {
   array<T,I,View>::array(T* a, View<I>&& view, bool copy) {
     data_ = a;
     view_ = view;
+    own_ = false;
   }
 
   // static initializer
@@ -386,13 +391,25 @@ namespace csp {
       return *this;
     }
 
-    if (std::is_same<ContiguousView<I>,View<I> >::value) {
-      _copy(a);
+    if (own_) {
+      if (std::is_same<ContiguousView<I>,View<I> >::value) {
+        _copy(a);
+      }
+      else {
+        _copy_different_view(a);
+      }
     }
     else {
-      _copy_different_view(a);
+      // if the array does not own the memory, invoke assign_ operation
+      assign_(a);
     }
     return *this;
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  template <template<typename> typename View2>
+  inline array<T,I,View>& array<T,I,View>::operator=(const array<T,I,View2>& a) {
+    return assign_(a);
   }
 
   template <typename T, typename I, template<typename> typename View>
