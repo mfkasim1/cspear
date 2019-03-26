@@ -347,6 +347,9 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   inline array<T,I,FilterView> array<T,I,View>::operator()(
                const array<bool,I,ContiguousView>& filter) {
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Only array with contiguous view can do filtering. Please do .copy() to "
+      "get the contiguous copy of this array.");
     _cspear_assert(filter.shape() == shape(),
       "Filter's shape mismatches");
     return array<T,I,FilterView>(data_,
@@ -355,6 +358,9 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   inline array<T,I,ContiguousView> array<T,I,View>::operator()(I idx) {
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Only array with contiguous view can do indexing. Please do .copy() to "
+      "get the contiguous copy of this array.");
     auto& sh = shape();
     _cspear_assert((idx >= 0) && (idx < sh[0]),
       "Index is out of the range");
