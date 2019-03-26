@@ -42,7 +42,7 @@ namespace csp {
 
     // internal constructor that does not own the data
     // (only for different memory view)
-    array(T* a, View<I>&& view);
+    array(T* a, View<I>&& view, bool copy);
 
     // static initializers
     static array<T,I,ContiguousView> empty(const std::vector<I>& shape);
@@ -58,6 +58,7 @@ namespace csp {
     T& operator[](I idx);
     const T& operator[](I idx) const;
     array<T,I,FilterView> operator()(const array<bool,I,ContiguousView>& filter);
+    array<T,I,ContiguousView> operator()(I idx); // get the first dimension
 
     // assignment operator and copy
     array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
@@ -261,7 +262,7 @@ namespace csp {
 
   // internal constructor for memory view of the same data
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>::array(T* a, View<I>&& view) {
+  array<T,I,View>::array(T* a, View<I>&& view, bool copy) {
     data_ = a;
     view_ = view;
   }
@@ -349,7 +350,27 @@ namespace csp {
     _cspear_assert(filter.shape() == shape(),
       "Filter's shape mismatches");
     return array<T,I,FilterView>(data_,
-                  FilterView<I>(filter.data(), filter.size()));
+                  FilterView<I>(filter.data(), filter.size()), false);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  inline array<T,I,ContiguousView> array<T,I,View>::operator()(I idx) {
+    auto& sh = shape();
+    _cspear_assert((idx >= 0) && (idx < sh[0]),
+      "Index is out of the range");
+
+    // get the newshape
+    std::vector<I> newshape;
+    if (ndim() == 1) {
+      newshape.push_back(1);
+    }
+    else {
+      newshape.resize(ndim()-1);
+      std::copy(sh.begin()+1, sh.end(), newshape.begin());
+    }
+    I stride = size() / sh[0];
+    return array<T,I,ContiguousView>(data_ + idx * stride,
+                     ContiguousView<I>(newshape), false);
   }
 
   // assignment operator and copy

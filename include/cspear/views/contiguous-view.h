@@ -11,6 +11,8 @@ namespace csp {
 
     public:
     ContiguousView();
+    ContiguousView(const std::vector<I>& shape);
+    ContiguousView(std::initializer_list<I> shape);
 
     void reshape(const std::vector<I>& shape);
     void reshape(std::initializer_list<I> shape);
@@ -25,6 +27,16 @@ namespace csp {
   // implementations
   template <typename I>
   ContiguousView<I>::ContiguousView() {}
+
+  template <typename I>
+  ContiguousView<I>::ContiguousView(const std::vector<I>& shape) {
+    reshape(shape);
+  }
+
+  template <typename I>
+  ContiguousView<I>::ContiguousView(std::initializer_list<I> shape) {
+    reshape(shape);
+  }
 
   template <typename I>
   inline void ContiguousView<I>::reshape(const std::vector<I>& shape) {

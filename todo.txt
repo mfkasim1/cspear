@@ -1,5 +1,6 @@
 shape
 array:
+  * inplace broadcast that does not change the shape
   * matmul
   * strided views
   * indexed views

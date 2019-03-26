@@ -8,6 +8,7 @@
 #include "test-array/test-op.h"
 #include "test-array/test-bcast.h"
 #include "test-view/test-filter-view.h"
+#include "test-view/test-contiguous-view.h"
 #include "test-lib/test-hist.h"
 #include "test-lib/test-interp.h"
 
