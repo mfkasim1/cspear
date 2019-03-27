@@ -16,6 +16,7 @@ void p(const vec& v) {
 int test1() {
   // auto b = csp::array<double>({1,2,3});
   auto b = csp::arange(10000000.0);
+  // auto b = csp::zeros({10000000});
   // a.reshape({2,5});
   // auto b = csp::random::randn<double>(a.shape());
   // a += 12;
@@ -27,14 +28,16 @@ int test1() {
   auto c = -b;
   c.clip_lb_(-1);
 
-  auto d = c / (b + 1);
-  d += b;
+  c /= (b + 1.0);
+  c += b;
+  // auto d = c / (b + 1);
+  // d += b;
 
-  auto a = d;
-  a.filter(d > 1) += 10;
+  // auto a = d;
+  // a.filter(d > 1) += 10;
 
-  for (int i = 0; i < 10; ++i) {
-    std::cout << a[i] << " ";
+  for (int i = 0; i < 1; ++i) {
+    std::cout << c[i] << " ";
   }
   std::cout << std::endl;
 
@@ -84,7 +87,8 @@ int test_bcast() {
 }
 
 int main() {
-  return test_bcast();
+  return test1();
+  // return test_bcast();
 }
 
 #endif
