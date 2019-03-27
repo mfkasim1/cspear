@@ -42,9 +42,8 @@ namespace csp {
     return arr;
   }
 
-  template <typename ResType, typename InpType, typename T, typename F>
-  inline ResType ewise_binary_op_with_val(F&& f,
-                                          const InpType& arr,
+  template <typename ResType, typename f, typename InpType, typename T>
+  inline ResType ewise_binary_op_with_val(const InpType& arr,
                                           const T& val) {
     // shape and size checking should be done outside this
 
@@ -60,14 +59,13 @@ namespace csp {
     auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
     auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
     for (; it1; ++it1, ++itr) {
-      *itr = f(*it1, val);
+      *itr = f::binary(*it1, val);
     }
     return res;
   }
 
-  template <typename InpType, typename T, typename F>
-  inline InpType& ewise_inplace_binary_op_with_val(F&& f,
-                                                   InpType& arr,
+  template <typename f, typename InpType, typename T>
+  inline InpType& ewise_inplace_binary_op_with_val(InpType& arr,
                                                    const T& val) {
     // shape and size checking should be done outside this
 
@@ -77,14 +75,13 @@ namespace csp {
 
     auto it = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
     for (; it; ++it) {
-      *it = f(*it, val);
+      *it = f::binary(*it, val);
     }
     return arr;
   }
 
-  template <typename ResType, typename InpType1, typename InpType2, typename F>
-  inline ResType ewise_binary_op(F&& f,
-                                 const InpType1& arr1,
+  template <typename ResType, typename f, typename InpType1, typename InpType2>
+  inline ResType ewise_binary_op(const InpType1& arr1,
                                  const InpType2& arr2) {
     // shape and size checking should be done outside this
 
@@ -105,7 +102,7 @@ namespace csp {
     auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
     auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
     for (; it1; ++it1, ++it2, ++itr) {
-      *itr = f(*it1, *it2);
+      *itr = f::binary(*it1, *it2);
     }
     return res;
   }
@@ -132,8 +129,8 @@ namespace csp {
     return arr1;
   }
 
-  template <typename ResType, typename InpType1, typename InpType2, typename F>
-  void bcast_binary_op(ResType& res, F&& f, const InpType1& arr1,
+  template <typename f, typename ResType, typename InpType1, typename InpType2>
+  void bcast_binary_op(ResType& res, const InpType1& arr1,
                        const InpType2& arr2) {
     // extract the types
     using T1 = typename InpType1::DataType;
@@ -152,23 +149,41 @@ namespace csp {
         (T2*)arr2.data(), arr2.view(),
         (TR*)res.data(), res.view());
     for (; itb; ++itb) {
-      itb.result() = f(itb.first(), itb.second());
+      itb.result() = f::binary(itb.first(), itb.second());
     }
   }
 
   template <typename InpType1, typename InpType2, typename F>
   inline InpType1& bcast_inplace_binary_op(F&& f, InpType1& arr1,
                                const InpType2& arr2) {
-    bcast_binary_op(arr1, f, arr1, arr2);
+    // bcast_binary_op(arr1, f, arr1, arr2);
+    // return arr1;
+
+    // extract the types
+    using T1 = typename InpType1::DataType;
+    using I1 = typename InpType1::IndexType;
+    using View1 = typename InpType1::ViewType;
+    using T2 = typename InpType2::DataType;
+    using I2 = typename InpType2::IndexType;
+    using View2 = typename InpType2::ViewType;
+
+    // do the iterations
+    auto itb = BCastIterator<T1,T2,T1,I1,View1,View2>(
+    (T1*)arr1.data(), arr1.view(),
+    (T2*)arr2.data(), arr2.view(),
+    (T1*)arr1.data(), arr1.view());
+    for (; itb; ++itb) {
+      itb.result() = f(itb.first(), itb.second());
+    }
     return arr1;
   }
 
-  template <typename ResType, typename InpType1, typename InpType2, typename F>
-  ResType binary_op(F&& f, const InpType1& arr1, const InpType2& arr2) {
+  template <typename ResType, typename f, typename InpType1, typename InpType2>
+  ResType binary_op(const InpType1& arr1, const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
     if (arr1.shape() == arr2.shape()) {
       // element wise
-      return ewise_binary_op<ResType>(f, arr1, arr2);
+      return ewise_binary_op<ResType, f>(arr1, arr2);
     }
     else {
       // check if they are broadcastable
@@ -180,7 +195,7 @@ namespace csp {
 
       // do the broadcast
       ResType res = ResType::empty(resshape);
-      bcast_binary_op(res, f, arr1, arr2);
+      bcast_binary_op<f>(res, arr1, arr2);
       return res;
     }
   }
