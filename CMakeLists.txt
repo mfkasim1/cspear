@@ -37,6 +37,7 @@ if (PROFILING)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PROFILING_FLAGS}")
 endif (PROFILING)
 
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
 # include directories
 include_directories("include")
 
