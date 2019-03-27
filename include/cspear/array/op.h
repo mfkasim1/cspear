@@ -107,9 +107,8 @@ namespace csp {
     return res;
   }
 
-  template <typename InpType1, typename InpType2, typename F>
-  inline InpType1& ewise_inplace_binary_op(F&& f,
-                                           InpType1& arr1,
+  template <typename f, typename InpType1, typename InpType2>
+  inline InpType1& ewise_inplace_binary_op(InpType1& arr1,
                                            const InpType2& arr2) {
     // shape and size checking should be done outside this
 
@@ -124,7 +123,7 @@ namespace csp {
     auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
     auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
     for (; it1; ++it1, ++it2) {
-      *it1 = f(*it1, *it2);
+      *it1 = f::binary(*it1, *it2);
     }
     return arr1;
   }
@@ -153,8 +152,8 @@ namespace csp {
     }
   }
 
-  template <typename InpType1, typename InpType2, typename F>
-  inline InpType1& bcast_inplace_binary_op(F&& f, InpType1& arr1,
+  template <typename f, typename InpType1, typename InpType2>
+  inline InpType1& bcast_inplace_binary_op(InpType1& arr1,
                                const InpType2& arr2) {
     // bcast_binary_op(arr1, f, arr1, arr2);
     // return arr1;
@@ -173,7 +172,7 @@ namespace csp {
     (T2*)arr2.data(), arr2.view(),
     (T1*)arr1.data(), arr1.view());
     for (; itb; ++itb) {
-      itb.result() = f(itb.first(), itb.second());
+      itb.result() = f::binary(itb.first(), itb.second());
     }
     return arr1;
   }
@@ -200,20 +199,19 @@ namespace csp {
     }
   }
 
-  template <typename InpType1, typename InpType2, typename F>
-  InpType1& inplace_binary_op(F&& f,
-                              InpType1& arr1,
+  template <typename f, typename InpType1, typename InpType2>
+  InpType1& inplace_binary_op(InpType1& arr1,
                               const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
     if (arr1.shape() == arr2.shape()) { // element wise
       // check aliasing
       if (arr1.dataptr() == arr2.dataptr()) { // possible aliasing
         auto res = arr1.copy();
-        arr1 = ewise_inplace_binary_op(f, res, arr2);
+        arr1 = ewise_inplace_binary_op<f>(res, arr2);
         return arr1;
       }
       else {
-        return ewise_inplace_binary_op(f, arr1, arr2);
+        return ewise_inplace_binary_op<f>(arr1, arr2);
       }
     }
     else {
@@ -226,11 +224,11 @@ namespace csp {
         // check aliasing
         if (arr1.dataptr() == arr2.dataptr()) { // possible aliasing could happen
           auto res = arr1.copy();
-          arr1 = bcast_inplace_binary_op(f, res, arr2);;
+          arr1 = bcast_inplace_binary_op<f>(res, arr2);;
           return arr1;
         }
         else {
-          return bcast_inplace_binary_op(f, arr1, arr2);
+          return bcast_inplace_binary_op<f>(arr1, arr2);
         }
       }
       else {

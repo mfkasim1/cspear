@@ -242,31 +242,31 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
   array<T,I,View>& array<T,I,View>::assign_(const array<T,I,View2>& a) {
-    return inplace_binary_op(ufunc::assign<T>::binary, *this, a);
+    return inplace_binary_op<ufunc::assign<T> >(*this, a);
   }
 
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
   array<T,I,View>& array<T,I,View>::operator+=(const array<T,I,View2>& a) {
-    return inplace_binary_op(ufunc::add<T>::binary, *this, a);
+    return inplace_binary_op<ufunc::add<T> >(*this, a);
   }
 
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
   array<T,I,View>& array<T,I,View>::operator-=(const array<T,I,View2>& a) {
-    return inplace_binary_op(ufunc::sub<T>::binary, *this, a);
+    return inplace_binary_op<ufunc::sub<T> >(*this, a);
   }
 
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
   array<T,I,View>& array<T,I,View>::operator*=(const array<T,I,View2>& a) {
-    return inplace_binary_op(ufunc::mult<T>::binary, *this, a);
+    return inplace_binary_op<ufunc::mult<T> >(*this, a);
   }
 
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
   array<T,I,View>& array<T,I,View>::operator/=(const array<T,I,View2>& a) {
-    return inplace_binary_op(ufunc::div<T>::binary, *this, a);
+    return inplace_binary_op<ufunc::div<T> >(*this, a);
   }
 }
 
