@@ -108,6 +108,18 @@ namespace {
     EXPECT_DOUBLE_EQ(vec[2], 0.0);
     EXPECT_DOUBLE_EQ(vec[3], 0.0);
   }
+  TEST(AVXTest,Neg) {
+    auto b = csp::simd::VectorAVX<double>({1.2, 2.4, 5.2, 6.5});
+    auto c = -b;
+
+    // store to a vector
+    std::vector<double> vec(c.size());
+    c.store(&vec[0]);
+    EXPECT_DOUBLE_EQ(vec[0], -1.2);
+    EXPECT_DOUBLE_EQ(vec[1], -2.4);
+    EXPECT_DOUBLE_EQ(vec[2], -5.2);
+    EXPECT_DOUBLE_EQ(vec[3], -6.5);
+  }
   TEST(AVXTest,Add) {
     auto a = csp::simd::VectorAVX<double>(1.2);
     auto b = csp::simd::VectorAVX<double>({1.2, 2.4, 5.2, 6.5});
@@ -211,6 +223,19 @@ namespace {
     EXPECT_DOUBLE_EQ(vec[1], 1.0);
     EXPECT_DOUBLE_EQ(vec[2], 2.0);
     EXPECT_DOUBLE_EQ(vec[3], 3.0);
+  }
+  TEST(AVXTest,AddAValue) {
+    auto a = 1.2;
+    auto b = csp::simd::VectorAVX<double>({1.2, 2.4, 5.2, 6.5});
+    auto c = b + a;
+
+    // store to a vector
+    std::vector<double> vec(c.size());
+    c.store(&vec[0]);
+    EXPECT_DOUBLE_EQ(vec[0], 2.4);
+    EXPECT_DOUBLE_EQ(vec[1], 3.6);
+    EXPECT_DOUBLE_EQ(vec[2], 6.4);
+    EXPECT_DOUBLE_EQ(vec[3], 7.7);
   }
 }
 

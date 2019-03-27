@@ -88,6 +88,7 @@ namespace csp {
       VectorAVX& partial_store(T* dat, int n);
 
       // arithmetic operators
+      VectorAVX operator-();
       VectorAVX operator+(const VectorAVX& other);
       VectorAVX operator-(const VectorAVX& other);
       VectorAVX operator*(const VectorAVX& other);
@@ -136,6 +137,10 @@ namespace csp {
     template <> inline VectorAVX<double>& VectorAVX<double>::partial_store(double* dat, int n) {
       _mm256_maskstore_pd(dat, avx_mask4(n), a_);
       return *this;
+    }
+    template <> inline VectorAVX<double> VectorAVX<double>::operator-() {
+      __m256d zeros = _mm256_set_pd(0.0, 0.0, 0.0, 0.0);
+      return _mm256_sub_pd(zeros, a_);
     }
     template <> inline VectorAVX<double> VectorAVX<double>::operator+(const VectorAVX<double>& other) {
       return _mm256_add_pd(a_, other.a_);
@@ -204,6 +209,10 @@ namespace csp {
     template <> inline VectorAVX<float>& VectorAVX<float>::partial_store(float* dat, int n) {
       _mm256_maskstore_ps(dat, avx_mask8(n), a_);
       return *this;
+    }
+    template <> inline VectorAVX<float> VectorAVX<float>::operator-() {
+      __m256 zeros = _mm256_set_ps(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      return _mm256_sub_ps(zeros, a_);
     }
     template <> inline VectorAVX<float> VectorAVX<float>::operator+(const VectorAVX<float>& other) {
       return _mm256_add_ps(a_, other.a_);
