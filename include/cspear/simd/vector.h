@@ -18,6 +18,7 @@
 #endif
 
 #ifndef __SIMD__
+  #include <cspear/simd/vector-dummy.h>
   #define __SIMD__ 0
 #endif
 
@@ -30,7 +31,7 @@ namespace csp {
       #define __SIMD_AVX__
       template <typename T> using Vector = VectorAVX<T>;
     #else
-      template <typename T> using Vector = std::vector<T>;
+      template <typename T> using Vector = VectorDummy<T>;
     #endif
   }
 }
