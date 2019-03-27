@@ -10,7 +10,7 @@
 namespace csp {
   template <typename f, typename It1, typename It2, typename It3>
   struct ewise_can_use_simd {
-    static const bool value = f::has_simd && It1::is_implemented &&
+    static const bool value = __SIMD__ && f::has_simd && It1::is_implemented &&
                               It2::is_implemented && It3::is_implemented;
   };
 
