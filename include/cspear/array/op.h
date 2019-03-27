@@ -77,7 +77,7 @@ namespace csp {
 
     auto it = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
     for (; it; ++it) {
-      f(*it, val);
+      *it = f(*it, val);
     }
     return arr;
   }
@@ -127,7 +127,7 @@ namespace csp {
     auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
     auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
     for (; it1; ++it1, ++it2) {
-      f(*it1, *it2);
+      *it1 = f(*it1, *it2);
     }
     return arr1;
   }
@@ -157,24 +157,9 @@ namespace csp {
   }
 
   template <typename InpType1, typename InpType2, typename F>
-  InpType1& bcast_inplace_binary_op(F&& f, InpType1& arr1,
+  inline InpType1& bcast_inplace_binary_op(F&& f, InpType1& arr1,
                                const InpType2& arr2) {
-    // extract the types
-    using T1 = typename InpType1::DataType;
-    using I1 = typename InpType1::IndexType;
-    using View1 = typename InpType1::ViewType;
-    using T2 = typename InpType2::DataType;
-    using I2 = typename InpType2::IndexType;
-    using View2 = typename InpType2::ViewType;
-
-    // do the iterations
-    auto itb = BCastIterator<T1,T2,T1,I1,View1,View2>(
-        (T1*)arr1.data(), arr1.view(),
-        (T2*)arr2.data(), arr2.view(),
-        (T1*)arr1.data(), arr1.view());
-    for (; itb; ++itb) {
-      f(itb.first(), itb.second());
-    }
+    bcast_binary_op(arr1, f, arr1, arr2);
     return arr1;
   }
 

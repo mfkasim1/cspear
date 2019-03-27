@@ -31,7 +31,7 @@ int test1() {
   d += b;
 
   auto a = d;
-  a[d > 1] += 10;
+  a.filter(d > 1) += 10;
 
   for (int i = 0; i < 10; ++i) {
     std::cout << a[i] << " ";
