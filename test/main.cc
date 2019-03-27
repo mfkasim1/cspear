@@ -11,6 +11,7 @@
 #include "test-view/test-contiguous-view.h"
 #include "test-lib/test-hist.h"
 #include "test-lib/test-interp.h"
+#include "test-simd/test-avx.h"
 
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
