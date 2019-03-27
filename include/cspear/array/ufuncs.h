@@ -1,6 +1,9 @@
 #ifndef CSPEAR_ARRAY_UFUNCS_H
 #define CSPEAR_ARRAY_UFUNCS_H
 
+#include <iostream>
+#include <cspear/simd/vector.h>
+
 namespace csp {
   namespace ufunc {
     // unary operations
