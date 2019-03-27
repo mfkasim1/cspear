@@ -571,6 +571,18 @@ namespace {
   }
 
   // inplace binary operator with another array
+  TEST(InplaceBinaryOp,Assignment) {
+    csp::array<double> b = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
+    b = 0.0;
+    EXPECT_DOUBLE_EQ(b[0], 0.0);
+    EXPECT_DOUBLE_EQ(b[1], 0.0);
+    EXPECT_DOUBLE_EQ(b[2], 0.0);
+    EXPECT_DOUBLE_EQ(b[3], 0.0);
+    EXPECT_DOUBLE_EQ(b[4], 0.0);
+    EXPECT_DOUBLE_EQ(b[5], 0.0);
+    EXPECT_DOUBLE_EQ(b[6], 0.0);
+    EXPECT_DOUBLE_EQ(b[7], 0.0);
+  }
   TEST(InplaceBinaryOp,Add) {
     csp::array<double> b = {{3.0, 4.1, -5.0, 0.0}, {0.1, 0.2, -4.1, 2.1}};
     csp::array<double> ars = {{1.0, 2.0, 5.0, 1.1}, {0.0, 2.0, 2.0, 1.0}};

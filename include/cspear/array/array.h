@@ -137,6 +137,7 @@ namespace csp {
     array<bool,I,ContiguousView> operator||(T a);
 
     // inplace unary operators
+    array<T,I,View>& operator=(T a);
     array<T,I,View>& operator+=(T a);
     array<T,I,View>& operator-=(T a);
     array<T,I,View>& operator*=(T a);
