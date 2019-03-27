@@ -71,6 +71,7 @@ namespace csp {
       VectorAVX(SimdType&& a);
       VectorAVX(T value);
       VectorAVX(std::initializer_list<T> values);
+      VectorAVX(const VectorAVX& other) { a_ = other.a_; }
 
       // loada
       VectorAVX& loada(const T* dat);
@@ -88,15 +89,16 @@ namespace csp {
       VectorAVX& partial_store(T* dat, int n);
 
       // arithmetic operators
-      VectorAVX operator-();
-      VectorAVX operator+(const VectorAVX& other);
-      VectorAVX operator-(const VectorAVX& other);
-      VectorAVX operator*(const VectorAVX& other);
-      VectorAVX operator/(const VectorAVX& other);
+      VectorAVX operator-() const;
+      VectorAVX operator+(const VectorAVX& other) const;
+      VectorAVX operator-(const VectorAVX& other) const;
+      VectorAVX operator*(const VectorAVX& other) const;
+      VectorAVX operator/(const VectorAVX& other) const;
       VectorAVX& operator+=(const VectorAVX& other);
       VectorAVX& operator-=(const VectorAVX& other);
       VectorAVX& operator*=(const VectorAVX& other);
       VectorAVX& operator/=(const VectorAVX& other);
+      VectorAVX& operator=(const VectorAVX& other);
     };
 
     // implementations in double
@@ -138,20 +140,20 @@ namespace csp {
       _mm256_maskstore_pd(dat, avx_mask4(n), a_);
       return *this;
     }
-    template <> inline VectorAVX<double> VectorAVX<double>::operator-() {
+    template <> inline VectorAVX<double> VectorAVX<double>::operator-() const {
       __m256d zeros = _mm256_set_pd(0.0, 0.0, 0.0, 0.0);
       return _mm256_sub_pd(zeros, a_);
     }
-    template <> inline VectorAVX<double> VectorAVX<double>::operator+(const VectorAVX<double>& other) {
+    template <> inline VectorAVX<double> VectorAVX<double>::operator+(const VectorAVX<double>& other) const {
       return _mm256_add_pd(a_, other.a_);
     }
-    template <> inline VectorAVX<double> VectorAVX<double>::operator-(const VectorAVX<double>& other) {
+    template <> inline VectorAVX<double> VectorAVX<double>::operator-(const VectorAVX<double>& other) const {
       return _mm256_sub_pd(a_, other.a_);
     }
-    template <> inline VectorAVX<double> VectorAVX<double>::operator*(const VectorAVX<double>& other) {
+    template <> inline VectorAVX<double> VectorAVX<double>::operator*(const VectorAVX<double>& other) const {
       return _mm256_mul_pd(a_, other.a_);
     }
-    template <> inline VectorAVX<double> VectorAVX<double>::operator/(const VectorAVX<double>& other) {
+    template <> inline VectorAVX<double> VectorAVX<double>::operator/(const VectorAVX<double>& other) const {
       return _mm256_div_pd(a_, other.a_);
     }
     template <> inline VectorAVX<double>& VectorAVX<double>::operator+=(const VectorAVX<double>& other) {
@@ -168,6 +170,10 @@ namespace csp {
     }
     template <> inline VectorAVX<double>& VectorAVX<double>::operator/=(const VectorAVX<double>& other) {
       a_ = _mm256_div_pd(a_, other.a_);
+      return *this;
+    }
+    template <> inline VectorAVX<double>& VectorAVX<double>::operator=(const VectorAVX<double>& other) {
+      a_ = other.a_;
       return *this;
     }
 
@@ -210,20 +216,20 @@ namespace csp {
       _mm256_maskstore_ps(dat, avx_mask8(n), a_);
       return *this;
     }
-    template <> inline VectorAVX<float> VectorAVX<float>::operator-() {
+    template <> inline VectorAVX<float> VectorAVX<float>::operator-() const {
       __m256 zeros = _mm256_set_ps(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
       return _mm256_sub_ps(zeros, a_);
     }
-    template <> inline VectorAVX<float> VectorAVX<float>::operator+(const VectorAVX<float>& other) {
+    template <> inline VectorAVX<float> VectorAVX<float>::operator+(const VectorAVX<float>& other) const {
       return _mm256_add_ps(a_, other.a_);
     }
-    template <> inline VectorAVX<float> VectorAVX<float>::operator-(const VectorAVX<float>& other) {
+    template <> inline VectorAVX<float> VectorAVX<float>::operator-(const VectorAVX<float>& other) const {
       return _mm256_sub_ps(a_, other.a_);
     }
-    template <> inline VectorAVX<float> VectorAVX<float>::operator*(const VectorAVX<float>& other) {
+    template <> inline VectorAVX<float> VectorAVX<float>::operator*(const VectorAVX<float>& other) const {
       return _mm256_mul_ps(a_, other.a_);
     }
-    template <> inline VectorAVX<float> VectorAVX<float>::operator/(const VectorAVX<float>& other) {
+    template <> inline VectorAVX<float> VectorAVX<float>::operator/(const VectorAVX<float>& other) const {
       return _mm256_div_ps(a_, other.a_);
     }
     template <> inline VectorAVX<float>& VectorAVX<float>::operator+=(const VectorAVX<float>& other) {
@@ -240,6 +246,10 @@ namespace csp {
     }
     template <> inline VectorAVX<float>& VectorAVX<float>::operator/=(const VectorAVX<float>& other) {
       a_ = _mm256_div_ps(a_, other.a_);
+      return *this;
+    }
+    template <> inline VectorAVX<float>& VectorAVX<float>::operator=(const VectorAVX<float>& other) {
+      a_ = other.a_;
       return *this;
     }
   }

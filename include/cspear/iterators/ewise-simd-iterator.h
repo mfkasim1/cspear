@@ -16,7 +16,7 @@ namespace csp {
 
     // iterator operator
     simd::Vector<T>& load(); // load the memory data into the intrinsic and return the intrinsic
-    EWiseIterator& operator++();
+    EWiseSIMDIterator& operator++();
     void store(); // store the intrinsic value to the memory data
     operator bool() const;
   };
@@ -49,7 +49,7 @@ namespace csp {
         return vec_.partial_load(data_, sz_-offset_);
     }
 
-    inline EWiseIterator& operator++() {
+    inline EWiseSIMDIterator& operator++() {
       data_ += simd_sz_;
       offset_ += simd_sz_;
       return *this;

@@ -4,9 +4,16 @@
 #include <stdexcept>
 #include <cspear/tools/assert.h>
 #include <cspear/iterators/ewise-iterator.h>
+#include <cspear/iterators/ewise-simd-iterator.h>
 #include <cspear/iterators/bcast-iterator.h>
 
 namespace csp {
+  template <typename f, typename It1, typename It2, typename It3>
+  struct ewise_can_use_simd {
+    static const bool value = f::has_simd && It1::is_implemented &&
+                              It2::is_implemented && It3::is_implemented;
+  };
+
   template <typename ResType, typename f, typename InpType>
   ResType unary_op(const InpType& arr) {
     using T = typename InpType::DataType;
@@ -18,13 +25,28 @@ namespace csp {
 
     ResType res = ResType::empty(arr.shape());
 
-    // performing the iteration
-    auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
-    auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(),
-                               res.view());
-    // auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
-    for (; it1; ++it1, ++itr) {
-      *itr = f::unary(*it1);
+    // check if it can use simd
+    if (ewise_can_use_simd<f,
+            EWiseSIMDIterator<T,I,View>,
+            EWiseSIMDIterator<T,I,View>,
+            EWiseSIMDIterator<TR,IR,ViewR> >::value) {
+      // performing the iteration
+      auto it1 = EWiseSIMDIterator<T,I,View>((T*)arr.data(), arr.view());
+      auto itr = EWiseSIMDIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      for (; it1; ++it1, ++itr) {
+        itr.load() = f::simd_unary(it1.load());
+        itr.store();
+      }
+    }
+    else {
+      // performing the iteration
+      auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
+      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(),
+                                 res.view());
+      // auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
+      for (; it1; ++it1, ++itr) {
+        *itr = f::unary(*it1);
+      }
     }
     return res;
   }
@@ -56,10 +78,24 @@ namespace csp {
     using IR = typename ResType::IndexType;
     using ViewR = typename ResType::ViewType;
 
-    auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
-    auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
-    for (; it1; ++it1, ++itr) {
-      *itr = f::binary(*it1, val);
+    // check if simd can be used
+    if (ewise_can_use_simd<f,
+            EWiseSIMDIterator<T1,I1,View1>,
+            EWiseSIMDIterator<T1,I1,View1>,
+            EWiseSIMDIterator<TR,IR,ViewR> >::value) {
+      auto it1 = EWiseSIMDIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
+      auto itr = EWiseSIMDIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      for (; it1; ++it1, ++itr) {
+        itr.load() = f::simd_binary(it1.load(), val);
+        itr.store();
+      }
+    }
+    else {
+      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
+      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      for (; it1; ++it1, ++itr) {
+        *itr = f::binary(*it1, val);
+      }
     }
     return res;
   }
@@ -73,9 +109,23 @@ namespace csp {
     using I1 = typename InpType::IndexType;
     using View1 = typename InpType::ViewType;
 
-    auto it = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
-    for (; it; ++it) {
-      *it = f::binary(*it, val);
+    // check if simd can be used
+    if (ewise_can_use_simd<f,
+            EWiseSIMDIterator<T1,I1,View1>,
+            EWiseSIMDIterator<T1,I1,View1>,
+            EWiseSIMDIterator<T1,I1,View1> >::value) {
+      auto it = EWiseSIMDIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
+      for (; it; ++it) {
+        auto& itr = it.load();
+        itr = f::simd_binary(itr, val);
+        it.store();
+      }
+    }
+    else {
+      auto it = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
+      for (; it; ++it) {
+        *it = f::binary(*it, val);
+      }
     }
     return arr;
   }
@@ -97,12 +147,27 @@ namespace csp {
     using IR = typename ResType::IndexType;
     using ViewR = typename ResType::ViewType;
 
-    // performing the iteration
-    auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-    auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
-    auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
-    for (; it1; ++it1, ++it2, ++itr) {
-      *itr = f::binary(*it1, *it2);
+    // check if simd can be used
+    if (ewise_can_use_simd<f,
+            EWiseSIMDIterator<T1,I1,View1>,
+            EWiseSIMDIterator<T2,I2,View2>,
+            EWiseSIMDIterator<TR,IR,ViewR> >::value) {
+      auto it1 = EWiseSIMDIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
+      auto it2 = EWiseSIMDIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
+      auto itr = EWiseSIMDIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      for (; it1; ++it1, ++it2, ++itr) {
+        itr.load() = f::simd_binary(it1.load(), it2.load());
+        itr.store();
+      }
+    }
+    else {
+      // performing the iteration
+      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
+      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
+      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      for (; it1; ++it1, ++it2, ++itr) {
+        *itr = f::binary(*it1, *it2);
+      }
     }
     return res;
   }
@@ -119,11 +184,27 @@ namespace csp {
     using I2 = typename InpType2::IndexType;
     using View2 = typename InpType2::ViewType;
 
-    // performing the iteration
-    auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-    auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
-    for (; it1; ++it1, ++it2) {
-      *it1 = f::binary(*it1, *it2);
+    // check if simd can be used
+    if (ewise_can_use_simd<f,
+            EWiseSIMDIterator<T1,I1,View1>,
+            EWiseSIMDIterator<T2,I2,View2>,
+            EWiseSIMDIterator<T2,I2,View2> >::value) {
+      // performing the iteration
+      auto it1 = EWiseSIMDIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
+      auto it2 = EWiseSIMDIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
+      for (; it1; ++it1, ++it2) {
+        auto& it1r = it1.load();
+        it1r = f::simd_binary(it1r, it2.load());
+        it1.store();
+      }
+    }
+    else {
+      // performing the iteration
+      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
+      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
+      for (; it1; ++it1, ++it2) {
+        *it1 = f::binary(*it1, *it2);
+      }
     }
     return arr1;
   }
