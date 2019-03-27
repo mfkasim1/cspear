@@ -7,8 +7,8 @@
 #include <cspear/iterators/bcast-iterator.h>
 
 namespace csp {
-  template <typename ResType, typename InpType, typename F>
-  ResType unary_op(F&& f, const InpType& arr) {
+  template <typename ResType, typename f, typename InpType>
+  ResType unary_op(const InpType& arr) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
@@ -24,7 +24,7 @@ namespace csp {
                                res.view());
     // auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
     for (; it1; ++it1, ++itr) {
-      *itr = f(*it1);
+      *itr = f::unary(*it1);
     }
     return res;
   }

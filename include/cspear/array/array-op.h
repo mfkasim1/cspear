@@ -11,7 +11,7 @@ namespace csp {
   // non inplace unary operators and binary with a value
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::operator-() {
-    return unary_op< array<T,I,ContiguousView> >(ufunc::neg<T>::unary, *this);
+    return unary_op<array<T,I,ContiguousView>,ufunc::neg<T> >(*this);
   }
 
   template <typename T, typename I, template<typename> typename View>
@@ -58,15 +58,12 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::clip(T lb, T ub) {
-    return unary_op< array<T,I,ContiguousView> >(
-      [&](T& b) {return (b < lb) ? lb : ((b > ub) ? ub : b);},
-      *this);
+    return clip_lb(lb).clip_ub(ub);
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<bool,I,ContiguousView> array<T,I,View>::operator!() {
-    return unary_op< array<bool,I,ContiguousView> >(
-      ufunc::logical_not<T>::unary, *this);
+    return unary_op< array<bool,I,ContiguousView>,ufunc::logical_not<T> >(*this);
   }
 
   template <typename T, typename I, template<typename> typename View>
@@ -156,10 +153,7 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,View>& array<T,I,View>::clip_(T lb, T ub) {
-    return inplace_unary_op(
-      [&](T& b) {
-        b = (b < lb) ? lb : (b > ub ? ub : b);
-      }, *this);
+    return clip_lb_(lb).clip_ub_(ub);
   }
 
   // binary operators (non inplace)
