@@ -186,7 +186,8 @@ namespace csp {
     array<T,I,View>& operator/=(const array<T,I,View2>& a);
 
     private:
-    void _realloc();
+    template <int n = 1> void _realloc();
+    void _calloc();
     void _copy(const array<T,I,View>& a);
     template <template<typename> typename View2>
     void _copy_different_view(const array<T,I,View2>& a);
@@ -291,6 +292,9 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::empty(const std::vector<I>& shape) {
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Static initializer only works for contiguous view array");
+
     array<T,I,ContiguousView> res;
     I sz = tools::_prod_init_list(shape);
     res.resize_(sz).reshape_(shape);
@@ -299,13 +303,21 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::zeros(const std::vector<I>& shape) {
-    array<T,I,ContiguousView> res = empty(shape);
-    std::memset(res.data(), 0, res.size()*sizeof(T));
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Static initializer only works for contiguous view array");
+
+    array<T,I,ContiguousView> res;
+    I sz = tools::_prod_init_list(shape);
+    res.view_.reshape({sz});
+    res._realloc<0>();
     return res;
   }
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::ones(const std::vector<I>& shape) {
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Static initializer only works for contiguous view array");
+
     array<T,I,ContiguousView> res = empty(shape);
     std::fill(res.data(), res.data()+res.size(), (T)1);
     return res;
@@ -313,6 +325,9 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::full(const std::vector<I>& shape, T value) {
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Static initializer only works for contiguous view array");
+
     array<T,I,ContiguousView> res = empty(shape);
     std::fill(res.data(), res.data()+res.size(), (T)value);
     return res;
@@ -320,6 +335,9 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::arange(T begin, T end, T range) {
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Static initializer only works for contiguous view array");
+
     array<T,I,ContiguousView> res;
     I sz = (I)std::ceil((end - begin) / range);
     res.resize_(sz);
@@ -342,6 +360,9 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::linspace(T begin, T end, I n) {
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Static initializer only works for contiguous view array");
+
     array<T,I,ContiguousView> res;
     res.resize_(n);
     T di = n > 1 ? (end - begin) / (n - 1) : 1;
@@ -552,6 +573,7 @@ namespace csp {
 
   // private functions
   template <typename T, typename I, template<typename> typename View>
+  template <int n>
   void array<T,I,View>::_realloc() {
     I sz = view_.size();
     if (sz == prev_allocated_size_) {
@@ -559,7 +581,12 @@ namespace csp {
     }
 
     if (allocated_) std::free(data_);
-    data_ = (T*) std::malloc(sz*sizeof(*data_));
+    if (n != 0) {
+      data_ = (T*) std::malloc(sz*sizeof(*data_));
+    }
+    else {
+      data_ = (T*) std::calloc(sz, sizeof(*data_));
+    }
     dataptr_ = data_;
     tools::_assert_cpu(data_, "CPU memory allocation failed.");
     allocated_ = true;
