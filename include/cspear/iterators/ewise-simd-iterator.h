@@ -29,6 +29,7 @@ namespace csp {
     simd::Vector<T> vec_;
     I simd_sz_;
     I offset_;
+    bool is_aligned_ = false;
 
     public:
     static const bool is_implemented = true;
@@ -39,14 +40,19 @@ namespace csp {
       data_ = data;
       offset_ = 0;
       simd_sz_ = vec_.size();
+      #if (__SIMD__ == 1)
+      is_aligned_ = ((unsigned long)data & (SIMD_ALIGNMENT-1) == 0);
+      #endif
     }
 
     // iterator operator
     inline simd::Vector<T>& load() {
-      if (sz_ >= offset_ + simd_sz_)
-        return vec_.load(data_);
-      else
+      if (sz_ < offset_ + simd_sz_)
         return vec_.partial_load(data_, sz_-offset_);
+      else if (is_aligned_)
+        return vec_.loada(data_);
+      else
+        return vec_.load(data_);
     }
 
     inline EWiseSIMDIterator& operator++() {
@@ -56,10 +62,12 @@ namespace csp {
     }
 
     inline void store() {
-      if (sz_ >= offset_ + simd_sz_)
-        vec_.store(data_);
-      else
+      if (sz_ < offset_ + simd_sz_)
         vec_.partial_store(data_, sz_-offset_);
+      else if (is_aligned_)
+        vec_.storea(data_);
+      else
+        vec_.store(data_);
     }
 
     inline operator bool() const {
