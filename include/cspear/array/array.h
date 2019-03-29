@@ -308,7 +308,7 @@ namespace csp {
 
     array<T,I,ContiguousView> res;
     res.view_.reshape(shape);
-    res._realloc<0>();
+    res.template _realloc<0>();
     return res;
   }
 
