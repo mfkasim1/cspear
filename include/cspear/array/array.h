@@ -307,8 +307,7 @@ namespace csp {
       "Static initializer only works for contiguous view array");
 
     array<T,I,ContiguousView> res;
-    I sz = tools::_prod_init_list(shape);
-    res.view_.reshape({sz});
+    res.view_.reshape(shape);
     res._realloc<0>();
     return res;
   }
@@ -342,19 +341,19 @@ namespace csp {
     I sz = (I)std::ceil((end - begin) / range);
     res.resize_(sz);
     auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
-    for (T i = begin; i < end; i+=range, ++it) {
+    for (T i = begin; it; i+=range, ++it) {
       *it = i;
     }
     return res;
   }
 
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,ContiguousView> array<T,I,View>::arange(T end) {
+  inline array<T,I,ContiguousView> array<T,I,View>::arange(T end) {
     return arange((T)0, end, (T)1);
   }
 
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,ContiguousView> array<T,I,View>::arange(T begin, T end) {
+  inline array<T,I,ContiguousView> array<T,I,View>::arange(T begin, T end) {
     return arange(begin, end, (T)1);
   }
 
