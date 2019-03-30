@@ -117,7 +117,7 @@ namespace csp {
 
   // inplace unary operators and binary operators with a value
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>& array<T,I,View>::operator=(T a) {
+  array<T,I,View>& array<T,I,View>::fill_(T a) {
     return ewise_inplace_binary_op_with_val< ufunc::assign<T> >(*this, a);
   }
 
