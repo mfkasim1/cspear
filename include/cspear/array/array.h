@@ -117,24 +117,24 @@ namespace csp {
 
     /*************** OPERATORS ***************/
     // unary operators (non inplace)
-    array<T,I,ContiguousView> operator-();
-    array<T,I,ContiguousView> operator+(T a);
-    array<T,I,ContiguousView> operator-(T a);
-    array<T,I,ContiguousView> operator*(T a);
-    array<T,I,ContiguousView> operator/(T a);
-    array<T,I,ContiguousView> reciprocal(T a); // returns a / this
-    array<T,I,ContiguousView> clip_lb(T lb);
-    array<T,I,ContiguousView> clip_ub(T ub);
-    array<T,I,ContiguousView> clip(T lb, T ub);
-    array<bool,I,ContiguousView> operator!();
-    array<bool,I,ContiguousView> operator>(T a);
-    array<bool,I,ContiguousView> operator>=(T a);
-    array<bool,I,ContiguousView> operator<(T a);
-    array<bool,I,ContiguousView> operator<=(T a);
-    array<bool,I,ContiguousView> operator==(T a);
-    array<bool,I,ContiguousView> operator!=(T a);
-    array<bool,I,ContiguousView> operator&&(T a);
-    array<bool,I,ContiguousView> operator||(T a);
+    array<T,I,ContiguousView> operator-() const;
+    array<T,I,ContiguousView> operator+(T a) const;
+    array<T,I,ContiguousView> operator-(T a) const;
+    array<T,I,ContiguousView> operator*(T a) const;
+    array<T,I,ContiguousView> operator/(T a) const;
+    array<T,I,ContiguousView> reciprocal(T a) const; // returns a / this
+    array<T,I,ContiguousView> clip_lb(T lb) const;
+    array<T,I,ContiguousView> clip_ub(T ub) const;
+    array<T,I,ContiguousView> clip(T lb, T ub) const;
+    array<bool,I,ContiguousView> operator!() const;
+    array<bool,I,ContiguousView> operator>(T a) const;
+    array<bool,I,ContiguousView> operator>=(T a) const;
+    array<bool,I,ContiguousView> operator<(T a) const;
+    array<bool,I,ContiguousView> operator<=(T a) const;
+    array<bool,I,ContiguousView> operator==(T a) const;
+    array<bool,I,ContiguousView> operator!=(T a) const;
+    array<bool,I,ContiguousView> operator&&(T a) const;
+    array<bool,I,ContiguousView> operator||(T a) const;
 
     // inplace unary operators
     array<T,I,View>& operator=(T a);
@@ -149,29 +149,29 @@ namespace csp {
 
     // binary operators (non inplace)
     template <template<typename> typename View2>
-    array<T,I,ContiguousView> operator+(const array<T,I,View2>& a);
+    array<T,I,ContiguousView> operator+(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<T,I,ContiguousView> operator-(const array<T,I,View2>& a);
+    array<T,I,ContiguousView> operator-(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<T,I,ContiguousView> operator*(const array<T,I,View2>& a);
+    array<T,I,ContiguousView> operator*(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<T,I,ContiguousView> operator/(const array<T,I,View2>& a);
+    array<T,I,ContiguousView> operator/(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator>(const array<T,I,View2>& a);
+    array<bool,I,ContiguousView> operator>(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator>=(const array<T,I,View2>& a);
+    array<bool,I,ContiguousView> operator>=(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator<(const array<T,I,View2>& a);
+    array<bool,I,ContiguousView> operator<(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator<=(const array<T,I,View2>& a);
+    array<bool,I,ContiguousView> operator<=(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator==(const array<T,I,View2>& a);
+    array<bool,I,ContiguousView> operator==(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator!=(const array<T,I,View2>& a);
+    array<bool,I,ContiguousView> operator!=(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator&&(const array<T,I,View2>& a);
+    array<bool,I,ContiguousView> operator&&(const array<T,I,View2>& a) const;
     template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator||(const array<T,I,View2>& a);
+    array<bool,I,ContiguousView> operator||(const array<T,I,View2>& a) const;
 
     // inplace binary operators
     template <template<typename> typename View2>
