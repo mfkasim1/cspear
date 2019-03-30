@@ -435,8 +435,8 @@ namespace csp {
       "Index is out of the range");
     _cspear_assert((idx1 >= 0) && (idx1 <= sh[0]),
       "Index is out of the range");
-    _cspear_assert(idx1 > idx0,
-      "The end index must be larger than the beginning index");
+    _cspear_assert(idx1 >= idx0,
+      "The end index must be larger or equal to the beginning index");
 
     // get the newshape
     std::vector<I> newshape = sh;
