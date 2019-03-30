@@ -75,13 +75,12 @@ namespace csp {
 
     // iterator operator
     inline T& operator*() {
-      return *data_;
+      return origin_data_[*idxs_];
     }
 
     inline EWiseIterator& operator++() {
       idxs_++;
       offset_++;
-      data_ = &origin_data_[*idxs_];
       return *this;
     }
 
