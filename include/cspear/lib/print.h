@@ -35,9 +35,12 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   std::ostream& operator<<(std::ostream& os, const array<T,I,View>& arr) {
     // print the content
-    std::vector<I> strides = arr.shape();
+    auto ndim = arr.ndim();
+    std::vector<I> strides(ndim);
+    auto& sh = arr.shape();
+    strides[0] = sh[ndim-1];
     for (auto i = 1; i < strides.size(); ++i) {
-      strides[i] *= strides[i-1];
+      strides[i] = strides[i-1] * sh[ndim-i-1];
     }
 
     for (auto i = 0; i < arr.size(); ++i) {
