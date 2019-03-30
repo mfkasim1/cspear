@@ -140,11 +140,11 @@ namespace csp {
   template <typename T1, typename T2, typename TR, typename I>
   class BCastIterator<T1,T2,TR,I,ContiguousView<I>,ContiguousView<I> > {
     // iterators
-    StepBackIterator<T1,I> sb1_;
-    StepBackIterator<T2,I> sb2_;
-    TR* itr_;
-    I offset_;
-    I sz_;
+    StepBackIterator<T1,I> sb1_ = StepBackIterator<T1,I>();
+    StepBackIterator<T2,I> sb2_ = StepBackIterator<T2,I>();
+    TR* itr_ = NULL;
+    I offset_ = 0;
+    I sz_ = 0;
 
     public:
     static const bool is_implemented = true;

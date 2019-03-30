@@ -8,9 +8,9 @@
 namespace csp {
   template <typename I>
   class FilterView : public ContiguousView<I> {
-    std::vector<I> shape_;
-    I sz_;
-    std::vector<I> idxs_;
+    std::vector<I> shape_ = {};
+    I sz_ = 0;
+    std::vector<I> idxs_ = {};
 
     public:
     FilterView() {}

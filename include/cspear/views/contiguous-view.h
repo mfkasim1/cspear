@@ -6,8 +6,8 @@
 namespace csp {
   template <typename I>
   class ContiguousView {
-    std::vector<I> shape_;
-    I sz_;
+    std::vector<I> shape_ = {};
+    I sz_ = 0;
 
     public:
     ContiguousView();

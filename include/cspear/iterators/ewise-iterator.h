@@ -23,9 +23,9 @@ namespace csp {
   // partial template specialization for different views
   template <typename T, typename I>
   class EWiseIterator<T,I,ContiguousView<I> > {
-    I sz_;
-    T* data_;
-    I offset_;
+    I sz_ = 0;
+    T* data_ = NULL;
+    I offset_ = 0;
 
     public:
     // constructor
@@ -53,12 +53,12 @@ namespace csp {
 
   template <typename T, typename I>
   class EWiseIterator<T,I,FilterView<I> > {
-    I sz_;
-    T* data_;
-    T* origin_data_;
-    I offset_;
-    const I* all_idxs_;
-    const I* idxs_;
+    I sz_ = 0;
+    T* data_ = NULL;
+    T* origin_data_ = NULL;
+    I offset_ = 0;
+    const I* all_idxs_ = NULL;
+    const I* idxs_ = NULL;
 
     public:
     EWiseIterator(T* data, const FilterView<I>& view) {

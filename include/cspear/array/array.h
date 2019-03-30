@@ -18,13 +18,13 @@ namespace csp {
             template<typename> typename View=ContiguousView>
   class array {
     T* data_ = NULL;
-    View<I> view_;
+    View<I> view_ = View<I>();
 
     I prev_allocated_size_ = 0;
     bool allocated_ = false; // flag to indicate if the data is allocated by us
     bool own_ = true; // flag to indicate if the array owns the memory
                       // (if the array is a view, own_ == false)
-    T* dataptr_; // the pointer to the beginning of the data in memory
+    T* dataptr_ = NULL; // the pointer to the beginning of the data in memory
                  // this is to check if the operands and the assignee share
                  // the same memory to avoid aliasing
 

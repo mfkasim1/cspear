@@ -24,11 +24,11 @@ namespace csp {
   // partial template specialization for different views
   template <typename T, typename I>
   class EWiseSIMDIterator<T,I,ContiguousView<I> > {
-    I sz_;
-    T* data_;
+    I sz_ = 0;
+    T* data_ = NULL;
     simd::Vector<T> vec_;
-    I simd_sz_;
-    I remaining_;
+    I simd_sz_ = 0;
+    I remaining_ = 0;
     // bool is_aligned_ = false;
 
     public:

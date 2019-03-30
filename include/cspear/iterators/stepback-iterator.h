@@ -25,12 +25,12 @@ namespace csp {
   */
   template <typename T, typename I>
   class StepBackIterator {
-    std::vector<I> nsteps_orig_;
-    std::vector<I> nrepeats_orig_;
-    std::vector<I> ncounts_;
-    std::vector<I> nrepeats_;
-    std::vector<I> move_back_;
-    T* ptr_;
+    std::vector<I> nsteps_orig_ = {};
+    std::vector<I> nrepeats_orig_ = {};
+    std::vector<I> ncounts_ = {};
+    std::vector<I> nrepeats_ = {};
+    std::vector<I> move_back_ = {};
+    T* ptr_ = NULL;
 
     public:
     StepBackIterator() {}

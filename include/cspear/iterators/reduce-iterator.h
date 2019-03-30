@@ -85,10 +85,10 @@ namespace csp {
   template <typename T, typename I>
   class ReduceIterator<T,I,ContiguousView<I> > {
     // iterators
-    T* it1_;
-    StepBackIterator<T,I> sbr_;
-    I offset_;
-    I sz_;
+    T* it1_ = NULL;
+    StepBackIterator<T,I> sbr_ = StepBackIterator<T,I>();
+    I offset_ = 0;
+    I sz_ = 0;
 
     public:
     static const bool is_implemented = true;
