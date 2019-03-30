@@ -62,7 +62,8 @@ namespace csp {
 
   template <typename I>
   inline const I* FilterView<I>::idxs() const {
-    return &idxs_[0];
+    if (sz_ == 0) return NULL;
+    else return &idxs_[0];
   }
 
   template <typename I>

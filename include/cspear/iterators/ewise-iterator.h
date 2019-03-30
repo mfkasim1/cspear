@@ -67,7 +67,10 @@ namespace csp {
       offset_ = 0;
       idxs_ = view.idxs();
       all_idxs_ = idxs_;
-      data_ = &origin_data_[*idxs_];
+      if (sz_ == 0)
+        data_ = NULL;
+      else
+        data_ = &origin_data_[*idxs_];
     }
 
     // iterator operator
