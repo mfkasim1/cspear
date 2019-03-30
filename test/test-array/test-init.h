@@ -241,8 +241,42 @@ namespace {
     EXPECT_EQ(arr.ndim(), 2);
   }
 
+  TEST(InitArray,OnesInitIntFromAssignment) {
+    csp::array<int> arr;
+    arr = csp::ones<int>({4,6});
+    EXPECT_EQ(arr.size(), 24);
+
+    // check the content
+    for (auto i = 0; i < arr.size(); ++i) {
+      EXPECT_EQ(arr[i], 1);
+    }
+
+    auto shape = arr.shape();
+    EXPECT_EQ(shape[0], 4);
+    EXPECT_EQ(shape[1], 6);
+    EXPECT_EQ(shape.size(), 2);
+    EXPECT_EQ(arr.ndim(), 2);
+  }
+
   TEST(InitArray,FullInit) {
     csp::array<double> arr = csp::full({4,6}, 5.0);
+    EXPECT_EQ(arr.size(), 24);
+
+    // check the content
+    for (auto i = 0; i < arr.size(); ++i) {
+      EXPECT_EQ(arr[i], 5.0);
+    }
+
+    auto shape = arr.shape();
+    EXPECT_EQ(shape[0], 4);
+    EXPECT_EQ(shape[1], 6);
+    EXPECT_EQ(shape.size(), 2);
+    EXPECT_EQ(arr.ndim(), 2);
+  }
+
+  TEST(InitArray,FullInitFromAssignment) {
+    csp::array<double> arr;
+    arr = csp::full({4,6}, 5.0);
     EXPECT_EQ(arr.size(), 24);
 
     // check the content

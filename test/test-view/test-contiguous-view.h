@@ -168,6 +168,30 @@ namespace {
     EXPECT_DOUBLE_EQ(a[4], 6.3);
     EXPECT_DOUBLE_EQ(a[5], 8.2);
   }
+  TEST(ContiguousViewSingleElmt,Copy) {
+    csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
+    auto b = a.at(0).copy();
+
+    std::vector<int> shape = {3};
+    EXPECT_EQ(b.size(), 3);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_DOUBLE_EQ(b[0], 1.0);
+    EXPECT_DOUBLE_EQ(b[1], 4.2);
+    EXPECT_DOUBLE_EQ(b[2], 3.0);
+  }
+  TEST(ContiguousViewSingleElmt,Copy2) {
+    csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
+    csp::array<double> b;
+    b = a.at(1).copy();
+    b = a.at(0).copy();
+
+    std::vector<int> shape = {3};
+    EXPECT_EQ(b.size(), 3);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_DOUBLE_EQ(b[0], 1.0);
+    EXPECT_DOUBLE_EQ(b[1], 4.2);
+    EXPECT_DOUBLE_EQ(b[2], 3.0);
+  }
 
   // accessing a slice from the first dimension
   TEST(ContiguousViewMultiElmt,FromContiguous1D) {
