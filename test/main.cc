@@ -12,6 +12,7 @@
 #include "test-lib/test-hist.h"
 #include "test-lib/test-interp.h"
 #include "test-simd/test-avx.h"
+#include "test-cases/test-copy.h"
 
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
