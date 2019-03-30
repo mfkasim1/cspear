@@ -97,23 +97,23 @@ namespace csp {
     array<T,I,View>& ravel_();
 
     /**************** REDUCE ****************/
-    T sum();
-    array<T,I,ContiguousView> sum(I axis);
-    array<T,I,ContiguousView> sum(const std::vector<I>& axes);
-    T max();
-    array<T,I,ContiguousView> max(I axis);
-    array<T,I,ContiguousView> max(const std::vector<I>& axes);
-    T min();
-    array<T,I,ContiguousView> min(I axis);
-    array<T,I,ContiguousView> min(const std::vector<I>& axes);
+    T sum() const;
+    array<T,I,ContiguousView> sum(I axis) const;
+    array<T,I,ContiguousView> sum(const std::vector<I>& axes) const;
+    T max() const;
+    array<T,I,ContiguousView> max(I axis) const;
+    array<T,I,ContiguousView> max(const std::vector<I>& axes) const;
+    T min() const;
+    array<T,I,ContiguousView> min(I axis) const;
+    array<T,I,ContiguousView> min(const std::vector<I>& axes) const;
 
     // boolean operations
-    T all();
-    array<T,I,ContiguousView> all(I axis);
-    array<T,I,ContiguousView> all(const std::vector<I>& axes);
-    T any();
-    array<T,I,ContiguousView> any(I axis);
-    array<T,I,ContiguousView> any(const std::vector<I>& axes);
+    T all() const;
+    array<T,I,ContiguousView> all(I axis) const;
+    array<T,I,ContiguousView> all(const std::vector<I>& axes) const;
+    T any() const;
+    array<T,I,ContiguousView> any(I axis) const;
+    array<T,I,ContiguousView> any(const std::vector<I>& axes) const;
 
     /*************** OPERATORS ***************/
     // unary operators (non inplace)
