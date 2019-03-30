@@ -177,7 +177,7 @@ namespace csp {
 
     // inplace binary operators
     template <template<typename> typename View2>
-    array<T,I,View>& assign_(const array<T,I,View2>& a);
+    array<T,I,View>& fill_(const array<T,I,View2>& a);
     template <template<typename> typename View2>
     array<T,I,View>& operator+=(const array<T,I,View2>& a);
     template <template<typename> typename View2>
@@ -499,8 +499,8 @@ namespace csp {
       }
     }
     else {
-      // if the array does not own the memory, invoke assign_ operation
-      assign_(a);
+      // if the array does not own the memory, invoke fill_ operation
+      fill_(a);
     }
     return *this;
   }
@@ -508,7 +508,7 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
   inline array<T,I,View>& array<T,I,View>::operator=(const array<T,I,View2>& a) {
-    return assign_(a);
+    return fill_(a);
   }
 
   template <typename T, typename I, template<typename> typename View>

@@ -240,7 +240,7 @@ namespace csp {
   // inplace binary operators
   template <typename T, typename I, template<typename> typename View>
   template <template<typename> typename View2>
-  array<T,I,View>& array<T,I,View>::assign_(const array<T,I,View2>& a) {
+  array<T,I,View>& array<T,I,View>::fill_(const array<T,I,View2>& a) {
     return inplace_binary_op<ufunc::assign<T> >(*this, a);
   }
 
