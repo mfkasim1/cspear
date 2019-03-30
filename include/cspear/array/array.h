@@ -17,7 +17,7 @@ namespace csp {
   template <typename T, typename I=tools::Int,
             template<typename> typename View=ContiguousView>
   class array {
-    T* data_;
+    T* data_ = NULL;
     View<I> view_;
 
     I prev_allocated_size_ = 0;
@@ -272,7 +272,8 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   array<T,I,View>::~array() {
     if (allocated_) {
-      std::free(data_);
+      if (data_ != NULL) std::free(data_);
+      data_ = NULL;
       allocated_ = false;
     }
   }
@@ -431,14 +432,21 @@ namespace csp {
 
     // check the input index
     auto& sh = shape();
-    _cspear_assert((idx0 >= 0) && (idx0 < sh[0]),
-      "Index is out of the range");
-    _cspear_assert((idx1 >= 0) && (idx1 <= sh[0]),
-      "Index is out of the range");
     _cspear_assert(idx1 >= idx0,
       "The end index must be larger or equal to the beginning index");
 
+    if ((idx0 >= sh[0]) || (idx1 == idx0) || (sh[0] == 0)) {
+      std::vector<I> newshape({0});
+      return array<T,I,ContiguousView>(data_,
+        ContiguousView<I>(newshape), dataptr_);
+    }
+
+    _cspear_assert((idx0 >= 0) && (idx1 >= 0),
+      "Index cannot be negative");
+
     // get the newshape
+    if (idx1 > sh[0]) idx1 = sh[0];
+
     std::vector<I> newshape = sh;
     newshape[0] = idx1 - idx0;
 

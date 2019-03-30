@@ -233,8 +233,8 @@ namespace {
   TEST(ContiguousViewMultiElmt,FromContiguous2DError) {
     csp::array<double> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
     try {
-      auto b = a.at(0,3);
-      FAIL() << "A runtime_error should be thrown for out-of-range index";
+      auto b = a.at(-1,3);
+      FAIL() << "A runtime_error should be thrown for negative index";
     }
     catch (const std::runtime_error& e) {
       SUCCEED();
