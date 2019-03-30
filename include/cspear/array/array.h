@@ -63,11 +63,13 @@ namespace csp {
     // indexing
     T& operator[](I idx);
     const T& operator[](I idx) const;
-    array<T,I,FilterView> filter(const array<bool,I,ContiguousView>& f);
-    array<T,I,ContiguousView> at(I idx); // get the first dimension
-    array<T,I,ContiguousView> at(I idx0, I idx1); // get the first dimension slice
+    array<T,I,FilterView> filter(const array<bool,I,ContiguousView>& f) const;
+    array<T,I,ContiguousView> at(I idx) const; // get the first dimension
+    array<T,I,ContiguousView> at(I idx0, I idx1) const; // get the first dimension slice
     T& at(std::initializer_list<I> idxs);
     T& at(const std::vector<I>& idxs);
+    const T& at(std::initializer_list<I> idxs) const;
+    const T& at(const std::vector<I>& idxs) const;
 
     // assignment operator and copy
     array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
@@ -387,7 +389,7 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   inline array<T,I,FilterView> array<T,I,View>::filter(
-               const array<bool,I,ContiguousView>& fltr) {
+               const array<bool,I,ContiguousView>& fltr) const {
     static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
       "Only array with contiguous view can do filtering. Please do .copy() to "
       "get the contiguous copy of this array.");
@@ -398,7 +400,7 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  inline array<T,I,ContiguousView> array<T,I,View>::at(I idx) {
+  inline array<T,I,ContiguousView> array<T,I,View>::at(I idx) const {
     static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
       "Only array with contiguous view can do indexing. Please do .copy() to "
       "get the contiguous copy of this array.");
@@ -421,7 +423,7 @@ namespace csp {
   }
 
   template <typename T, typename I, template<typename> typename View>
-  inline array<T,I,ContiguousView> array<T,I,View>::at(I idx0, I idx1) {
+  inline array<T,I,ContiguousView> array<T,I,View>::at(I idx0, I idx1) const {
     // check the type
     static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
       "Only array with contiguous view can do indexing. Please do .copy() to "
@@ -447,12 +449,22 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   inline T& array<T,I,View>::at(std::initializer_list<I> idxs) {
+    return const_cast<T&>(const_cast<const array<T,I,View>*>(this)->at(idxs));
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  inline T& array<T,I,View>::at(const std::vector<I>& idxs) {
+    return const_cast<T&>(const_cast<const array<T,I,View>*>(this)->at(idxs));
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  inline const T& array<T,I,View>::at(std::initializer_list<I> idxs) const {
     std::vector<I> i = idxs;
     return at(i);
   }
 
   template <typename T, typename I, template<typename> typename View>
-  inline T& array<T,I,View>::at(const std::vector<I>& idxs) {
+  inline const T& array<T,I,View>::at(const std::vector<I>& idxs) const {
     _cspear_assert(idxs.size() == ndim(),
                   "The indices length must match the dimension");
     // ravel indices
