@@ -28,7 +28,7 @@ namespace csp {
     T* data_;
     simd::Vector<T> vec_;
     I simd_sz_;
-    I offset_;
+    I remaining_;
     // bool is_aligned_ = false;
 
     public:
@@ -38,7 +38,7 @@ namespace csp {
     EWiseSIMDIterator(T* data, const ContiguousView<I>& view) {
       sz_ = view.size();
       data_ = data;
-      offset_ = 0;
+      remaining_ = sz_;
       simd_sz_ = vec_.size();
       // #if (__SIMD__ == 1)
       // is_aligned_ = ((unsigned long)data & (SIMD_ALIGNMENT-1) == 0);
@@ -47,8 +47,8 @@ namespace csp {
 
     // iterator operator
     inline simd::Vector<T>& load() {
-      if (sz_ < offset_ + simd_sz_)
-        return vec_.partial_load(data_, sz_-offset_);
+      if (remaining_ < simd_sz_)
+        return vec_.partial_load(data_, remaining_);
       // else if (is_aligned_)
       //   return vec_.loada(data_);
       else
@@ -57,13 +57,13 @@ namespace csp {
 
     inline EWiseSIMDIterator& operator++() {
       data_ += simd_sz_;
-      offset_ += simd_sz_;
+      remaining_ -= simd_sz_;
       return *this;
     }
 
     inline void store() {
-      if (sz_ < offset_ + simd_sz_)
-        vec_.partial_store(data_, sz_-offset_);
+      if (remaining_ < simd_sz_)
+        vec_.partial_store(data_, remaining_);
       // else if (is_aligned_)
       //   vec_.storea(data_);
       else
@@ -71,7 +71,7 @@ namespace csp {
     }
 
     inline operator bool() const {
-      return offset_ < sz_;
+      return remaining_ > 0;
     }
   };
 }
