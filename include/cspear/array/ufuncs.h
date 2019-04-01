@@ -59,6 +59,20 @@ namespace csp {
         const simd::Vector<T>& b) {}
     };
     template <typename T>
+    struct max {
+      static const bool has_simd = false;
+      static inline T binary(const T& a, const T& b) { return a>b?a:b; }
+      static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
+        const simd::Vector<T>& b) {}
+    };
+    template <typename T>
+    struct min {
+      static const bool has_simd = false;
+      static inline T binary(const T& a, const T& b) { return a<b?a:b; }
+      static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
+        const simd::Vector<T>& b) {}
+    };
+    template <typename T>
     struct assign {
       static const bool has_simd = true;
       static inline T binary(const T& a, const T& b) { return b; }

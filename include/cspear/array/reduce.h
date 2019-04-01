@@ -8,8 +8,8 @@
 #include <cspear/iterators/reduce-iterator.h>
 
 namespace csp {
-  template <typename TR, typename InpType, typename F>
-  TR reduce_all(F&& f, const InpType& arr, TR initval) {
+  template <typename f, typename TR, typename InpType>
+  TR reduce_all(const InpType& arr, TR initval) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
@@ -19,14 +19,14 @@ namespace csp {
     // performing the iteration
     auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
     for (; it1; ++it1) {
-      f(res, *it1);
+      res = f::binary(res, *it1);
     }
     return res;
   }
 
-  template <typename ResType, typename TR, typename InpType, typename IAx,
-            typename F>
-  ResType reduce_axis(F&& f, const InpType& arr, const IAx& ax, TR initval) {
+  template <typename ResType, typename f, typename TR, typename InpType,
+            typename IAx>
+  ResType reduce_axis(const InpType& arr, const IAx& ax, TR initval) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
@@ -41,14 +41,15 @@ namespace csp {
                       (T*)arr.data(), arr.view(),
                       (TR*)res.data(), res.view());
     for (; it1; ++it1) {
-      f(it1.result(), it1.first());
+      auto& it1r = it1.result();
+      it1r = f::binary(it1r, it1.first());
     }
     return res;
   }
 
-  template <typename ResType, typename TR, typename InpType, typename AxType,
-            typename F>
-  ResType reduce_axes(F&& f, const InpType& arr, const AxType& axes, TR initval) {
+  template <typename ResType, typename f, typename TR, typename InpType,
+            typename AxType>
+  ResType reduce_axes(const InpType& arr, const AxType& axes, TR initval) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
@@ -66,7 +67,8 @@ namespace csp {
                       (T*)arr.data(), arr.view(),
                       (TR*)res.data(), res.view());
     for (; it1; ++it1) {
-      f(it1.result(), it1.first());
+      auto& it1r = it1.result();
+      it1r = f::binary(it1r, it1.first());
     }
     return res;
   }
