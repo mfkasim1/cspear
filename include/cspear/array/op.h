@@ -10,8 +10,16 @@
 namespace csp {
   template <typename f, typename It1, typename It2, typename It3>
   struct ewise_can_use_simd {
-    static const bool value = __SIMD__ && f::has_simd && It1::is_implemented &&
-                              It2::is_implemented && It3::is_implemented;
+    using Vector1 = typename It1::VectorDataType;
+    using Vector2 = typename It2::VectorDataType;
+    using Vector3 = typename It3::VectorDataType;
+    static const bool value = __SIMD__ && f::has_simd &&
+                              It1::is_implemented &&
+                              It2::is_implemented &&
+                              It3::is_implemented &&
+                              Vector1::is_implemented &&
+                              Vector2::is_implemented &&
+                              Vector3::is_implemented;
   };
 
   template <typename ResType, typename f, typename InpType>

@@ -10,6 +10,7 @@ namespace csp {
   class EWiseSIMDIterator {
     public:
     static const bool is_implemented = false;
+    using VectorDataType = simd::Vector<T>;
 
     // constructor
     EWiseSIMDIterator(T* data, const View& view);
@@ -33,6 +34,7 @@ namespace csp {
 
     public:
     static const bool is_implemented = true;
+    using VectorDataType = simd::Vector<T>;
 
     // constructor
     EWiseSIMDIterator(T* data, const ContiguousView<I>& view) {

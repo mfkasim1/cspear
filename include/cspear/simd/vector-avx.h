@@ -63,6 +63,7 @@ namespace csp {
       public:
       using SimdType = typename std::conditional<std::is_same<T,double>::value,
             __m256d, __m256>::type;
+      static const bool is_implemented;
       private:
       SimdType a_;
 
@@ -100,6 +101,17 @@ namespace csp {
       VectorAVX& operator/=(const VectorAVX& other);
       VectorAVX& operator=(const VectorAVX& other);
     };
+
+    // implementation status
+    template <> const bool VectorAVX<unsigned int>::is_implemented = false;
+    template <> const bool VectorAVX<unsigned long int>::is_implemented = false;
+    template <> const bool VectorAVX<unsigned long long int>::is_implemented = false;
+    template <> const bool VectorAVX<int>::is_implemented = false;
+    template <> const bool VectorAVX<long int>::is_implemented = false;
+    template <> const bool VectorAVX<long long int>::is_implemented = false;
+    template <> const bool VectorAVX<bool>::is_implemented = false;
+    template <> const bool VectorAVX<float>::is_implemented = true;
+    template <> const bool VectorAVX<double>::is_implemented = true;
 
     // implementations in double
     template <> inline VectorAVX<double>::VectorAVX(std::initializer_list<double> values) {
