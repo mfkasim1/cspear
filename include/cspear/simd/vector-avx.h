@@ -103,12 +103,14 @@ namespace csp {
     };
 
     // implementation status
-    template <> const bool VectorAVX<unsigned int>::is_implemented = false;
-    template <> const bool VectorAVX<unsigned long int>::is_implemented = false;
-    template <> const bool VectorAVX<unsigned long long int>::is_implemented = false;
-    template <> const bool VectorAVX<int>::is_implemented = false;
-    template <> const bool VectorAVX<long int>::is_implemented = false;
-    template <> const bool VectorAVX<long long int>::is_implemented = false;
+    template <> const bool VectorAVX<std::uint8_t>::is_implemented = false;
+    template <> const bool VectorAVX<std::uint16_t>::is_implemented = false;
+    template <> const bool VectorAVX<std::uint32_t>::is_implemented = false;
+    template <> const bool VectorAVX<std::uint64_t>::is_implemented = false;
+    template <> const bool VectorAVX<std::int8_t>::is_implemented = false;
+    template <> const bool VectorAVX<std::int16_t>::is_implemented = false;
+    template <> const bool VectorAVX<std::int32_t>::is_implemented = false;
+    template <> const bool VectorAVX<std::int64_t>::is_implemented = false;
     template <> const bool VectorAVX<bool>::is_implemented = false;
     template <> const bool VectorAVX<float>::is_implemented = true;
     template <> const bool VectorAVX<double>::is_implemented = true;
