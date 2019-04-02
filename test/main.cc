@@ -4,6 +4,7 @@
 #include "gtest/gtest.h"
 #include "test_params.h"
 #include "test-array/test-init.h"
+#include "test-array/test-nil.h"
 #include "test-array/test-reshape.h"
 #include "test-array/test-reduce.h"
 #include "test-array/test-op.h"

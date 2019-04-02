@@ -269,7 +269,10 @@ namespace csp {
   template <typename ResType, typename f, typename InpType1, typename InpType2>
   ResType binary_op(const InpType1& arr1, const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
-    if (arr1.shape() == arr2.shape()) {
+    if (arr1.size() * arr2.size() == 0) {
+      throw std::runtime_error("Operations cannot be done with empty arrays.\n");
+    }
+    else if (arr1.shape() == arr2.shape()) {
       // element wise
       return ewise_binary_op<ResType, f>(arr1, arr2);
     }
@@ -292,7 +295,10 @@ namespace csp {
   InpType1& inplace_binary_op(InpType1& arr1,
                               const InpType2& arr2) {
     // check the shape and decide if it is element-wise or broadcases
-    if (arr1.shape() == arr2.shape()) { // element wise
+    if (arr1.size() * arr2.size() == 0) {
+      throw std::runtime_error("Operations cannot be done with empty arrays.\n");
+    }
+    else if (arr1.shape() == arr2.shape()) { // element wise
       // check aliasing
       if (arr1.dataptr() == arr2.dataptr()) { // possible aliasing
         auto res = arr1.copy();

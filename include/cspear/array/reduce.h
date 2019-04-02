@@ -14,6 +14,10 @@ namespace csp {
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
 
+    if (arr.size() == 0) {
+      throw std::runtime_error("Reduce cannot be done with empty array.");
+    }
+
     TR res = initval;
 
     // performing the iteration
@@ -30,6 +34,10 @@ namespace csp {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
+
+    if (arr.size() == 0) {
+      throw std::runtime_error("Reduce cannot be done with empty array.");
+    }
 
     // get the shape of the result
     std::vector<IAx> axis = {ax};
@@ -53,6 +61,10 @@ namespace csp {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
+
+    if (arr.size() == 0) {
+      throw std::runtime_error("Reduce cannot be done with empty array.");
+    }
 
     // order ax
     AxType ax = axes;
