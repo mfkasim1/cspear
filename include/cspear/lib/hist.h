@@ -7,15 +7,15 @@
 #include <cspear/tools/types.h>
 
 namespace csp {
-  template <typename InpType1, typename InpType2,
-            typename ResType=array<tools::Real,tools::Int,ContiguousView> >
-  ResType hist_sorted(const InpType1& data, const InpType2& xbins) {
+  template <typename R=tools::Int, typename InpType1, typename InpType2>
+  csp::array<R> hist_sorted(const InpType1& data, const InpType2& xbins) {
     using T1 = typename InpType1::DataType;
     using I1 = typename InpType1::IndexType;
     using View1 = typename InpType1::ViewType;
     using T2 = typename InpType2::DataType;
     using I2 = typename InpType2::IndexType;
     using View2 = typename InpType2::ViewType;
+    using ResType = typename csp::array<R>;
     using TR = typename ResType::DataType;
     using IR = typename ResType::IndexType;
     using ViewR = typename ResType::ViewType;
@@ -61,9 +61,8 @@ namespace csp {
     return res;
   }
 
-  template <typename InpType1, typename InpType2,
-            typename ResType=array<tools::Real,tools::Int,ContiguousView> >
-  ResType hist(const InpType1& data, const InpType2& xbins) {
+  template <typename R=tools::Int, typename InpType1, typename InpType2>
+  csp::array<R> hist(const InpType1& data, const InpType2& xbins) {
     using T1 = typename InpType1::DataType;
     using I1 = typename InpType1::IndexType;
     using View1 = typename InpType1::ViewType;
@@ -72,7 +71,7 @@ namespace csp {
     array<T1,I1> cdata = data;
     std::sort(cdata.data(), cdata.data()+cdata.size());
 
-    return hist_sorted<InpType1,InpType2,ResType>(cdata, xbins);
+    return hist_sorted<R>(cdata, xbins);
   }
 }
 

@@ -7,9 +7,8 @@
 #include <cspear/tools/assert.h>
 
 namespace csp {
-  template <typename XType, typename XPType, typename YPType,
-            typename ResType=array<tools::Real,tools::Int,ContiguousView> >
-  ResType interp_sorted(const XType& x, const XPType& xp, const YPType& yp) {
+  template <typename R=tools::Real, typename XType, typename XPType, typename YPType>
+  csp::array<R> interp_sorted(const XType& x, const XPType& xp, const YPType& yp) {
     using TX = typename XType::DataType;
     using IX = typename XType::IndexType;
     using ViewX = typename XType::ViewType;
@@ -22,6 +21,7 @@ namespace csp {
     using TR = typename XType::DataType;
     using IR = typename XType::IndexType;
     using ViewR = typename XType::ViewType;
+    using ResType = typename csp::array<R>;
 
     // the arguments xp and yp must be 1D
     _cspear_assert((xp.ndim() == 1) && (yp.ndim() == 1),
@@ -79,9 +79,8 @@ namespace csp {
     return y;
   }
 
-  template <typename XType, typename XPType, typename YPType,
-            typename ResType=array<tools::Real,tools::Int,ContiguousView> >
-  ResType interp(const XType& x, const XPType& xp, const YPType& yp) {
+  template <typename R=tools::Real, typename XType, typename XPType, typename YPType>
+  csp::array<R> interp(const XType& x, const XPType& xp, const YPType& yp) {
     using TX = typename XType::DataType;
     using IX = typename XType::IndexType;
     using ViewX = typename XType::ViewType;
@@ -91,7 +90,7 @@ namespace csp {
     std::sort(xc.data(), xc.data()+xc.size());
 
     // do the sorted interpolation
-    return interp_sorted<XType,XPType,YPType,ResType>(xc, xp, yp);
+    return interp_sorted<R>(xc, xp, yp);
   }
 }
 
