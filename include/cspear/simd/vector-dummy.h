@@ -15,6 +15,8 @@ namespace csp {
     template <typename T>
     class VectorDummy {
       public:
+      static const bool is_implemented = false;
+
       VectorDummy() {
         _cspear_assert(false, "This vector dummy should not be called. "
                        "Please report this error to the developer.");
