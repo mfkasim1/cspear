@@ -8,14 +8,16 @@
 #include <cspear/iterators/reduce-iterator.h>
 
 namespace csp {
-  template <typename f, typename TR, typename InpType>
+  template <typename f, bool error_if_empty=true, typename TR, typename InpType>
   TR reduce_all(const InpType& arr, TR initval) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
 
-    if (arr.size() == 0) {
-      throw std::runtime_error("Reduce cannot be done with empty array.");
+    if (error_if_empty) {
+      if (arr.size() == 0) {
+        throw std::runtime_error("Reduce cannot be done with empty array.");
+      }
     }
 
     TR res = initval;
@@ -28,15 +30,20 @@ namespace csp {
     return res;
   }
 
-  template <typename ResType, typename f, typename TR, typename InpType,
-            typename IAx>
+  template <typename ResType, typename f, bool error_if_empty=true, typename TR,
+            typename InpType, typename IAx>
   ResType reduce_axis(const InpType& arr, const IAx& ax, TR initval) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
 
     if (arr.size() == 0) {
-      throw std::runtime_error("Reduce cannot be done with empty array.");
+      if (error_if_empty) {
+        throw std::runtime_error("Reduce cannot be done with empty array.");
+      }
+      else {
+        return {};
+      }
     }
 
     // get the shape of the result
@@ -55,15 +62,20 @@ namespace csp {
     return res;
   }
 
-  template <typename ResType, typename f, typename TR, typename InpType,
-            typename AxType>
+  template <typename ResType, typename f, bool error_if_empty=true, typename TR,
+            typename InpType, typename AxType>
   ResType reduce_axes(const InpType& arr, const AxType& axes, TR initval) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
 
     if (arr.size() == 0) {
-      throw std::runtime_error("Reduce cannot be done with empty array.");
+      if (error_if_empty) {
+        throw std::runtime_error("Reduce cannot be done with empty array.");
+      }
+      else {
+        return {};
+      }
     }
 
     // order ax

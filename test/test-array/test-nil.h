@@ -53,21 +53,6 @@ namespace {
                 "empty array";
     }
   }
-  TYPED_TEST(EmptyArrayTest, Reduce) {
-    csp::array<TypeParam> arr = {};
-    try {
-      auto b = arr.all();
-      FAIL() << "A runtime_error should be thrown for reduce with "
-                "empty array";
-    }
-    catch (const std::runtime_error& e) {
-      SUCCEED();
-    }
-    catch (...) {
-      FAIL() << "A runtime_error should be thrown for reduce with "
-                "empty array";
-    }
-  }
 }
 
 #endif

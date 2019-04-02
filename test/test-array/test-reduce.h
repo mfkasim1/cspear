@@ -73,6 +73,45 @@ namespace {
     EXPECT_NEAR(arr0[4], 7.0, AbsTol<TypeParam>::val);
     EXPECT_NEAR(arr0[5], 9.0, AbsTol<TypeParam>::val);
   }
+  TYPED_TEST(ReduceTestAllNumbers,SumAllEmpty) {
+    csp::array<TypeParam> arr = {};
+    EXPECT_NEAR(arr.sum(), (TypeParam)0, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,SumAxisEmpty) {
+    csp::array<TypeParam> arr = {};
+    auto arr0 = arr.sum(0);
+    std::vector<int> shape0 = {};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 0);
+
+    auto arr1 = arr.sum(1);
+    std::vector<int> shape1 = {};
+    EXPECT_EQ(arr1.shape(), shape1);
+    EXPECT_EQ(arr1.size(), 0);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,SumAxes1Empty) {
+    csp::array<TypeParam> arr = {};
+    std::vector<int> axes = {0,1};
+    auto arr0 = arr.sum(axes);
+    std::vector<int> shape0 = {};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 0);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,SumAxes2Empty) {
+    csp::array<TypeParam> arr = {};
+    auto arr0 = arr.sum({0,1});
+    std::vector<int> shape0 = {};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 0);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,SumAxesNilAxesEmpty) {
+    csp::array<TypeParam> arr = {};
+    std::vector<int> axes = {};
+    auto arr0 = arr.sum(axes);
+    std::vector<int> shape0 = {};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 0);
+  }
 
   TYPED_TEST(ReduceTestSignedNumbers,MinAll) {
     csp::array<TypeParam> arr = {{(TypeParam)10, (TypeParam)2, (TypeParam)14},
@@ -135,6 +174,84 @@ namespace {
     EXPECT_NEAR(arr0[3], (TypeParam)6, AbsTol<TypeParam>::val);
     EXPECT_NEAR(arr0[4], (TypeParam)-7, AbsTol<TypeParam>::val);
     EXPECT_NEAR(arr0[5], (TypeParam)-9, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MinAllEmpty) {
+    csp::array<TypeParam> arr = {};
+    try {
+      auto a = arr.min();
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MinAxisEmpty) {
+    csp::array<TypeParam> arr = {};
+    try {
+      auto a = arr.min(0);
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+
+    try {
+      auto a = arr.min(1);
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MinAxes1Empty) {
+    csp::array<TypeParam> arr = {};
+    std::vector<int> axes = {0,1};
+    try {
+      auto a = arr.min(axes);
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MinAxes2Empty) {
+    csp::array<TypeParam> arr = {};
+    try {
+      auto a = arr.min({0,1});
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MinAxesNilAxesEmpty) {
+    csp::array<TypeParam> arr = {};
+    std::vector<int> axes = {};
+    try {
+      auto a = arr.min(axes);
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
   }
 
   TYPED_TEST(ReduceTestSignedNumbers,MaxAll) {
@@ -199,6 +316,84 @@ namespace {
     EXPECT_NEAR(arr0[4], (TypeParam)-7, AbsTol<TypeParam>::val);
     EXPECT_NEAR(arr0[5], (TypeParam)-9, AbsTol<TypeParam>::val);
   }
+  TYPED_TEST(ReduceTestAllNumbers,MaxAllEmpty) {
+    csp::array<TypeParam> arr = {};
+    try {
+      auto a = arr.max();
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MaxAxisEmpty) {
+    csp::array<TypeParam> arr = {};
+    try {
+      auto a = arr.max(0);
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+
+    try {
+      auto a = arr.max(1);
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MaxAxes1Empty) {
+    csp::array<TypeParam> arr = {};
+    std::vector<int> axes = {0,1};
+    try {
+      auto a = arr.max(axes);
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MaxAxes2Empty) {
+    csp::array<TypeParam> arr = {};
+    try {
+      auto a = arr.max({0,1});
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
+  TYPED_TEST(ReduceTestAllNumbers,MaxAxesNilAxesEmpty) {
+    csp::array<TypeParam> arr = {};
+    std::vector<int> axes = {};
+    try {
+      auto a = arr.max(axes);
+      FAIL() << "A runtime_error should be thrown";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown";
+    }
+  }
 
   TEST(ReduceTestBool,AllAnyAll) {
     csp::array<bool> arr = {{false, true, true}, {true, true, true}};
@@ -229,7 +424,6 @@ namespace {
     EXPECT_EQ(arrany1[0], true);
     EXPECT_EQ(arrany1[1], true);
   }
-
   TEST(ReduceTestBool,AllAnyAxes1) {
     csp::array<bool> arr = {{false, true, true}, {true, true, true}};
     auto a1 = arr.all({0,1});
@@ -263,6 +457,51 @@ namespace {
     EXPECT_EQ(a2[3], true);
     EXPECT_EQ(a2[4], true);
     EXPECT_EQ(a2[5], true);
+  }
+  TEST(ReduceTestBool,AllAnyAllEmpty) {
+    csp::array<bool> arr = {};
+    EXPECT_EQ(arr.all(), true);
+    EXPECT_EQ(arr.any(), false);
+  }
+  TEST(ReduceTestBool,AllAnyAxisEmpty) {
+    csp::array<bool> arr = {};
+    auto arrall0 = arr.all(0);
+    auto arrall1 = arr.all(1);
+    auto arrany0 = arr.any(0);
+    auto arrany1 = arr.any(1);
+    std::vector<int> shape = {};
+
+    EXPECT_EQ(arrall0.size(), 0);
+    EXPECT_EQ(arrall1.size(), 0);
+    EXPECT_EQ(arrany0.size(), 0);
+    EXPECT_EQ(arrany1.size(), 0);
+
+    EXPECT_EQ(arrall0.shape(), shape);
+    EXPECT_EQ(arrall1.shape(), shape);
+    EXPECT_EQ(arrany0.shape(), shape);
+    EXPECT_EQ(arrany1.shape(), shape);
+  }
+  TEST(ReduceTestBool,AllAnyAxes1Empty) {
+    csp::array<bool> arr = {};
+    auto a1 = arr.all({0,1});
+    auto a2 = arr.any({0,1});
+    std::vector<int> shape = {};
+    EXPECT_EQ(a1.size(), 0);
+    EXPECT_EQ(a2.size(), 0);
+    EXPECT_EQ(a1.shape(), shape);
+    EXPECT_EQ(a2.shape(), shape);
+  }
+  TEST(ReduceTestBool,AllAnyNilAxesEmpty) {
+    csp::array<bool> arr = {};
+    std::vector<int> axes = {};
+    auto a1 = arr.all(axes);
+    auto a2 = arr.any(axes);
+    std::vector<int> shape = {};
+
+    EXPECT_EQ(a1.size(), 0);
+    EXPECT_EQ(a2.size(), 0);
+    EXPECT_EQ(a1.shape(), shape);
+    EXPECT_EQ(a2.shape(), shape);
   }
 }
 
