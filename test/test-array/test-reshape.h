@@ -3,10 +3,18 @@
 
 #include <vector>
 #include <cspear/cspear>
+#include "test_params.h"
 
 namespace {
-  TEST(ReshapeTest,Resize) {
-    csp::array<double> arr = {1.0, 2.0};
+  template <typename T>
+  class ReshapeTest : public testing::Test {};
+
+  using testing::Types;
+  typedef Types<double, float> RealNumbers;
+  TYPED_TEST_SUITE(ReshapeTest, RealNumbers);
+
+  TYPED_TEST(ReshapeTest,Resize) {
+    csp::array<TypeParam> arr = {1.0, 2.0};
     arr.resize_(5);
 
     EXPECT_EQ(arr.size(), 5);
@@ -15,8 +23,8 @@ namespace {
     EXPECT_EQ(shape.size(), 1);
   }
 
-  TEST(ReshapeTest,Reshape1) {
-    csp::array<double> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  TYPED_TEST(ReshapeTest,Reshape1) {
+    csp::array<TypeParam> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     arr.reshape_({3,2});
 
     EXPECT_EQ(arr.size(), 6);
@@ -26,8 +34,8 @@ namespace {
     EXPECT_EQ(shape.size(), 2);
   }
 
-  TEST(ReshapeTest,Reshape2) {
-    csp::array<double> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  TYPED_TEST(ReshapeTest,Reshape2) {
+    csp::array<TypeParam> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     std::vector<int> sh = {3,2};
     arr.reshape_(sh);
 
@@ -38,8 +46,8 @@ namespace {
     EXPECT_EQ(shape.size(), 2);
   }
 
-  TEST(ReshapeTest,Squeeze) {
-    csp::array<double> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  TYPED_TEST(ReshapeTest,Squeeze) {
+    csp::array<TypeParam> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     arr.reshape_({3,1,2,1});
 
     EXPECT_EQ(arr.size(), 6);
@@ -56,8 +64,8 @@ namespace {
     EXPECT_EQ(arr.shape(), sh);
   }
 
-  TEST(ReshapeTest,ExpandDims) {
-    csp::array<double> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  TYPED_TEST(ReshapeTest,ExpandDims) {
+    csp::array<TypeParam> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     arr.reshape_({3,2,1});
 
     EXPECT_EQ(arr.size(), 6);
@@ -73,8 +81,8 @@ namespace {
     EXPECT_EQ(arr.shape(), sh2);
   }
 
-  TEST(ReshapeTest,Ravel) {
-    csp::array<double> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  TYPED_TEST(ReshapeTest,Ravel) {
+    csp::array<TypeParam> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     arr.reshape_({3,2,1});
 
     EXPECT_EQ(arr.size(), 6);
@@ -87,8 +95,8 @@ namespace {
     EXPECT_EQ(arr.shape(), sh);
   }
 
-  TEST(ReshapeTest,ReshapeError1) {
-    csp::array<double> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  TYPED_TEST(ReshapeTest,ReshapeError1) {
+    csp::array<TypeParam> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     try {
       arr.reshape_({3,3});
       FAIL() << "Expected runtime_error with unmatched reshape.";
@@ -105,8 +113,8 @@ namespace {
     EXPECT_EQ(arr.shape(), sh);
   }
 
-  TEST(ReshapeTest,ReshapeError2) {
-    csp::array<double> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  TYPED_TEST(ReshapeTest,ReshapeError2) {
+    csp::array<TypeParam> arr = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     std::vector<int> shape = {3,3};
     try {
       arr.reshape_(shape);

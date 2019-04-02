@@ -4,10 +4,18 @@
 #include <vector>
 #include "gtest/gtest.h"
 #include <cspear/cspear>
+#include "test_params.h"
 
 namespace {
-  TEST(HistTest,Hist1) {
-    csp::array<double> data = {
+  template <typename T>
+  class HistTest : public testing::Test {};
+
+  using testing::Types;
+  typedef Types<double, float> RealNumbers;
+  TYPED_TEST_SUITE(HistTest, RealNumbers);
+
+  TYPED_TEST(HistTest,Hist1) {
+    csp::array<TypeParam> data = {
       9.26807592, 4.38592717, 8.35050516, 8.52187654, 2.2052744 ,
       9.29849376, 8.81394698, 3.70867992, 8.58137779, 0.37354402,
       3.67404957, 1.86827367, 8.83848067, 4.27372862, 8.16559377,
@@ -29,7 +37,7 @@ namespace {
       3.88324419, 7.35911711, 4.59703443, 7.36001994, 1.7682204 ,
       8.80340173, 3.35996323, 0.67109559, 1.32790919, 1.90724414
     };
-    csp::array<double> xbins =
+    csp::array<TypeParam> xbins =
       {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
     auto count = csp::hist(data, xbins);
     std::vector<int> res = {12, 11, 12, 9, 11, 9, 6, 11, 12, 7};
@@ -39,7 +47,7 @@ namespace {
       EXPECT_EQ(res[i], count[i]);
     }
 
-    csp::array<double> xbins2 = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+    csp::array<TypeParam> xbins2 = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
     auto count2 = csp::hist(data, xbins2);
     std::vector<int> res2 = {11, 12, 9, 11, 9, 6, 11, 12};
 
@@ -48,8 +56,8 @@ namespace {
       EXPECT_EQ(res2[i], count2[i]);
     }
   }
-  TEST(HistTest,HistSorted) {
-    csp::array<double> data = {
+  TYPED_TEST(HistTest,HistSorted) {
+    csp::array<TypeParam> data = {
       0.20624743, 0.50549685, 0.50553058, 0.58733305, 0.65323621,
       0.70017806, 0.79280431, 1.0149874 , 1.0330133 , 1.03486118,
       1.36437328, 1.46259396, 1.56572267, 1.67818148, 1.7027026 ,
@@ -71,7 +79,7 @@ namespace {
       8.92312844, 9.16057067, 9.29331118, 9.39900477, 9.41682961,
       9.49921846, 9.83495378, 9.89126465, 9.93754152, 9.9815926
     };
-    csp::array<double> xbins =
+    csp::array<TypeParam> xbins =
       {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
     auto count = csp::hist_sorted(data, xbins);
     std::vector<int> res = {7, 8, 10, 8, 8, 12, 17, 10, 11, 9};
@@ -81,7 +89,7 @@ namespace {
       EXPECT_EQ(res[i], count[i]);
     }
 
-    csp::array<double> xbins2 = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+    csp::array<TypeParam> xbins2 = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
     auto count2 = csp::hist_sorted(data, xbins2);
     std::vector<int> res2 = {8, 10, 8, 8, 12, 17, 10, 11};
 

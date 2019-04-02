@@ -34,6 +34,7 @@ endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") # debug mode
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
+include_directories("include")
 include_directories("../include")
 
 add_executable(test main.cc)

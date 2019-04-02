@@ -1,6 +1,5 @@
 shape
 array:
-  * inplace broadcast that does not change the shape
   * matmul
   * strided views
   * indexed views
@@ -8,8 +7,8 @@ array:
   * casting
 
 test:
-  * use in class with valgrind
   * zero element array
+  * array with int, bool
 
 optimize:
 * optimize filter view (not constructing the indices until it is necessary)
