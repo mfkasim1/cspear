@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdexcept>
 #include <cspear/simd/vector.h>
+#include "test_params.h"
 
 #ifdef __SIMD_AVX__
 

@@ -20,8 +20,6 @@ namespace {
   template <typename T>
   class InplaceBinaryOp : public testing::Test {};
 
-  using testing::Types;
-  typedef Types<double, float> RealNumbers;
   TYPED_TEST_SUITE(UnaryOp, RealNumbers);
   TYPED_TEST_SUITE(BinaryOpWithAValue, RealNumbers);
   TYPED_TEST_SUITE(BinaryOpWithAValueCmp, RealNumbers);

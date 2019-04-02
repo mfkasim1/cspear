@@ -12,8 +12,6 @@ namespace {
   template <typename T>
   class ContiguousViewMultiElmt : public testing::Test {};
 
-  using testing::Types;
-  typedef Types<double, float> RealNumbers;
   TYPED_TEST_SUITE(ContiguousViewSingleElmt, RealNumbers);
   TYPED_TEST_SUITE(ContiguousViewMultiElmt, RealNumbers);
 

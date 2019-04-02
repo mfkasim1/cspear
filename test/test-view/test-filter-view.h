@@ -4,13 +4,12 @@
 #include <vector>
 #include "gtest/gtest.h"
 #include <cspear/cspear>
+#include "test_params.h"
 
 namespace {
   template <typename T>
   class FilterView : public testing::Test {};
 
-  using testing::Types;
-  typedef Types<double, float> RealNumbers;
   TYPED_TEST_SUITE(FilterView, RealNumbers);
 
   TYPED_TEST(FilterView,FromContiguous) {

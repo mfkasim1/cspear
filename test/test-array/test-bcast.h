@@ -12,8 +12,6 @@ namespace {
   template <typename T>
   class BCastOpCMP : public testing::Test {};
 
-  using testing::Types;
-  typedef Types<double, float> RealNumbers;
   TYPED_TEST_SUITE(BCastOp, RealNumbers);
   TYPED_TEST_SUITE(BCastOpCMP, RealNumbers);
 

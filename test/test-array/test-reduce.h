@@ -10,8 +10,6 @@ namespace {
   template <typename T>
   class ReduceTest : public testing::Test {};
 
-  using testing::Types;
-  typedef Types<double, float> RealNumbers;
   TYPED_TEST_SUITE(ReduceTest, RealNumbers);
 
   TYPED_TEST(ReduceTest,SumAll) {
