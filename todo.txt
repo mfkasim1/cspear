@@ -1,5 +1,10 @@
 shape
 array:
+  * op:
+    * maximum
+    * minimum
+  * reduce:
+    * prod
   * matmul
   * strided views
   * indexed views
@@ -7,8 +12,10 @@ array:
   * casting
 
 test:
-  * zero element array
-  * array with int, bool
+  * contiguous view array with int
+
+SIMD:
+  * vector int
 
 optimize:
 * optimize filter view (not constructing the indices until it is necessary)
