@@ -6,16 +6,15 @@
 #include <vector>
 #include <stdexcept>
 #include <initializer_list>
+#include <cspear/array/macro-op.h>
+#include <cspear/array/ufuncs.h>
+#include <cspear/array/ufuncs-math.h>
 #include <cspear/tools/assert.h>
 #include <cspear/tools/misc.h>
 #include <cspear/tools/types.h>
 #include <cspear/views/contiguous-view.h>
 #include <cspear/views/filter-view.h>
 #include <cspear/iterators/ewise-iterator.h>
-
-#define CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(op) \
-  array<T,I,ContiguousView> op() const; \
-  array<T,I,View>& op##_() const;
 
 namespace csp {
   template <typename T, typename I=tools::Int,
@@ -122,102 +121,67 @@ namespace csp {
     array<T,I,ContiguousView> any(const std::vector<I>& axes) const;
 
     /*************** OPERATORS ***************/
-    // unary operators (non inplace)
-    array<T,I,ContiguousView> operator-() const;
-    array<T,I,ContiguousView> operator+(T a) const;
-    array<T,I,ContiguousView> operator-(T a) const;
-    array<T,I,ContiguousView> operator*(T a) const;
-    array<T,I,ContiguousView> operator/(T a) const;
-    array<T,I,ContiguousView> reciprocal(T a) const; // returns a / this
-    array<T,I,ContiguousView> clip_lb(T lb) const;
-    array<T,I,ContiguousView> clip_ub(T ub) const;
+    // arithmetic operators
+    CSPEAR_UNARY_OP_NOT_INPLACE(operator-,ufunc::neg);
+    CSPEAR_BINARY_OP_NOT_INPLACE(operator+,ufunc::add);
+    CSPEAR_BINARY_OP_NOT_INPLACE(operator-,ufunc::sub);
+    CSPEAR_BINARY_OP_NOT_INPLACE(operator*,ufunc::mult);
+    CSPEAR_BINARY_OP_NOT_INPLACE(operator/,ufunc::div);
+    CSPEAR_BINARY_OP(reciprocal,ufunc::reciprocal);
+    CSPEAR_BINARY_OP_INPLACE(operator+=,ufunc::add);
+    CSPEAR_BINARY_OP_INPLACE(operator-=,ufunc::sub);
+    CSPEAR_BINARY_OP_INPLACE(operator*=,ufunc::mult);
+    CSPEAR_BINARY_OP_INPLACE(operator/=,ufunc::div);
+
+    // comparison operators
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator>,ufunc::gt);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator>=,ufunc::gteq);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator<,ufunc::lt);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator<=,ufunc::lteq);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator==,ufunc::eq);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator!=,ufunc::neq);
+
+    // logical operators
+    CSPEAR_UNARY_OP_NOT_INPLACE_TO_BOOL(operator!,ufunc::logical_not);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator&&,ufunc::logical_and);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator||,ufunc::logical_or);
+
+    // clip operations
     array<T,I,ContiguousView> clip(T lb, T ub) const;
-    array<bool,I,ContiguousView> operator!() const;
-    array<bool,I,ContiguousView> operator>(T a) const;
-    array<bool,I,ContiguousView> operator>=(T a) const;
-    array<bool,I,ContiguousView> operator<(T a) const;
-    array<bool,I,ContiguousView> operator<=(T a) const;
-    array<bool,I,ContiguousView> operator==(T a) const;
-    array<bool,I,ContiguousView> operator!=(T a) const;
-    array<bool,I,ContiguousView> operator&&(T a) const;
-    array<bool,I,ContiguousView> operator||(T a) const;
-
-    // inplace unary operators
-    array<T,I,View>& fill_(T a);
-    array<T,I,View>& operator+=(T a);
-    array<T,I,View>& operator-=(T a);
-    array<T,I,View>& operator*=(T a);
-    array<T,I,View>& operator/=(T a);
-    array<T,I,View>& reciprocal_(T a);
-    array<T,I,View>& clip_lb_(T lb);
-    array<T,I,View>& clip_ub_(T ub);
     array<T,I,View>& clip_(T lb, T ub);
+    CSPEAR_BINARY_OP(clip_lb,ufunc::clip_lb);
+    CSPEAR_BINARY_OP(clip_ub,ufunc::clip_ub);
 
-    // binary operators (non inplace)
-    template <template<typename> typename View2>
-    array<T,I,ContiguousView> operator+(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<T,I,ContiguousView> operator-(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<T,I,ContiguousView> operator*(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<T,I,ContiguousView> operator/(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator>(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator>=(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator<(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator<=(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator==(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator!=(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator&&(const array<T,I,View2>& a) const;
-    template <template<typename> typename View2>
-    array<bool,I,ContiguousView> operator||(const array<T,I,View2>& a) const;
-
-    // inplace binary operators
-    template <template<typename> typename View2>
-    array<T,I,View>& fill_(const array<T,I,View2>& a);
-    template <template<typename> typename View2>
-    array<T,I,View>& operator+=(const array<T,I,View2>& a);
-    template <template<typename> typename View2>
-    array<T,I,View>& operator-=(const array<T,I,View2>& a);
-    template <template<typename> typename View2>
-    array<T,I,View>& operator*=(const array<T,I,View2>& a);
-    template <template<typename> typename View2>
-    array<T,I,View>& operator/=(const array<T,I,View2>& a);
+    // fill / assignment operators
+    CSPEAR_BINARY_OP(fill,ufunc::assign);
 
     // math operations
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(cos);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(sin);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(tan);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(acos);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(asin);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(atan);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(cosh);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(sinh);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(tanh);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(exp);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(log);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(log10);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(exp2);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(expm1);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(log1p);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(log2);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(sqrt);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(cbrt);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(erf);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(erfc);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(tgamma);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(lgamma);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(ceil);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(floor);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(round);
-    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(abs);
+    CSPEAR_UNARY_OP(cos,ufunc::cos);
+    CSPEAR_UNARY_OP(sin,ufunc::sin);
+    CSPEAR_UNARY_OP(tan,ufunc::tan);
+    CSPEAR_UNARY_OP(acos,ufunc::acos);
+    CSPEAR_UNARY_OP(asin,ufunc::asin);
+    CSPEAR_UNARY_OP(atan,ufunc::atan);
+    CSPEAR_UNARY_OP(cosh,ufunc::cosh);
+    CSPEAR_UNARY_OP(sinh,ufunc::sinh);
+    CSPEAR_UNARY_OP(tanh,ufunc::tanh);
+    CSPEAR_UNARY_OP(exp,ufunc::exp);
+    CSPEAR_UNARY_OP(log,ufunc::log);
+    CSPEAR_UNARY_OP(log10,ufunc::log10);
+    CSPEAR_UNARY_OP(exp2,ufunc::exp2);
+    CSPEAR_UNARY_OP(expm1,ufunc::expm1);
+    CSPEAR_UNARY_OP(log1p,ufunc::log1p);
+    CSPEAR_UNARY_OP(log2,ufunc::log2);
+    CSPEAR_UNARY_OP(sqrt,ufunc::sqrt);
+    CSPEAR_UNARY_OP(cbrt,ufunc::cbrt);
+    CSPEAR_UNARY_OP(erf,ufunc::erf);
+    CSPEAR_UNARY_OP(erfc,ufunc::erfc);
+    CSPEAR_UNARY_OP(tgamma,ufunc::tgamma);
+    CSPEAR_UNARY_OP(lgamma,ufunc::lgamma);
+    CSPEAR_UNARY_OP(ceil,ufunc::ceil);
+    CSPEAR_UNARY_OP(floor,ufunc::floor);
+    CSPEAR_UNARY_OP(round,ufunc::round);
+    CSPEAR_UNARY_OP(abs,ufunc::abs);
 
     private:
     template <int n = 1> void _realloc();
