@@ -13,6 +13,10 @@
 #include <cspear/views/filter-view.h>
 #include <cspear/iterators/ewise-iterator.h>
 
+#define CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(op) \
+  array<T,I,ContiguousView> op() const; \
+  array<T,I,View>& op##_() const;
+
 namespace csp {
   template <typename T, typename I=tools::Int,
             template<typename> typename View=ContiguousView>
@@ -186,6 +190,34 @@ namespace csp {
     array<T,I,View>& operator*=(const array<T,I,View2>& a);
     template <template<typename> typename View2>
     array<T,I,View>& operator/=(const array<T,I,View2>& a);
+
+    // math operations
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(cos);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(sin);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(tan);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(acos);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(asin);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(atan);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(cosh);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(sinh);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(tanh);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(exp);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(log);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(log10);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(exp2);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(expm1);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(log1p);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(log2);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(sqrt);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(cbrt);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(erf);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(erfc);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(tgamma);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(lgamma);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(ceil);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(floor);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(round);
+    CSPEAR_ARRAY_MATH_OP_UNARY_DECLARATION(abs);
 
     private:
     template <int n = 1> void _realloc();

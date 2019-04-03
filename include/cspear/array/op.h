@@ -59,15 +59,15 @@ namespace csp {
     return res;
   }
 
-  template <typename InpType, typename F>
-  InpType& inplace_unary_op(F&& f, InpType& arr) {
+  template <typename f, typename InpType>
+  InpType& inplace_unary_op(InpType& arr) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
 
     auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
     for (; it1; ++it1) {
-      f(*it1);
+      *it1 = f::unary(*it1);
     }
     return arr;
   }
