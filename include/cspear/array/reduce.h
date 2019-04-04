@@ -3,16 +3,18 @@
 
 #include <stdexcept>
 #include <algorithm>
+#include <type_traits>
 #include <cspear/tools/assert.h>
 #include <cspear/iterators/ewise-iterator.h>
 #include <cspear/iterators/reduce-iterator.h>
 
 namespace csp {
-  template <typename f, bool error_if_empty=true, typename TR, typename InpType>
-  TR reduce_all(const InpType& arr, TR initval) {
+  template <typename f, bool error_if_empty=true, typename InpType>
+  auto reduce_all(const InpType& arr) -> typename std::remove_const<decltype(f::identity)>::type {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
+    using TR = typename std::remove_const<decltype(f::identity)>::type;
 
     if (error_if_empty) {
       if (arr.size() == 0) {
@@ -20,7 +22,7 @@ namespace csp {
       }
     }
 
-    TR res = initval;
+    TR res = f::identity;
 
     // performing the iteration
     auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
@@ -30,12 +32,13 @@ namespace csp {
     return res;
   }
 
-  template <typename ResType, typename f, bool error_if_empty=true, typename TR,
+  template <typename ResType, typename f, bool error_if_empty=true,
             typename InpType, typename IAx>
-  ResType reduce_axis(const InpType& arr, const IAx& ax, TR initval) {
+  ResType reduce_axis(const InpType& arr, const IAx& ax) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
+    using TR = typename std::remove_const<decltype(f::identity)>::type;
 
     if (arr.size() == 0) {
       if (error_if_empty) {
@@ -49,7 +52,7 @@ namespace csp {
     // get the shape of the result
     std::vector<IAx> axis = {ax};
     auto rshape = reduce_output_shape(axis, arr.shape());
-    ResType res = ResType::full(rshape, initval);
+    ResType res = ResType::full(rshape, f::identity);
 
     // performing the iteration
     auto it1 = ReduceIterator<T,I,View>(axis,
@@ -62,12 +65,13 @@ namespace csp {
     return res;
   }
 
-  template <typename ResType, typename f, bool error_if_empty=true, typename TR,
+  template <typename ResType, typename f, bool error_if_empty=true,
             typename InpType, typename AxType>
-  ResType reduce_axes(const InpType& arr, const AxType& axes, TR initval) {
+  ResType reduce_axes(const InpType& arr, const AxType& axes) {
     using T = typename InpType::DataType;
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
+    using TR = typename std::remove_const<decltype(f::identity)>::type;
 
     if (arr.size() == 0) {
       if (error_if_empty) {
@@ -84,7 +88,7 @@ namespace csp {
 
     // get the shape of the result
     auto rshape = reduce_output_shape(ax, arr.shape());
-    ResType res = ResType::full(rshape, initval);
+    ResType res = ResType::full(rshape, f::identity);
 
     // performing the iteration
     auto it1 = ReduceIterator<T,I,View>(ax,

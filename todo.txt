@@ -1,8 +1,5 @@
 shape
 array:
-  * op:
-    * maximum
-    * minimum
   * reduce:
     * prod
   * matmul

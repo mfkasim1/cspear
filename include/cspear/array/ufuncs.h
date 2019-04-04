@@ -26,6 +26,7 @@ namespace csp {
     template <typename T>
     struct add {
       static const bool has_simd = true;
+      static constexpr T identity = (T)0;
       static inline T binary(const T& a, const T& b) { return a + b; }
       static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
         const simd::Vector<T>& b) { return a + b; }
@@ -40,6 +41,7 @@ namespace csp {
     template <typename T>
     struct mult {
       static const bool has_simd = true;
+      static constexpr T identity = (T)1;
       static inline T binary(const T& a, const T& b) { return a * b; }
       static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
         const simd::Vector<T>& b) { return a * b; }
@@ -61,6 +63,7 @@ namespace csp {
     template <typename T>
     struct max {
       static const bool has_simd = false;
+      static constexpr T identity = std::numeric_limits<T>::lowest();
       static inline T binary(const T& a, const T& b) { return a>b?a:b; }
       static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
         const simd::Vector<T>& b) {}
@@ -68,6 +71,7 @@ namespace csp {
     template <typename T>
     struct min {
       static const bool has_simd = false;
+      static constexpr T identity = std::numeric_limits<T>::max();
       static inline T binary(const T& a, const T& b) { return a<b?a:b; }
       static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
         const simd::Vector<T>& b) {}
@@ -124,6 +128,7 @@ namespace csp {
     template <typename T>
     struct logical_and {
       static const bool has_simd = false;
+      static const bool identity = true;
       static inline bool binary(const T& a, const T& b) { return a && b; }
       static inline simd::Vector<bool> simd_binary(const simd::Vector<T>& a,
         const simd::Vector<T>& b) {}
@@ -131,6 +136,7 @@ namespace csp {
     template <typename T>
     struct logical_or {
       static const bool has_simd = false;
+      static const bool identity = false;
       static inline bool binary(const T& a, const T& b) { return a || b; }
       static inline simd::Vector<bool> simd_binary(const simd::Vector<T>& a,
         const simd::Vector<T>& b) {}

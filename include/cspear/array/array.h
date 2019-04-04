@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <initializer_list>
 #include <cspear/array/macro-op.h>
+#include <cspear/array/macro-reduce.h>
 #include <cspear/array/ufuncs.h>
 #include <cspear/array/ufuncs-math.h>
 #include <cspear/tools/assert.h>
@@ -102,23 +103,11 @@ namespace csp {
     array<T,I,View>& ravel_();
 
     /**************** REDUCE ****************/
-    T sum() const;
-    array<T,I,ContiguousView> sum(I axis) const;
-    array<T,I,ContiguousView> sum(const std::vector<I>& axes) const;
-    T max() const;
-    array<T,I,ContiguousView> max(I axis) const;
-    array<T,I,ContiguousView> max(const std::vector<I>& axes) const;
-    T min() const;
-    array<T,I,ContiguousView> min(I axis) const;
-    array<T,I,ContiguousView> min(const std::vector<I>& axes) const;
-
-    // boolean operations
-    T all() const;
-    array<T,I,ContiguousView> all(I axis) const;
-    array<T,I,ContiguousView> all(const std::vector<I>& axes) const;
-    T any() const;
-    array<T,I,ContiguousView> any(I axis) const;
-    array<T,I,ContiguousView> any(const std::vector<I>& axes) const;
+    CSPEAR_REDUCE(sum,ufunc::add,false);
+    CSPEAR_REDUCE(max,ufunc::max,true);
+    CSPEAR_REDUCE(min,ufunc::min,true);
+    CSPEAR_REDUCE(all,ufunc::logical_and,false);
+    CSPEAR_REDUCE(any,ufunc::logical_or,false);
 
     /*************** OPERATORS ***************/
     // arithmetic operators
