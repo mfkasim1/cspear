@@ -122,6 +122,11 @@ namespace csp {
     CSPEAR_BINARY_OP_INPLACE(operator-=,ufunc::sub);
     CSPEAR_BINARY_OP_INPLACE(operator*=,ufunc::mult);
     CSPEAR_BINARY_OP_INPLACE(operator/=,ufunc::div);
+    CSPEAR_UNARY_OP(neg,ufunc::neg);
+    CSPEAR_BINARY_OP(add,ufunc::add);
+    CSPEAR_BINARY_OP(sub,ufunc::sub);
+    CSPEAR_BINARY_OP(mult,ufunc::mult);
+    CSPEAR_BINARY_OP(div,ufunc::div);
 
     // comparison operators
     CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator>,ufunc::gt);
@@ -130,6 +135,12 @@ namespace csp {
     CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator<=,ufunc::lteq);
     CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator==,ufunc::eq);
     CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator!=,ufunc::neq);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(gt,ufunc::gt);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(gteq,ufunc::gteq);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(lt,ufunc::lt);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(lteq,ufunc::lteq);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(eq,ufunc::eq);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(neq,ufunc::neq);
 
     // logical operators
     CSPEAR_UNARY_OP_NOT_INPLACE_TO_BOOL(operator!,ufunc::logical_not);
