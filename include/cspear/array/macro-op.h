@@ -20,14 +20,11 @@ T is the array's data type, View is the array's view.
 
 #define CSPEAR_UNARY_OP_NOT_INPLACE(opname,ufuncname) \
   CSPEAR_UNARY_OP_NOT_INPLACE_GENERAL(opname,ufuncname,T)
-
 #define CSPEAR_UNARY_OP_NOT_INPLACE_TO_BOOL(opname,ufuncname) \
   CSPEAR_UNARY_OP_NOT_INPLACE_GENERAL(opname,ufuncname,bool)
-
 #define CSPEAR_UNARY_OP(opname,ufuncname) \
   CSPEAR_UNARY_OP_NOT_INPLACE_GENERAL(opname,ufuncname,T); \
   CSPEAR_UNARY_OP_INPLACE_GENERAL(opname##_,ufuncname)
-
 #define CSPEAR_UNARY_OP_TO_BOOL(opname,ufuncname) \
   CSPEAR_UNARY_OP_NOT_INPLACE_GENERAL(opname,ufuncname,bool)
 
@@ -57,19 +54,15 @@ T is the array's data type, View is the array's view.
 #define CSPEAR_BINARY_OP_NOT_INPLACE(opname,ufuncname) \
   CSPEAR_BINARY_OP_NOT_INPLACE_A_VALUE_GENERAL(opname,ufuncname,T); \
   CSPEAR_BINARY_OP_NOT_INPLACE_ARRAY_GENERAL(opname,ufuncname,T)
-
 #define CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(opname,ufuncname) \
   CSPEAR_BINARY_OP_NOT_INPLACE_A_VALUE_GENERAL(opname,ufuncname,bool); \
   CSPEAR_BINARY_OP_NOT_INPLACE_ARRAY_GENERAL(opname,ufuncname,bool)
-
 #define CSPEAR_BINARY_OP_INPLACE(opname,ufuncname) \
   CSPEAR_BINARY_OP_INPLACE_A_VALUE_GENERAL(opname,ufuncname); \
   CSPEAR_BINARY_OP_INPLACE_ARRAY_GENERAL(opname,ufuncname)
-
 #define CSPEAR_BINARY_OP(opname,ufuncname) \
   CSPEAR_BINARY_OP_INPLACE(opname##_,ufuncname); \
   CSPEAR_BINARY_OP_NOT_INPLACE(opname,ufuncname)
-
 #define CSPEAR_BINARY_OP_TO_BOOL(opname,ufuncname) \
   CSPEAR_BINARY_OP_INPLACE(opname##_,ufuncname); \
   CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(opname,ufuncname,bool)
@@ -129,5 +122,4 @@ T is the array's data type, View is the array's view.
   CSPEAR_TERNARY_OP_INPLACE_A_VALUE_L_GENERAL(opname##_,ufuncname); \
   CSPEAR_TERNARY_OP_NOT_INPLACE_ARRAY_GENERAL(opname,ufuncname,T); \
   CSPEAR_TERNARY_OP_INPLACE_ARRAY_GENERAL(opname##_,ufuncname);
-
 #endif
