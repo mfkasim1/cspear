@@ -104,6 +104,7 @@ namespace csp {
 
     /**************** REDUCE ****************/
     CSPEAR_REDUCE(sum,ufunc::add,false);
+    CSPEAR_REDUCE(prod,ufunc::mult,false);
     CSPEAR_REDUCE(max,ufunc::max,true);
     CSPEAR_REDUCE(min,ufunc::min,true);
     CSPEAR_REDUCE(all,ufunc::logical_and,false);

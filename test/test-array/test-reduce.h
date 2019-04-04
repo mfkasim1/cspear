@@ -47,7 +47,7 @@ namespace {
     std::vector<int> shape0 = {1};
     EXPECT_EQ(arr0.shape(), shape0);
     EXPECT_EQ(arr0.size(), 1);
-    EXPECT_NEAR(arr0[0], 29.0, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[0], (TypeParam)29, AbsTol<TypeParam>::val);
   }
   TYPED_TEST(ReduceTestAllNumbers,SumAxes2) {
     csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
@@ -56,7 +56,7 @@ namespace {
     std::vector<int> shape0 = {1};
     EXPECT_EQ(arr0.shape(), shape0);
     EXPECT_EQ(arr0.size(), 1);
-    EXPECT_NEAR(arr0[0], 29.0, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[0], (TypeParam)29, AbsTol<TypeParam>::val);
   }
   TYPED_TEST(ReduceTestAllNumbers,SumAxesNilAxes) {
     csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
@@ -66,12 +66,12 @@ namespace {
     std::vector<int> shape0 = {2,3};
     EXPECT_EQ(arr0.shape(), shape0);
     EXPECT_EQ(arr0.size(), 6);
-    EXPECT_NEAR(arr0[0], 1.0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(arr0[1], 2.0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(arr0[2], 4.0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(arr0[3], 6.0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(arr0[4], 7.0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(arr0[5], 9.0, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[1], (TypeParam)2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[2], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[3], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[4], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[5], (TypeParam)9, AbsTol<TypeParam>::val);
   }
   TYPED_TEST(ReduceTestAllNumbers,SumAllEmpty) {
     csp::array<TypeParam> arr = {};
@@ -108,6 +108,104 @@ namespace {
     csp::array<TypeParam> arr = {};
     std::vector<int> axes = {};
     auto arr0 = arr.sum(axes);
+    std::vector<int> shape0 = {};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 0);
+  }
+
+  TYPED_TEST(ReduceTestAllNumbers,ProdAll) {
+    csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)3},
+                                 {(TypeParam)2, (TypeParam)4, (TypeParam)1}};
+    EXPECT_NEAR(arr.prod(), (TypeParam)48, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAxis) {
+    csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)3},
+                                 {(TypeParam)2, (TypeParam)4, (TypeParam)1}};
+
+    auto arr0 = arr.prod(0);
+    std::vector<int> shape0 = {3};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 3);
+    EXPECT_NEAR(arr0[0], (TypeParam)2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[1], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[2], (TypeParam)3, AbsTol<TypeParam>::val);
+
+    auto arr1 = arr.prod(1);
+    std::vector<int> shape1 = {2};
+    EXPECT_EQ(arr1.shape(), shape1);
+    EXPECT_EQ(arr1.size(), 2);
+    EXPECT_NEAR(arr1[0], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr1[1], (TypeParam)8, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAxes1) {
+    csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)3},
+                                 {(TypeParam)2, (TypeParam)4, (TypeParam)1}};
+    std::vector<int> axes = {0,1};
+    auto arr0 = arr.prod(axes);
+    std::vector<int> shape0 = {1};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 1);
+    EXPECT_NEAR(arr0[0], (TypeParam)48, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAxes2) {
+    csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)3},
+                                 {(TypeParam)2, (TypeParam)4, (TypeParam)1}};
+    auto arr0 = arr.prod({0,1});
+    std::vector<int> shape0 = {1};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 1);
+    EXPECT_NEAR(arr0[0], (TypeParam)48, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAxesNilAxes) {
+    csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
+                                 {(TypeParam)6, (TypeParam)7, (TypeParam)9}};
+    std::vector<int> axes = {};
+    auto arr0 = arr.prod(axes);
+    std::vector<int> shape0 = {2,3};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 6);
+    EXPECT_NEAR(arr0[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[1], (TypeParam)2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[2], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[3], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[4], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(arr0[5], (TypeParam)9, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAllEmpty) {
+    csp::array<TypeParam> arr = {};
+    EXPECT_NEAR(arr.prod(), (TypeParam)1, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAxisEmpty) {
+    csp::array<TypeParam> arr = {};
+    auto arr0 = arr.prod(0);
+    std::vector<int> shape0 = {};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 0);
+
+    auto arr1 = arr.prod(1);
+    std::vector<int> shape1 = {};
+    EXPECT_EQ(arr1.shape(), shape1);
+    EXPECT_EQ(arr1.size(), 0);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAxes1Empty) {
+    csp::array<TypeParam> arr = {};
+    std::vector<int> axes = {0,1};
+    auto arr0 = arr.prod(axes);
+    std::vector<int> shape0 = {};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 0);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAxes2Empty) {
+    csp::array<TypeParam> arr = {};
+    auto arr0 = arr.prod({0,1});
+    std::vector<int> shape0 = {};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 0);
+  }
+  TYPED_TEST(ReduceTestAllNumbers,ProdAxesNilAxesEmpty) {
+    csp::array<TypeParam> arr = {};
+    std::vector<int> axes = {};
+    auto arr0 = arr.prod(axes);
     std::vector<int> shape0 = {};
     EXPECT_EQ(arr0.shape(), shape0);
     EXPECT_EQ(arr0.size(), 0);

@@ -1,7 +1,5 @@
 shape
 array:
-  * reduce:
-    * prod
   * matmul
   * strided views
   * indexed views
