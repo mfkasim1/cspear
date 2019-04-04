@@ -135,6 +135,19 @@ namespace csp {
       static inline simd::Vector<bool> simd_binary(const simd::Vector<T>& a,
         const simd::Vector<T>& b) {}
     };
+
+    // ternary operations
+    template <typename T>
+    struct clip {
+      static const bool has_simd = false;
+      static inline T ternary(const T& a, const T& b, const T& c) {
+        return a < b ? b : (a > c ? c : a);
+      }
+      static inline simd::Vector<T> simd_ternary(
+        const simd::Vector<T>& a,
+        const simd::Vector<T>& b,
+        const simd::Vector<T>& c) {}
+    };
   }
 }
 

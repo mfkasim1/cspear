@@ -19,6 +19,10 @@ namespace {
   class BinaryOp : public testing::Test {};
   template <typename T>
   class InplaceBinaryOp : public testing::Test {};
+  template <typename T>
+  class TernaryOpWithValues : public testing::Test {};
+  template <typename T>
+  class InplaceTernaryOpWithValues : public testing::Test {};
 
   TYPED_TEST_SUITE(UnaryOp,                   SignedNumbers);
   TYPED_TEST_SUITE(BinaryOpWithAValue,        SignedNumbers);
@@ -26,6 +30,8 @@ namespace {
   TYPED_TEST_SUITE(InplaceBinaryOpWithAValue, SignedNumbers);
   TYPED_TEST_SUITE(BinaryOp,                  SignedNumbers);
   TYPED_TEST_SUITE(InplaceBinaryOp,           SignedNumbers);
+  TYPED_TEST_SUITE(TernaryOpWithValues,       SignedNumbers);
+  TYPED_TEST_SUITE(InplaceTernaryOpWithValues,SignedNumbers);
 
   TYPED_TEST(UnaryOp,Indexing) {
     csp::array<TypeParam> arr = {{(TypeParam)3, (TypeParam)4, (TypeParam)-5, (TypeParam)0},
@@ -123,21 +129,6 @@ namespace {
     EXPECT_NEAR(b[5], (TypeParam)4, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[6], (TypeParam)-3, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[7], (TypeParam)6, AbsTol<TypeParam>::val);
-  }
-  TYPED_TEST(BinaryOpWithAValue,Clip) {
-    csp::array<TypeParam> arr = {{(TypeParam)2, (TypeParam)4, (TypeParam)-5, (TypeParam)10},
-                                 {(TypeParam)0, (TypeParam)0, (TypeParam)-4, (TypeParam)2}};
-    auto b = arr.clip((TypeParam)-1, (TypeParam)3);
-    EXPECT_EQ(b.shape(), arr.shape());
-    EXPECT_EQ(b.size(), arr.size());
-    EXPECT_NEAR(b[0], (TypeParam)2, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[1], (TypeParam)3, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[2], (TypeParam)-1, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[3], (TypeParam)3, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[4], (TypeParam)0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[5], (TypeParam)0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[6], (TypeParam)-1, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[7], (TypeParam)2, AbsTol<TypeParam>::val);
   }
   TYPED_TEST(BinaryOpWithAValue,Maximum) {
     csp::array<TypeParam> arr = {{(TypeParam)2, (TypeParam)4, (TypeParam)-5, (TypeParam)10},
@@ -376,19 +367,6 @@ namespace {
     EXPECT_NEAR(b[5], (TypeParam)2, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[6], (TypeParam)-3, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[7], (TypeParam)6, AbsTol<TypeParam>::val);
-  }
-  TYPED_TEST(InplaceBinaryOpWithAValue,Clip) {
-    csp::array<TypeParam> b = {{(TypeParam)2, (TypeParam)4, (TypeParam)-5, (TypeParam)10},
-                               {(TypeParam)0, (TypeParam)0, (TypeParam)-4, (TypeParam)2}};
-    b.clip_((TypeParam)-1, (TypeParam)3);
-    EXPECT_NEAR(b[0], (TypeParam)2, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[1], (TypeParam)3, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[2], (TypeParam)-1, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[3], (TypeParam)3, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[4], (TypeParam)0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[5], (TypeParam)0, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[6], (TypeParam)-1, AbsTol<TypeParam>::val);
-    EXPECT_NEAR(b[7], (TypeParam)2, AbsTol<TypeParam>::val);
   }
   TYPED_TEST(InplaceBinaryOpWithAValue,Maximum) {
     csp::array<TypeParam> b = {{(TypeParam)2, (TypeParam)4, (TypeParam)-5, (TypeParam)10},
@@ -750,6 +728,36 @@ namespace {
     EXPECT_NEAR(b[4], (TypeParam)0, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[5], (TypeParam)0, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[6], (TypeParam)-2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[7], (TypeParam)2, AbsTol<TypeParam>::val);
+  }
+
+  // ternary op
+  TYPED_TEST(TernaryOpWithValues,Clip) {
+    csp::array<TypeParam> arr = {{(TypeParam)2, (TypeParam)4, (TypeParam)-5, (TypeParam)10},
+                                 {(TypeParam)0, (TypeParam)0, (TypeParam)-4, (TypeParam)2}};
+    auto b = arr.clip((TypeParam)-1, (TypeParam)3);
+    EXPECT_EQ(b.shape(), arr.shape());
+    EXPECT_EQ(b.size(), arr.size());
+    EXPECT_NEAR(b[0], (TypeParam)2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)3, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)-1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)3, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[4], (TypeParam)0, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[5], (TypeParam)0, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[6], (TypeParam)-1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[7], (TypeParam)2, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(InplaceTernaryOpWithValues,Clip) {
+    csp::array<TypeParam> b = {{(TypeParam)2, (TypeParam)4, (TypeParam)-5, (TypeParam)10},
+                               {(TypeParam)0, (TypeParam)0, (TypeParam)-4, (TypeParam)2}};
+    b.clip_((TypeParam)-1, (TypeParam)3);
+    EXPECT_NEAR(b[0], (TypeParam)2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)3, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)-1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)3, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[4], (TypeParam)0, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[5], (TypeParam)0, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[6], (TypeParam)-1, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[7], (TypeParam)2, AbsTol<TypeParam>::val);
   }
 }
