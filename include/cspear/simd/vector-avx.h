@@ -95,6 +95,8 @@ namespace csp {
       VectorAVX operator-(const VectorAVX& other) const;
       VectorAVX operator*(const VectorAVX& other) const;
       VectorAVX operator/(const VectorAVX& other) const;
+      VectorAVX max(const VectorAVX& other) const;
+      VectorAVX min(const VectorAVX& other) const;
       VectorAVX& operator+=(const VectorAVX& other);
       VectorAVX& operator-=(const VectorAVX& other);
       VectorAVX& operator*=(const VectorAVX& other);
@@ -169,6 +171,12 @@ namespace csp {
     }
     template <> inline VectorAVX<double> VectorAVX<double>::operator/(const VectorAVX<double>& other) const {
       return _mm256_div_pd(a_, other.a_);
+    }
+    template <> inline VectorAVX<double> VectorAVX<double>::max(const VectorAVX<double>& other) const {
+      return _mm256_max_pd(a_, other.a_);
+    }
+    template <> inline VectorAVX<double> VectorAVX<double>::min(const VectorAVX<double>& other) const {
+      return _mm256_min_pd(a_, other.a_);
     }
     template <> inline VectorAVX<double>& VectorAVX<double>::operator+=(const VectorAVX<double>& other) {
       a_ = _mm256_add_pd(a_, other.a_);
@@ -245,6 +253,12 @@ namespace csp {
     }
     template <> inline VectorAVX<float> VectorAVX<float>::operator/(const VectorAVX<float>& other) const {
       return _mm256_div_ps(a_, other.a_);
+    }
+    template <> inline VectorAVX<float> VectorAVX<float>::max(const VectorAVX<float>& other) const {
+      return _mm256_max_ps(a_, other.a_);
+    }
+    template <> inline VectorAVX<float> VectorAVX<float>::min(const VectorAVX<float>& other) const {
+      return _mm256_min_ps(a_, other.a_);
     }
     template <> inline VectorAVX<float>& VectorAVX<float>::operator+=(const VectorAVX<float>& other) {
       a_ = _mm256_add_ps(a_, other.a_);

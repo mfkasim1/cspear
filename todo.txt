@@ -1,5 +1,7 @@
 shape
 array:
+  * reduce to accept array of integer
+  * static error if inplace math op applied to array of non-real
   * matmul
   * strided views
   * indexed views
@@ -7,7 +9,6 @@ array:
   * casting
 
 test:
-  * contiguous view array with int
 
 SIMD:
   * vector int

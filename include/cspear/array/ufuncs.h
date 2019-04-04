@@ -55,18 +55,18 @@ namespace csp {
     };
     template <typename T>
     struct reciprocal {
-      static const bool has_simd = false;
+      static const bool has_simd = true;
       static inline T binary(const T& a, const T& b) { return b / a; }
       static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
-        const simd::Vector<T>& b) {}
+        const simd::Vector<T>& b) { return b / a; }
     };
     template <typename T>
     struct max {
-      static const bool has_simd = false;
+      static const bool has_simd = true;
       static constexpr T identity = std::numeric_limits<T>::lowest();
       static inline T binary(const T& a, const T& b) { return a>b?a:b; }
       static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
-        const simd::Vector<T>& b) {}
+        const simd::Vector<T>& b) { return a.max(b); }
     };
     template <typename T>
     struct min {
@@ -74,7 +74,7 @@ namespace csp {
       static constexpr T identity = std::numeric_limits<T>::max();
       static inline T binary(const T& a, const T& b) { return a<b?a:b; }
       static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
-        const simd::Vector<T>& b) {}
+        const simd::Vector<T>& b) { return a.min(b); }
     };
     template <typename T>
     struct assign {

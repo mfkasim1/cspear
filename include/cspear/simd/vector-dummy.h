@@ -47,6 +47,8 @@ namespace csp {
       VectorDummy operator-(const VectorDummy& other) const {};
       VectorDummy operator*(const VectorDummy& other) const {};
       VectorDummy operator/(const VectorDummy& other) const {};
+      VectorDummy max(const VectorDummy& other) const {};
+      VectorDummy min(const VectorDummy& other) const {};
       VectorDummy& operator+=(const VectorDummy& other) {};
       VectorDummy& operator-=(const VectorDummy& other) {};
       VectorDummy& operator*=(const VectorDummy& other) {};
