@@ -8,7 +8,6 @@
 #include <cspear/iterators/bcast-iterator.h>
 
 namespace csp {
-  // TODO: should use variadic template here
   template <typename ... args>
   struct ewise_can_use_simd {
     static const bool value = false;
@@ -17,51 +16,12 @@ namespace csp {
   struct ewise_can_use_simd<f> {
     static const bool value = __SIMD__ && f::has_simd;
   };
-  template <typename f, typename It1>
-  struct ewise_can_use_simd<f,It1> {
+  template <typename f, typename It1, typename ... It>
+  struct ewise_can_use_simd<f,It1,It...> {
     using Vector1 = typename It1::VectorDataType;
-    static const bool value = __SIMD__ && f::has_simd &&
-                              It1::is_implemented &&
-                              Vector1::is_implemented;
-  };
-  template <typename f, typename It1, typename It2>
-  struct ewise_can_use_simd<f,It1,It2> {
-    using Vector1 = typename It1::VectorDataType;
-    using Vector2 = typename It2::VectorDataType;
-    static const bool value = __SIMD__ && f::has_simd &&
-                              It1::is_implemented &&
-                              It2::is_implemented &&
-                              Vector1::is_implemented &&
-                              Vector2::is_implemented;
-  };
-  template <typename f, typename It1, typename It2, typename It3>
-  struct ewise_can_use_simd<f,It1,It2,It3> {
-    using Vector1 = typename It1::VectorDataType;
-    using Vector2 = typename It2::VectorDataType;
-    using Vector3 = typename It3::VectorDataType;
-    static const bool value = __SIMD__ && f::has_simd &&
-                              It1::is_implemented &&
-                              It2::is_implemented &&
-                              It3::is_implemented &&
-                              Vector1::is_implemented &&
-                              Vector2::is_implemented &&
-                              Vector3::is_implemented;
-  };
-  template <typename f, typename It1, typename It2, typename It3, typename It4>
-  struct ewise_can_use_simd<f,It1,It2,It3,It4> {
-    using Vector1 = typename It1::VectorDataType;
-    using Vector2 = typename It2::VectorDataType;
-    using Vector3 = typename It3::VectorDataType;
-    using Vector4 = typename It4::VectorDataType;
-    static const bool value = __SIMD__ && f::has_simd &&
-                              It1::is_implemented &&
-                              It2::is_implemented &&
-                              It3::is_implemented &&
-                              It4::is_implemented &&
-                              Vector1::is_implemented &&
-                              Vector2::is_implemented &&
-                              Vector3::is_implemented &&
-                              Vector4::is_implemented;
+    static constexpr bool value = ewise_can_use_simd<f,It...>::value &&
+                                  It1::is_implemented &&
+                                  Vector1::is_implemented;
   };
 
   // unary operations
