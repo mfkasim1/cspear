@@ -8,6 +8,7 @@
 #include <initializer_list>
 #include <cspear/array/macro-op.h>
 #include <cspear/array/macro-reduce.h>
+#include <cspear/array/macro-accumulate.h>
 #include <cspear/array/ufuncs.h>
 #include <cspear/array/ufuncs-math.h>
 #include <cspear/tools/assert.h>
@@ -109,6 +110,12 @@ namespace csp {
     CSPEAR_REDUCE(min,ufunc::min,true);
     CSPEAR_REDUCE(all,ufunc::logical_and,false);
     CSPEAR_REDUCE(any,ufunc::logical_or,false);
+
+    /**************** ACCUMULATE ****************/
+    CSPEAR_ACCUMULATE(cumsum,ufunc::add);
+    CSPEAR_ACCUMULATE(cumprod,ufunc::mult);
+    CSPEAR_ACCUMULATE(cummax,ufunc::max);
+    CSPEAR_ACCUMULATE(cummin,ufunc::min);
 
     /*************** OPERATORS ***************/
     // arithmetic operators
