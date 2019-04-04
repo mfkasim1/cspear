@@ -22,7 +22,7 @@ namespace csp {
       return {};
     }
 
-    ResType res = ResType::empty({arr.size()});
+    ResType res = ResType::empty(arr.shape());
     TR r = f::identity;
 
     // performing the iteration

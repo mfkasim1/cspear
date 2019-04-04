@@ -22,7 +22,7 @@ namespace {
     csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
                                  {(TypeParam)6, (TypeParam)7, (TypeParam)9}};
     auto b = arr.cumsum();
-    std::vector<int> shape = {6};
+    std::vector<int> shape = {2,3};
     EXPECT_EQ(b.shape(), shape);
     EXPECT_EQ(b.size(), 6);
     EXPECT_NEAR(b[0], (TypeParam)1, AbsTol<TypeParam>::val);
@@ -62,7 +62,7 @@ namespace {
     csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)3},
                                  {(TypeParam)2, (TypeParam)4, (TypeParam)1}};
     auto b = arr.cumprod();
-    std::vector<int> shape = {6};
+    std::vector<int> shape = {2,3};
     EXPECT_EQ(b.shape(), shape);
     EXPECT_EQ(b.size(), 6);
     EXPECT_NEAR(b[0], (TypeParam)1, AbsTol<TypeParam>::val);
@@ -103,7 +103,7 @@ namespace {
     csp::array<TypeParam> arr = {{(TypeParam)-1, (TypeParam)21, (TypeParam)-4},
                                  {(TypeParam)6, (TypeParam)-7, (TypeParam)-9}};
     auto b = arr.cummin();
-    std::vector<int> shape = {6};
+    std::vector<int> shape = {2,3};
     EXPECT_EQ(b.shape(), shape);
     EXPECT_EQ(b.size(), 6);
     EXPECT_NEAR(b[0], (TypeParam)-1, AbsTol<TypeParam>::val);
@@ -144,7 +144,7 @@ namespace {
     csp::array<TypeParam> arr = {{(TypeParam)-1, (TypeParam)21, (TypeParam)-4},
                                  {(TypeParam)26, (TypeParam)-7, (TypeParam)-9}};
     auto b = arr.cummax();
-    std::vector<int> shape = {6};
+    std::vector<int> shape = {2,3};
     EXPECT_EQ(b.shape(), shape);
     EXPECT_EQ(b.size(), 6);
     EXPECT_NEAR(b[0], (TypeParam)-1, AbsTol<TypeParam>::val);
