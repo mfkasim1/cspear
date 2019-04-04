@@ -611,6 +611,31 @@ namespace {
     EXPECT_EQ(a1.shape(), shape);
     EXPECT_EQ(a2.shape(), shape);
   }
+
+  TEST(ReduceOutlierTest,WrongAxis) {
+    csp::array<double> arr = {{1.0, 2.0, 4.0},
+                              {6.0, 7.0, 9.0}};
+    try {
+      auto b = arr.sum(-1);
+      FAIL() << "A runtime_error should be thrown if index is out of bounds";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown if index is out of bounds";
+    }
+    try {
+      auto c = arr.sum(2);
+      FAIL() << "A runtime_error should be thrown if index is out of bounds";
+    }
+    catch (const std::runtime_error& e) {
+      SUCCEED();
+    }
+    catch (...) {
+      FAIL() << "A runtime_error should be thrown if index is out of bounds";
+    }
+  }
 }
 
 #endif

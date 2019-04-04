@@ -49,6 +49,9 @@ namespace csp {
       }
     }
 
+    // check the axis
+    _cspear_assert(((ax < arr.ndim()) && (ax >= 0)), "Out-of-the bound index");
+
     // get the shape of the result
     std::vector<IAx> axis = {ax};
     auto rshape = reduce_output_shape(axis, arr.shape());
