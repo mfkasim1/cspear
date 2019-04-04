@@ -1,6 +1,6 @@
 shape
 array:
-  * accummulate
+  * inplace accummulate
   * static error if inplace math op applied to array of non-real
   * matmul
   * strided views
