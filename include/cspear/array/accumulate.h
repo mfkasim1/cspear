@@ -50,22 +50,14 @@ namespace csp {
 
     // check the axis
     _cspear_assert(((ax < arr.ndim()) && (ax >= 0)), "Out-of-the bound index");
-
-    // get the shape of the reduce temporary
-    std::vector<IAx> axis = {ax};
-    auto rshape = reduce_output_shape(axis, arr.shape());
-    ResType temp = ResType::full(rshape, f::identity);
     ResType res = ResType::empty(arr.shape());
 
     // performing the iteration
-    auto it = AccumulateIterator<T,I,View>(ax,
+    auto it = AccumulateIterator<T,I,View>(ax, f::identity,
                       (T*)arr.data(), arr.view(),
-                      (TR*)res.data(), res.view(),
-                      (TR*)temp.data(), temp.view());
+                      (TR*)res.data(), res.view());
     for (; it; ++it) {
-      auto& itt = it.reducetemp();
-      itt = f::binary(itt, it.first());
-      it.result() = itt;
+      it.result() = f::binary(it.prev(), it.first());
     }
     return res;
   }

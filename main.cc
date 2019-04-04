@@ -13,6 +13,14 @@ void p(const vec& v) {
   std::cout << std::endl;
 }
 
+int testaccum() {
+  csp::array<double> a = csp::arange<double>(20).reshape_({4,5});
+  std::cout << a << std::endl;
+  std::cout << a.cumsum(0) << std::endl;
+  std::cout << a.cumsum(1) << std::endl;
+  return 0;
+}
+
 int test1() {
   // auto b = csp::array<double>({1,2,3});
   auto b = csp::arange(10000000.0);
@@ -87,7 +95,8 @@ int test_bcast() {
 }
 
 int main() {
-  return test1();
+  // return test1();
+  return testaccum();
   // return test_bcast();
 }
 
