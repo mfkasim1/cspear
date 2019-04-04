@@ -38,4 +38,3 @@ Makefile
 CMakeFiles/*
 
 # templated source file
-include/cspear/lib/math.h
