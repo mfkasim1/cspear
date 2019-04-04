@@ -58,6 +58,46 @@ namespace {
     EXPECT_NEAR(c[5], (TypeParam)22, AbsTol<TypeParam>::val);
   }
 
+  TYPED_TEST(AccumTestAllNumbers,CumSumAllInplace) {
+    csp::array<TypeParam> b = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
+                               {(TypeParam)6, (TypeParam)7, (TypeParam)9}};
+    b.cumsum_();
+    std::vector<int> shape = {2,3};
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_EQ(b.size(), 6);
+    EXPECT_NEAR(b[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)3, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)13, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[4], (TypeParam)20, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[5], (TypeParam)29, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(AccumTestAllNumbers,CumSumAxisInplace) {
+    csp::array<TypeParam> b = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
+                               {(TypeParam)6, (TypeParam)7, (TypeParam)9}};
+    b.cumsum_(0);
+    std::vector<int> shape = {2,3};
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_EQ(b.size(), 6);
+    EXPECT_NEAR(b[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[4], (TypeParam)9, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[5], (TypeParam)13, AbsTol<TypeParam>::val);
+
+    b.cumsum_(1);
+    std::vector<int> shape2 = {2,3};
+    EXPECT_EQ(b.shape(), shape2);
+    EXPECT_EQ(b.size(), 6);
+    EXPECT_NEAR(b[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)3, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[4], (TypeParam)16, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[5], (TypeParam)29, AbsTol<TypeParam>::val);
+  }
+
   TYPED_TEST(AccumTestAllNumbers,CumProdAll) {
     csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)3},
                                  {(TypeParam)2, (TypeParam)4, (TypeParam)1}};
