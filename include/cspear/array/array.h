@@ -149,8 +149,8 @@ namespace csp {
     // clip operations
     array<T,I,ContiguousView> clip(T lb, T ub) const;
     array<T,I,View>& clip_(T lb, T ub);
-    CSPEAR_BINARY_OP(clip_lb,ufunc::clip_lb);
-    CSPEAR_BINARY_OP(clip_ub,ufunc::clip_ub);
+    CSPEAR_BINARY_OP(maximum,ufunc::max);
+    CSPEAR_BINARY_OP(minimum,ufunc::min);
 
     // fill / assignment operators
     CSPEAR_BINARY_OP(fill,ufunc::assign);

@@ -80,20 +80,6 @@ namespace csp {
         const simd::Vector<T>& b) { return b; }
     };
     template <typename T>
-    struct clip_lb {
-      static const bool has_simd = false;
-      static inline T binary(const T& a, const T& lb) { return a < lb ? lb : a; }
-      static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
-        const simd::Vector<T>& b) {}
-    };
-    template <typename T>
-    struct clip_ub {
-      static const bool has_simd = false;
-      static inline T binary(const T& a, const T& ub) { return a > ub ? ub : a; }
-      static inline simd::Vector<T> simd_binary(const simd::Vector<T>& a,
-        const simd::Vector<T>& b) {}
-    };
-    template <typename T>
     struct gt {
       static const bool has_simd = false;
       static inline bool binary(const T& a, const T& b) { return a > b; }

@@ -58,7 +58,7 @@ namespace {
   TYPED_TEST(FilterView,InplaceClip) {
     csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
                                {(TypeParam)7, (TypeParam)2, (TypeParam)5}};
-    a.filter(a <= (TypeParam)3).clip_lb_((TypeParam)2);
+    a.filter(a <= (TypeParam)3).maximum_((TypeParam)2);
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);

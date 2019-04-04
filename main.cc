@@ -26,7 +26,7 @@ int test1() {
   //
   // p<std::vector<double> > ({1,2,3,4,5});
   auto c = -b;
-  c.clip_lb_(-1);
+  c.maximum_(-1);
 
   c /= (b + 1.0);
   c += b;

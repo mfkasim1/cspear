@@ -101,7 +101,7 @@ namespace {
   }
   TYPED_TEST(ContiguousViewSingleElmt,InplaceClip) {
     csp::array<TypeParam> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}};
-    a.at(0).clip_lb_(3.5);
+    a.at(0).maximum_(3.5);
 
     std::vector<int> shape = {2,3};
     EXPECT_EQ(a.size(), 6);
@@ -300,7 +300,7 @@ namespace {
   }
   TYPED_TEST(ContiguousViewMultiElmt,InplaceClip) {
     csp::array<TypeParam> a = {{1.0, 4.2, 3.0}, {6.9, 2.1, 5.2}, {1.0, 9.0, 3.0}};
-    a.at(0,2).clip_lb_(3.5);
+    a.at(0,2).maximum_(3.5);
 
     std::vector<int> shape = {3,3};
     EXPECT_EQ(a.size(), 9);
