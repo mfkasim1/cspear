@@ -16,6 +16,7 @@ void p(const vec& v) {
 int testaccum() {
   csp::array<double> a = csp::arange<double>(20).reshape_({4,5});
   std::cout << a << std::endl;
+  std::cout << a.cumsum_() << std::endl;
   std::cout << a.cumsum(0) << std::endl;
   std::cout << a.cumsum(1) << std::endl;
   return 0;
