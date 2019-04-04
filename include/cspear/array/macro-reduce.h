@@ -22,6 +22,13 @@ T is the array's data type, View is the array's view.
     return reduce_axes<array<T,I,ContiguousView>, \
                        ufuncname<T>,error_if_empty >( \
       *this, ax); \
+  } \
+  template <typename TI, typename II> \
+  array<T,I,ContiguousView> opname(const array<TI,II,ContiguousView>& ax) const { \
+    std::vector<TI> axvec(ax.data(), ax.data()+ax.size()); \
+    return reduce_axes<array<T,I,ContiguousView>, \
+                       ufuncname<T>,error_if_empty >( \
+      *this, axvec); \
   }
 
 #define CSPEAR_REDUCE(opname,ufuncname,error_if_empty) \

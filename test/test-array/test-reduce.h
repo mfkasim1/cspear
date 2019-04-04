@@ -58,6 +58,16 @@ namespace {
     EXPECT_EQ(arr0.size(), 1);
     EXPECT_NEAR(arr0[0], (TypeParam)29, AbsTol<TypeParam>::val);
   }
+  TYPED_TEST(ReduceTestAllNumbers,SumAxesArray) {
+    csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
+                                 {(TypeParam)6, (TypeParam)7, (TypeParam)9}};
+    csp::array<int> axes = {0,1};
+    auto arr0 = arr.sum(axes);
+    std::vector<int> shape0 = {1};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 1);
+    EXPECT_NEAR(arr0[0], (TypeParam)29, AbsTol<TypeParam>::val);
+  }
   TYPED_TEST(ReduceTestAllNumbers,SumAxesNilAxes) {
     csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
                                  {(TypeParam)6, (TypeParam)7, (TypeParam)9}};

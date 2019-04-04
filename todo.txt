@@ -1,6 +1,6 @@
 shape
 array:
-  * reduce to accept array of integer
+  * accummulate
   * static error if inplace math op applied to array of non-real
   * matmul
   * strided views
