@@ -30,6 +30,11 @@ namespace csp {
     os << "filter view";
     return os;
   }
+  template <typename I>
+  std::ostream& operator<<(std::ostream& os, const SliceView<I>& view) {
+    os << "slice view";
+    return os;
+  }
 
   // printing array
   template <typename T, typename I, template<typename> typename View>
@@ -43,7 +48,8 @@ namespace csp {
       strides[i] = strides[i-1] * sh[ndim-i-1];
     }
 
-    for (auto i = 0; i < arr.size(); ++i) {
+    auto it = EWiseIterator<T,I,View<I> >((T*)arr.data(), arr.view());
+    for (auto i = 0; it; ++i, ++it) {
       // opening bracket
       for (auto j = 0; j < strides.size(); ++j) {
         if (i % strides[j] == 0) {
@@ -52,7 +58,7 @@ namespace csp {
       }
 
       // the content
-      os << arr[i];
+      os << *it;
 
       // closing bracket
       for (auto j = 0; j < strides.size(); ++j) {

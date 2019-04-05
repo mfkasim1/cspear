@@ -22,6 +22,16 @@ int testaccum() {
   return 0;
 }
 
+int testslice() {
+  csp::array<double> a = csp::arange<double>(24);
+  a.reshape_({2,3,4});
+  std::cout << a << std::endl;
+  auto c = a.slice({csp::whole(), {0,3}, {0,3}});
+  std::cout << c << std::endl;
+  auto b = a.slice({csp::whole(), {0,3,2}, {0,3,2}});
+  std::cout << b << std::endl;
+}
+
 int test1() {
   // auto b = csp::array<double>({1,2,3});
   auto b = csp::arange(10000000.0);
@@ -97,7 +107,8 @@ int test_bcast() {
 
 int main() {
   // return test1();
-  return testaccum();
+  // return testaccum();
+  return testslice();
   // return test_bcast();
 }
 

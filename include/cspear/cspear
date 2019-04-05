@@ -2,6 +2,7 @@
 #define CSPEAR_ARRAY_H
 
 #include <cspear/array/array.h>
+#include <cspear/views/slice.h>
 #include <cspear/lib/init.h>
 #include <cspear/lib/print.h>
 #include <cspear/lib/interp.h>

@@ -23,7 +23,8 @@ set(DEBUG_FLAGS "-g")
 set(PROFILING_FLAGS "-pg -no-pie")
 
 # default flags to be used for all targets
-set(CMAKE_CXX_FLAGS "${OPT_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPT_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEBUG_FLAGS}")
 
 # check for openmp
 find_package(OpenMP)

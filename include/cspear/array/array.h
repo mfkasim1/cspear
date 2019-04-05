@@ -16,6 +16,7 @@
 #include <cspear/tools/types.h>
 #include <cspear/views/contiguous-view.h>
 #include <cspear/views/filter-view.h>
+#include <cspear/views/slice-view.h>
 #include <cspear/iterators/ewise-iterator.h>
 
 namespace csp {
@@ -68,13 +69,17 @@ namespace csp {
     // indexing
     T& operator[](I idx);
     const T& operator[](I idx) const;
+    // filter views
     array<T,I,FilterView> filter(const array<bool,I,ContiguousView>& f) const;
+    // at (returns contiguous views)
     array<T,I,ContiguousView> at(I idx) const; // get the first dimension
     array<T,I,ContiguousView> at(I idx0, I idx1) const; // get the first dimension slice
     T& at(std::initializer_list<I> idxs);
     T& at(const std::vector<I>& idxs);
     const T& at(std::initializer_list<I> idxs) const;
     const T& at(const std::vector<I>& idxs) const;
+    // slice views
+    array<T,I,SliceView> slice(std::initializer_list< Slice<I> > s) const;
 
     // assignment operator and copy
     array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
@@ -499,6 +504,25 @@ namespace csp {
     }
 
     return operator[](idx);
+  }
+
+  // slice views
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,SliceView> array<T,I,View>::slice(
+      std::initializer_list< Slice<I> > s) const {
+    // TODO: do checking here
+    // get the unravel index of the slice's beginning
+    I idx = 0;
+    auto& sh = shape();
+    I stride = size();
+    I i = 0;
+    for (auto& slice : s) {
+      stride /= sh[i];
+      idx += slice.begin * stride;
+      ++i;
+    }
+
+    return array<T,I,SliceView>(data_+idx, SliceView<I>(s, sh), data_);
   }
 
   // assignment operator and copy
