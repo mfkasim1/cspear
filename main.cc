@@ -23,12 +23,12 @@ int testaccum() {
 }
 
 int testslice() {
-  csp::array<double> a = csp::arange<double>(24);
-  a.reshape_({2,3,4});
+  csp::array<double> a = csp::arange<double>(24.0);
+  a.reshape_({4,3,2});
   std::cout << a << std::endl;
   auto c = a.slice({csp::whole(), {0,3}, {0,3}});
   std::cout << c << std::endl;
-  auto b = a.slice({csp::whole(), {0,3,2}, {0,3,2}});
+  auto b = a.slice({{1,4,2},{0,3,2},1});
   std::cout << b << std::endl;
 }
 

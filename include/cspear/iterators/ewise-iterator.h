@@ -100,7 +100,7 @@ namespace csp {
 
     void _set_up_nsteps_and_skips(const std::vector< Slice<I> >& slices,
                                  const std::vector<I>& dshape) {
-      I nsize = slices.size() - 1;
+      I nsize = slices.size();
       orig_nsteps_.resize(nsize);
       skips_.resize(nsize);
       strides_.resize(nsize);

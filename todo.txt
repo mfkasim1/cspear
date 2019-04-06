@@ -1,8 +1,11 @@
 shape
 array:
+  * test empty initializer
+  * using smart pointer for dataptr to handle cases like:
+      auto b = arr.copy().at(0);
   * static error if inplace math op applied to array of non-real
   * matmul
-  * strided views
+  * strided views (negative stride, i.e. flip)
   * indexed views
   * transpose views
   * casting

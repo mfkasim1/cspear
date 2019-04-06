@@ -13,6 +13,11 @@ namespace csp {
     I step;
     I nelmt;
 
+    Slice (I v) {
+      begin = v;
+      end = v + 1;
+      step = 1;
+    }
     Slice(std::initializer_list<I> r) {
       auto sz = r.size();
       auto it = r.begin();
@@ -40,10 +45,6 @@ namespace csp {
           throw std::runtime_error("Slice needs to have 1 to 3 elements");
         }
       }
-      if (step > 0)
-        nelmt = (end - begin) / step;
-        if ((end - begin) != step * nelmt)
-          ++nelmt;
     }
     template <typename I2>
     Slice(const Slice<I2>& s) {
@@ -61,8 +62,11 @@ namespace csp {
       else if (step == 0) {
         end = sz;
         step = 1;
-        nelmt = (end - begin);
       }
+      // recalculate the number of elements
+      nelmt = (end - begin) / step;
+      if ((end - begin) != step * nelmt)
+        ++nelmt;
     }
   };
 
