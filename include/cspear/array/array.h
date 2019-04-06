@@ -11,6 +11,7 @@
 #include <cspear/array/macro-accumulate.h>
 #include <cspear/array/ufuncs.h>
 #include <cspear/array/ufuncs-math.h>
+#include <cspear/lib/idx.h>
 #include <cspear/tools/assert.h>
 #include <cspear/tools/misc.h>
 #include <cspear/tools/types.h>
@@ -92,6 +93,8 @@ namespace csp {
     inline T* dataptr() { return dataptr_; }
     inline const T* dataptr() const { return dataptr_; }
     inline const T* data() const { return data_; }
+    inline const T* begin() const { return data_; }
+    inline const T* end() const { return data_ + size(); }
     inline const View<I>& view() const { return view_; }
     inline I size() const { return view_.size(); }
     inline I ndim() const { return shape().size(); }
@@ -491,18 +494,7 @@ namespace csp {
     _cspear_assert(idxs.size() == ndim(),
                   "The indices length must match the dimension");
     // ravel indices
-    I idx = 0;
-    I stride = 1;
-    auto its = shape().rbegin();
-    auto it = idxs.rbegin();
-    for (; it != idxs.rend(); ++it, ++its) {
-      auto& i = *it;
-      _cspear_assert(i >= 0 && i < *its, "Index out-of-bounds");
-
-      idx += i * stride;
-      stride *= (*its);
-    }
-
+    I idx = ravel_index(idxs, shape());
     return operator[](idx);
   }
 
