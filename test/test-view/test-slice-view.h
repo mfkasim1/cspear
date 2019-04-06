@@ -81,7 +81,7 @@ namespace {
   TYPED_TEST(SliceViewTest,FromContiguousSliceFarEnd) {
     csp::array<TypeParam> a = csp::arange<double>(24.0);
     a.reshape_({2,3,4});
-    auto b = a.slice({0,{1,5},{2,6}}).copy();
+    auto b = a.slice({0,{1,5},{2,6}});
 
     std::vector<int> shape = {1,2,2};
     EXPECT_EQ(b.size(), 4);

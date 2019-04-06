@@ -30,6 +30,10 @@ int testslice() {
   std::cout << c << std::endl;
   auto b = a.slice({{1,4,2},{0,3,2},1});
   std::cout << b << std::endl;
+  std::cout << b[0] << std::endl;
+  std::cout << b[1] << std::endl;
+  std::cout << b[2] << std::endl;
+  std::cout << b[3] << std::endl;
 }
 
 int test1() {

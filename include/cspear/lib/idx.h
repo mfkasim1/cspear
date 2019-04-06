@@ -26,7 +26,7 @@ namespace csp {
   std::vector<I> unravel_index(I idx, const std::vector<I>& dims) {
     I ndims = dims.size();
     std::vector<I> res(ndims);
-    if (ndims > 0) return res;
+    if (ndims == 0) return res;
 
     // get the size
     I size = 1;

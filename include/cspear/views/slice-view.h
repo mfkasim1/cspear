@@ -4,6 +4,7 @@
 #include <vector>
 #include <type_traits>
 #include <cspear/views/slice.h>
+#include <cspear/lib/idx.h>
 #include <cspear/tools/assert.h>
 
 namespace csp {
@@ -56,6 +57,20 @@ namespace csp {
   void SliceView<I>::reshape(std::initializer_list<I> shape) {
     _cspear_assert(false, "The slice view cannot be reshaped. "
       "Please use .copy() to make the contiguous view");
+  }
+
+  template <typename I>
+  I SliceView<I>::idx(I i) const {
+    std::vector<I> multi_idx = unravel_index(i, shape_);
+    std::vector<I> multi_idx_data(multi_idx.size());
+    std::vector<I> idx_begin(multi_idx.size());
+    for (I i = 0; i < multi_idx.size(); ++i) {
+      auto& s = slices_[i];
+      multi_idx_data[i] = multi_idx[i] * s.step + s.begin;
+      idx_begin[i] = s.begin;
+    }
+    return ravel_index(multi_idx_data, data_shape_) -
+           ravel_index(idx_begin, data_shape_);
   }
 }
 
