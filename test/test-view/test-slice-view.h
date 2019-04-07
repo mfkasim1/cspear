@@ -9,8 +9,11 @@
 namespace {
   template <typename T>
   class SliceViewTest : public testing::Test {};
+  template <typename T>
+  class SliceViewOutlierTest : public testing::Test {};
 
   TYPED_TEST_SUITE(SliceViewTest, RealDoubleNumber);
+  TYPED_TEST_SUITE(SliceViewOutlierTest, RealDoubleNumber);
 
   TYPED_TEST(SliceViewTest,FromContiguousSlice0) {
     csp::array<TypeParam> a = csp::arange<double>(24.0);
@@ -116,6 +119,62 @@ namespace {
     EXPECT_NEAR(b[1], (TypeParam)11, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[2], (TypeParam)19, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[3], (TypeParam)23, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(SliceViewTest,FromContiguousSliceStrided2) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({4,3,2});
+    auto b = a.slice({{0,6,3},{0,3,2},1}).copy();
+
+    std::vector<int> shape = {2,2,1};
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)19, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)23, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(SliceViewTest,FromContiguousSliceStrided3) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({4,3,2});
+    auto b = a.slice({{0,6,3},{0,10,5},1});
+
+    std::vector<int> shape = {2,1,1};
+    EXPECT_EQ(b.size(), 2);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)19, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(SliceViewTest,FromContiguousSliceStrided4) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({4,3,2});
+    auto b = a.slice({{0,6,3},{0,10,5},csp::whole()});
+
+    std::vector<int> shape = {2,1,2};
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)0, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)18, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)19, AbsTol<TypeParam>::val);
+  }
+
+  TYPED_TEST(SliceViewOutlierTest,UnmatchedDims) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({4,3,2});
+    EXPECT_THROW({auto b = a.slice({});}, std::runtime_error);
+    EXPECT_THROW({auto b = a.slice({1});}, std::runtime_error);
+    EXPECT_THROW({auto b = a.slice({1,2});}, std::runtime_error);
+    EXPECT_THROW({auto b = a.slice({1,2,4,5});}, std::runtime_error);
+  }
+  TYPED_TEST(SliceViewOutlierTest,OutOfBounds) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({4,3,2});
+    auto b = a.slice({csp::whole(), csp::whole(), 2});
+    EXPECT_EQ(b.size(), 0);
+    auto c = a.slice({csp::whole(), {3,5}, 0});
+    EXPECT_EQ(c.size(), 0);
+    auto d = a.slice({{1,3,-1}, 2, 0});
+    EXPECT_EQ(d.size(), 0);
   }
 }
 

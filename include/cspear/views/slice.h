@@ -67,6 +67,7 @@ namespace csp {
       nelmt = (end - begin) / step;
       if ((end - begin) != step * nelmt)
         ++nelmt;
+      nelmt = (nelmt < 0) ? 0 : nelmt;
     }
   };
 

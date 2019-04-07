@@ -502,7 +502,9 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   array<T,I,SliceView> array<T,I,View>::slice(
       std::initializer_list< Slice<I> > s) const {
-    // TODO: do checking here
+    // do checking here
+    _cspear_assert(s.size() == ndim(), "Invalid length of the slices.");
+
     // get the unravel index of the slice's beginning
     I idx = 0;
     auto& sh = shape();
