@@ -413,6 +413,8 @@ namespace {
     csp::array<TypeParam> f = csp::linspace<TypeParam>(
                                   (TypeParam)3, (TypeParam)1, 0);
     EXPECT_EQ(f.size(), 0);
+    csp::array<TypeParam> g = csp::random::random<TypeParam>({});
+    EXPECT_EQ(g.size(), 0);
   }
 }
 

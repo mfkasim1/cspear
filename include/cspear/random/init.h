@@ -24,7 +24,7 @@ namespace csp {
 
     // single number random generator
     template <typename T=tools::Real, typename I=tools::Int>
-    T random(T lb=0, T ub=1) {
+    T random_scalar(T lb=0, T ub=1) {
       typename std::conditional<std::is_integral<T>::value,
           std::uniform_int_distribution<T>,
           std::uniform_real_distribution<T> >::type dist(lb, ub);
@@ -32,7 +32,7 @@ namespace csp {
     }
 
     template <typename T=tools::Real, typename I=tools::Int>
-    array<T,I> randn(T mean=0, T std=1) {
+    array<T,I> randn_scalar(T mean=0, T std=1) {
       std::normal_distribution<T> dist(mean, std);
       return dist(rng);
     }
