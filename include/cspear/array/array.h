@@ -360,6 +360,7 @@ namespace csp {
 
     array<T,I,ContiguousView> res;
     I sz = (I)std::ceil((end - begin) / range);
+    sz = (sz < 0) ? 0 : sz;
     res.resize_(sz);
     auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
     for (T i = begin; it; i+=range, ++it) {

@@ -2,6 +2,7 @@
 #define CSPEAR_VIEWS_CONTIGUOUS_VIEW_H
 
 #include <vector>
+#include <cspear/tools/misc.h>
 
 namespace csp {
   template <typename I>
@@ -19,9 +20,6 @@ namespace csp {
     I size() const;
     const std::vector<I>& shape() const;
     I idx(I i) const;
-
-    private:
-    static I _compute_size(const std::vector<I>& shape);
   };
 
   // implementations
@@ -41,13 +39,13 @@ namespace csp {
   template <typename I>
   inline void ContiguousView<I>::reshape(const std::vector<I>& shape) {
     shape_ = shape;
-    sz_ = _compute_size(shape_);
+    sz_ = tools::_prod_init_list(shape_);
   }
 
   template <typename I>
   inline void ContiguousView<I>::reshape(std::initializer_list<I> shape) {
     shape_ = shape;
-    sz_ = _compute_size(shape_);
+    sz_ = tools::_prod_init_list(shape_);
   }
 
   template <typename I>
@@ -63,15 +61,6 @@ namespace csp {
   template <typename I>
   inline I ContiguousView<I>::idx(I i) const {
     return i;
-  }
-
-  template <typename I>
-  inline I ContiguousView<I>::_compute_size(const std::vector<I>& shape) {
-    I sz = 1;
-    for (auto& s : shape) {
-      sz *= s;
-    }
-    return sz;
   }
 }
 

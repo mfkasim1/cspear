@@ -11,9 +11,12 @@ namespace {
   class ArrayInitTest : public testing::Test {};
   template <typename T>
   class ArrayInitRealTest : public testing::Test {};
+  template <typename T>
+  class ArrayInitOutlierTest : public testing::Test {};
 
   TYPED_TEST_SUITE(ArrayInitTest, AllNumbers);
   TYPED_TEST_SUITE(ArrayInitRealTest, RealNumbers);
+  TYPED_TEST_SUITE(ArrayInitOutlierTest, RealDoubleNumber);
 
   TYPED_TEST(ArrayInitTest,InitializerList1D) {
     csp::array<TypeParam> arr = {(TypeParam)4, (TypeParam)1, (TypeParam)3, (TypeParam)6};
@@ -394,6 +397,22 @@ namespace {
       EXPECT_TRUE(arr[i] < 1.0);
       EXPECT_TRUE(arr[i] >= 0.0);
     }
+  }
+
+  TYPED_TEST(ArrayInitOutlierTest,ZeroSizeArray) {
+    csp::array<TypeParam> a = csp::empty<TypeParam>({});
+    EXPECT_EQ(a.size(), 0);
+    csp::array<TypeParam> b = csp::empty<TypeParam>({1,0});
+    EXPECT_EQ(b.size(), 0);
+    csp::array<TypeParam> c = csp::zeros<TypeParam>({});
+    EXPECT_EQ(c.size(), 0);
+    csp::array<TypeParam> d = csp::ones<TypeParam>({});
+    EXPECT_EQ(d.size(), 0);
+    csp::array<TypeParam> e = csp::arange<TypeParam>((TypeParam)-8);
+    EXPECT_EQ(e.size(), 0);
+    csp::array<TypeParam> f = csp::linspace<TypeParam>(
+                                  (TypeParam)3, (TypeParam)1, 0);
+    EXPECT_EQ(f.size(), 0);
   }
 }
 
