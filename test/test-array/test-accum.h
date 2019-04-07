@@ -14,8 +14,8 @@ namespace {
   template <typename T>
   class AccumOutlierTest : public testing::Test {};
 
-  TYPED_TEST_SUITE(AccumTestAllNumbers, AllNumbers);
-  TYPED_TEST_SUITE(AccumTestSignedNumbers, SignedNumbers);
+  TYPED_TEST_SUITE(AccumTestAllNumbers, RealAndInteger);
+  TYPED_TEST_SUITE(AccumTestSignedNumbers, SignedRealAndInteger);
   TYPED_TEST_SUITE(AccumOutlierTest, RealDoubleNumber);
 
   TYPED_TEST(AccumTestAllNumbers,CumSumAll) {

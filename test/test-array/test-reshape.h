@@ -9,7 +9,7 @@ namespace {
   template <typename T>
   class ReshapeTest : public testing::Test {};
 
-  TYPED_TEST_SUITE(ReshapeTest, AllTypes);
+  TYPED_TEST_SUITE(ReshapeTest, RealDoubleNumber);
 
   TYPED_TEST(ReshapeTest,Resize) {
     csp::array<TypeParam> arr = {(TypeParam)1, (TypeParam)0};

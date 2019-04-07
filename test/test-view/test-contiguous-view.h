@@ -12,8 +12,8 @@ namespace {
   template <typename T>
   class ContiguousViewMultiElmt : public testing::Test {};
 
-  TYPED_TEST_SUITE(ContiguousViewSingleElmt, AllNumbers);
-  TYPED_TEST_SUITE(ContiguousViewMultiElmt, AllNumbers);
+  TYPED_TEST_SUITE(ContiguousViewSingleElmt, RealDoubleNumber);
+  TYPED_TEST_SUITE(ContiguousViewMultiElmt, RealDoubleNumber);
 
   // test accessing the first dimension
   TYPED_TEST(ContiguousViewSingleElmt,FromContiguous1D) {

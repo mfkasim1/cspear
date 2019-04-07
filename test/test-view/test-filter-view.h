@@ -10,7 +10,7 @@ namespace {
   template <typename T>
   class FilterView : public testing::Test {};
 
-  TYPED_TEST_SUITE(FilterView, AllNumbers);
+  TYPED_TEST_SUITE(FilterView, RealDoubleNumber);
 
   TYPED_TEST(FilterView,FromContiguous) {
     csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},

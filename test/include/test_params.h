@@ -34,6 +34,8 @@ namespace {
                 std::uint8_t, std::uint16_t, std::uint32_t, std::uint64_t>
                 AllTypes;
   typedef Types<double> RealDoubleNumber;
+  typedef Types<double, std::int64_t> SignedRealAndInteger;
+  typedef Types<double, std::int64_t, std::uint64_t> RealAndInteger;
 }
 
 #endif

@@ -11,7 +11,7 @@ namespace {
   template <typename T>
   class EmptyArrayTest : public testing::Test {};
 
-  TYPED_TEST_SUITE(EmptyArrayTest, AllTypes);
+  TYPED_TEST_SUITE(EmptyArrayTest, RealDoubleNumber);
 
   TYPED_TEST(EmptyArrayTest, Init1) {
     csp::array<TypeParam> arr = {};

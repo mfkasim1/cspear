@@ -10,7 +10,7 @@ namespace {
   template <typename T>
   class BCastOp : public testing::Test {};
 
-  TYPED_TEST_SUITE(BCastOp, AllNumbers);
+  TYPED_TEST_SUITE(BCastOp, SignedRealAndInteger);
 
   // broadcast test for the shapes
   TYPED_TEST(BCastOp,Add1) {

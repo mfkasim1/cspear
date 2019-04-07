@@ -12,8 +12,8 @@ namespace {
   template <typename T>
   class ReduceTestSignedNumbers : public testing::Test {};
 
-  TYPED_TEST_SUITE(ReduceTestAllNumbers, AllNumbers);
-  TYPED_TEST_SUITE(ReduceTestSignedNumbers, SignedNumbers);
+  TYPED_TEST_SUITE(ReduceTestAllNumbers, RealAndInteger);
+  TYPED_TEST_SUITE(ReduceTestSignedNumbers, SignedRealAndInteger);
 
   TYPED_TEST(ReduceTestAllNumbers,SumAll) {
     csp::array<TypeParam> arr = {{(TypeParam)1, (TypeParam)2, (TypeParam)4},
