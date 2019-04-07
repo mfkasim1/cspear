@@ -75,6 +75,10 @@ namespace csp {
   Slice<I> whole() {
     return Slice<I>({0,0,0});
   }
+  template <typename I=tools::Int>
+  Slice<I> from(I i) {
+    return Slice<I>({i,0,0});
+  }
 }
 
 #endif
