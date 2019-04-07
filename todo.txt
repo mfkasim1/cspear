@@ -1,5 +1,6 @@
 shape
 array:
+  * op of slice and array still error because BCastIterator is not implemented
   * test empty initializer
   * using smart pointer for dataptr to handle cases like:
       auto b = arr.copy().at(0);
