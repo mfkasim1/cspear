@@ -230,7 +230,7 @@ namespace csp {
     using ViewR = typename ResType::ViewType;
 
     // do the iterations
-    auto itb = BCastIterator<T1,T2,TR,I1,View1,View2>(
+    auto itb = BCastIterator<T1,T2,TR,I1,View1,View2,ViewR>(
         (T1*)arr1.data(), arr1.view(),
         (T2*)arr2.data(), arr2.view(),
         (TR*)res.data(), res.view());
@@ -254,7 +254,7 @@ namespace csp {
     using View2 = typename InpType2::ViewType;
 
     // do the iterations
-    auto itb = BCastIterator<T1,T2,T1,I1,View1,View2>(
+    auto itb = BCastIterator<T1,T2,T1,I1,View1,View2,View1>(
     (T1*)arr1.data(), arr1.view(),
     (T2*)arr2.data(), arr2.view(),
     (T1*)arr1.data(), arr1.view());

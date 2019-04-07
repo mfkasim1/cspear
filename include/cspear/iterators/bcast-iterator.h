@@ -13,7 +13,7 @@ namespace csp {
   // The result view must always be ContiguousView
 
   template <typename T1, typename T2, typename TR,
-            typename I, typename View1, typename View2>
+            typename I, typename View1, typename View2, typename ViewR>
   class BCastIterator {
     public:
     static const bool is_implemented = false;
@@ -21,7 +21,7 @@ namespace csp {
     // constructor
     BCastIterator(T1* data1, const View1& view1,
                   T2* data2, const View2& view2,
-                  TR* resdata, const ContiguousView<I>& viewr) {
+                  TR* resdata, const ViewR& viewr) {
       std::cout << "The broadcast iteration for " << view1 << " and ";
       std::cout << view2 << "have not been implemented. ";
       std::cout << "Please apply the .copy() function of non-contiguous view ";
@@ -138,7 +138,8 @@ namespace csp {
 
   // partial template specialization for different views
   template <typename T1, typename T2, typename TR, typename I>
-  class BCastIterator<T1,T2,TR,I,ContiguousView<I>,ContiguousView<I> > {
+  class BCastIterator<T1,T2,TR,I,
+                      ContiguousView<I>,ContiguousView<I>,ContiguousView<I> > {
     // iterators
     StepBackIterator<T1,I> sb1_ = StepBackIterator<T1,I>();
     StepBackIterator<T2,I> sb2_ = StepBackIterator<T2,I>();
