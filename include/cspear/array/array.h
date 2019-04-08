@@ -560,6 +560,10 @@ namespace csp {
     if (view_.size() == sz) {
       return *this;
     }
+    else if (!own_) {
+      throw std::runtime_error("Array that does not own memory cannot be "
+          "resized. Please make a copy of this array first with .copy()");
+    }
     else {
       view_.reshape({sz}); // make it a one-dimensional array
       _realloc();

@@ -11,9 +11,12 @@ namespace {
   class ContiguousViewSingleElmt : public testing::Test {};
   template <typename T>
   class ContiguousViewMultiElmt : public testing::Test {};
+  template <typename T>
+  class ContiguousViewOutlierTest : public testing::Test {};
 
   TYPED_TEST_SUITE(ContiguousViewSingleElmt, RealDoubleNumber);
   TYPED_TEST_SUITE(ContiguousViewMultiElmt, RealDoubleNumber);
+  TYPED_TEST_SUITE(ContiguousViewOutlierTest, RealDoubleNumber);
 
   // test accessing the first dimension
   TYPED_TEST(ContiguousViewSingleElmt,FromContiguous1D) {
@@ -408,6 +411,14 @@ namespace {
     EXPECT_NEAR(a[6], (TypeParam)1, AbsTol<TypeParam>::val);
     EXPECT_NEAR(a[7], (TypeParam)9, AbsTol<TypeParam>::val);
     EXPECT_NEAR(a[8], (TypeParam)3, AbsTol<TypeParam>::val);
+  }
+
+  TYPED_TEST(ContiguousViewOutlierTest,Resize) {
+    csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
+                               {(TypeParam)6, (TypeParam)2, (TypeParam)5},
+                               {(TypeParam)1, (TypeParam)9, (TypeParam)3}};
+    auto b = a.at(0,2);
+    EXPECT_THROW({b.resize_(5);}, std::runtime_error);
   }
 }
 

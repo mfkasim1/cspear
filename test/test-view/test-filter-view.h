@@ -9,8 +9,11 @@
 namespace {
   template <typename T>
   class FilterView : public testing::Test {};
+  template <typename T>
+  class FilterViewOutlierTest : public testing::Test {};
 
   TYPED_TEST_SUITE(FilterView, RealDoubleNumber);
+  TYPED_TEST_SUITE(FilterViewOutlierTest, RealDoubleNumber);
 
   TYPED_TEST(FilterView,FromContiguous) {
     csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
@@ -126,7 +129,8 @@ namespace {
     EXPECT_NEAR(a[4], (TypeParam)4, AbsTol<TypeParam>::val);
     EXPECT_NEAR(a[5], (TypeParam)5, AbsTol<TypeParam>::val);
   }
-  TYPED_TEST(FilterView,InplaceAddAValueWithNoTrue) {
+
+  TYPED_TEST(FilterViewOutlierTest,InplaceAddAValueWithNoTrue) {
     csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
                                {(TypeParam)7, (TypeParam)2, (TypeParam)5}};
     a.filter(a <= (TypeParam)0) += (TypeParam)2;
@@ -140,6 +144,13 @@ namespace {
     EXPECT_NEAR(a[3], (TypeParam)7, AbsTol<TypeParam>::val);
     EXPECT_NEAR(a[4], (TypeParam)2, AbsTol<TypeParam>::val);
     EXPECT_NEAR(a[5], (TypeParam)5, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(FilterViewOutlierTest,Resize) {
+    csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
+                               {(TypeParam)6, (TypeParam)2, (TypeParam)5},
+                               {(TypeParam)1, (TypeParam)9, (TypeParam)3}};
+    auto b = a.filter(a <= (TypeParam)4);
+    EXPECT_THROW({b.resize_(50);}, std::runtime_error);
   }
 }
 

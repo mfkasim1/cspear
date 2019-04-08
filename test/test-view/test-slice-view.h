@@ -243,6 +243,12 @@ namespace {
     auto e = a.slice({csp::whole(), csp::from(3), 0});
     EXPECT_EQ(e.size(), 0);
   }
+  TYPED_TEST(SliceViewOutlierTest,Resize) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({4,3,2});
+    auto b = a.slice({csp::whole(), csp::whole(), 2});
+    EXPECT_THROW({b.resize_(100);}, std::runtime_error);
+  }
 }
 
 #endif
