@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cmath>
 #include <vector>
+#include <memory>
 #include <stdexcept>
 #include <initializer_list>
 #include <cspear/array/macro-op.h>
@@ -31,7 +32,7 @@ namespace csp {
     bool allocated_ = false; // flag to indicate if the data is allocated by us
     bool own_ = true; // flag to indicate if the array owns the memory
                       // (if the array is a view, own_ == false)
-    T* dataptr_ = NULL; // the pointer to the beginning of the data in memory
+    std::shared_ptr<T> dataptr_ = NULL; // the pointer to the beginning of the data in memory
                  // this is to check if the operands and the assignee share
                  // the same memory to avoid aliasing
 
@@ -54,7 +55,7 @@ namespace csp {
 
     // internal constructor that does not own the data
     // (only for different memory view)
-    array(T* a, View<I>&& view, T* aptr);
+    array(T* a, View<I>&& view, const std::shared_ptr<T>& aptr);
 
     // static initializers
     static array<T,I,ContiguousView> wrap(T* a, I sz);
@@ -90,8 +91,8 @@ namespace csp {
 
     // parameters
     inline T* data() { return data_; }
-    inline T* dataptr() { return dataptr_; }
-    inline const T* dataptr() const { return dataptr_; }
+    inline std::shared_ptr<T>& dataptr() { return dataptr_; }
+    inline const std::shared_ptr<T>& dataptr() const { return dataptr_; }
     inline const T* data() const { return data_; }
     inline const T* begin() const { return data_; }
     inline const T* end() const { return data_ + size(); }
@@ -290,7 +291,7 @@ namespace csp {
   template <typename T, typename I, template<typename> typename View>
   array<T,I,View>::~array() {
     if (allocated_) {
-      if (data_ != NULL) std::free(data_);
+      dataptr_.reset();
       data_ = NULL;
       allocated_ = false;
     }
@@ -298,7 +299,7 @@ namespace csp {
 
   // internal constructor for memory view of the same data
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,View>::array(T* a, View<I>&& view, T* aptr) {
+  array<T,I,View>::array(T* a, View<I>&& view, const std::shared_ptr<T>& aptr) {
     data_ = a;
     view_ = view;
     own_ = false;
@@ -517,7 +518,7 @@ namespace csp {
       ++i;
     }
 
-    return array<T,I,SliceView>(data_+idx, SliceView<I>(s, sh), data_);
+    return array<T,I,SliceView>(data_+idx, SliceView<I>(s, sh), dataptr_);
   }
 
   // assignment operator and copy
@@ -563,6 +564,10 @@ namespace csp {
     else if (!own_) {
       throw std::runtime_error("Array that does not own memory cannot be "
           "resized. Please make a copy of this array first with .copy()");
+    }
+    else if (dataptr_.use_count() > 1) {
+      throw std::runtime_error("This array has stored view(s). Resizing this "
+          "would invalidate the view(s).");
     }
     else {
       view_.reshape({sz}); // make it a one-dimensional array
@@ -632,14 +637,13 @@ namespace csp {
       return;
     }
 
-    if (allocated_) std::free(data_);
     if (n != 0) {
       data_ = (T*) std::malloc(sz*sizeof(*data_));
     }
     else {
       data_ = (T*) std::calloc(sz, sizeof(*data_));
     }
-    dataptr_ = data_;
+    dataptr_.reset(data_, std::free);
     tools::_assert_cpu(data_, "CPU memory allocation failed.");
     allocated_ = true;
     prev_allocated_size_ = sz;
