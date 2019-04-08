@@ -94,6 +94,20 @@ namespace {
     EXPECT_NEAR(b[2], (TypeParam)10, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[3], (TypeParam)11, AbsTol<TypeParam>::val);
   }
+  TYPED_TEST(SliceViewTest,FromVectorSlice) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({2,3,4});
+    std::vector< csp::Slice<int> > slice = {0,csp::from(1),csp::from(2)};
+    auto b = a.slice(slice);
+
+    std::vector<int> shape = {1,2,2};
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)11, AbsTol<TypeParam>::val);
+  }
   TYPED_TEST(SliceViewTest,FromContiguousSliceFarEnd) {
     csp::array<TypeParam> a = csp::arange<double>(24.0);
     a.reshape_({2,3,4});

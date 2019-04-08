@@ -81,7 +81,8 @@ namespace csp {
     const T& at(std::initializer_list<I> idxs) const;
     const T& at(const std::vector<I>& idxs) const;
     // slice views
-    array<T,I,SliceView> slice(std::initializer_list< Slice<I> > s) const;
+    template <template<typename> typename Vec=std::initializer_list>
+    array<T,I,SliceView> slice(const Vec< Slice<I> >& s) const;
 
     // assignment operator and copy
     array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
@@ -502,8 +503,8 @@ namespace csp {
 
   // slice views
   template <typename T, typename I, template<typename> typename View>
-  array<T,I,SliceView> array<T,I,View>::slice(
-      std::initializer_list< Slice<I> > s) const {
+  template <template<typename> typename Vec>
+  array<T,I,SliceView> array<T,I,View>::slice(const Vec< Slice<I> >& s) const {
     // do checking here
     static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
       "Only array with contiguous view can do slicing. Please do .copy() to "

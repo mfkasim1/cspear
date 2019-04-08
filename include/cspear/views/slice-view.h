@@ -17,7 +17,8 @@ namespace csp {
 
   public:
     SliceView() {}
-    SliceView(const std::vector< Slice<I> >& slices,
+    template <template<typename> typename Vec>
+    SliceView(const Vec< Slice<I> >& slices,
               const std::vector<I>& datashape);
 
     void reshape(const std::vector<I>& shape);
@@ -32,7 +33,8 @@ namespace csp {
   };
 
   template <typename I>
-  SliceView<I>::SliceView(const std::vector< Slice<I> >& slices,
+  template <template<typename> typename Vec>
+  SliceView<I>::SliceView(const Vec< Slice<I> >& slices,
                        const std::vector<I>& datashape) {
     slices_ = slices;
     data_shape_ = datashape;

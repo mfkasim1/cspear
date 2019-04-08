@@ -17,7 +17,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 # set flags
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(OPT_FLAGS "-O2")
 set(DEBUG_FLAGS "-g")
 set(PROFILING_FLAGS "-pg -no-pie")
