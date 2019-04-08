@@ -505,6 +505,9 @@ namespace csp {
   array<T,I,SliceView> array<T,I,View>::slice(
       std::initializer_list< Slice<I> > s) const {
     // do checking here
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Only array with contiguous view can do slicing. Please do .copy() to "
+      "get the contiguous copy of this array.");
     _cspear_assert(s.size() == ndim(), "Invalid length of the slices.");
 
     // get the unravel index of the slice's beginning
