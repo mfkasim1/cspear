@@ -9,6 +9,7 @@
 #include <cspear/lib/hist.h>
 #include <cspear/lib/grad.h>
 #include <cspear/random/init.h>
+#include <cspear/random/shuffle.h>
 using csp::operator<<;
 
 #endif

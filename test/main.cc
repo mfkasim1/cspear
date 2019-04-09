@@ -17,6 +17,7 @@
 #include "test-lib/test-interp.h"
 #include "test-lib/test-grad.h"
 #include "test-simd/test-avx.h"
+#include "test-random/test-shuffle.h"
 #include "test-cases/test-copy.h"
 
 int main(int argc, char** argv) {

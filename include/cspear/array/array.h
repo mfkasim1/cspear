@@ -95,6 +95,8 @@ namespace csp {
     inline std::shared_ptr<T>& dataptr() { return dataptr_; }
     inline const std::shared_ptr<T>& dataptr() const { return dataptr_; }
     inline const T* data() const { return data_; }
+    inline T* begin() { return data_; }
+    inline T* end() { return data_ + size(); }
     inline const T* begin() const { return data_; }
     inline const T* end() const { return data_ + size(); }
     inline const View<I>& view() const { return view_; }
