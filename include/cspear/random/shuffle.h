@@ -13,11 +13,12 @@
 namespace csp {
   namespace random {
     // using SFINAE to make sure it is an array type
-    template <typename ArrType,
-              typename T = typename ArrType::DataType,
-              typename I = typename ArrType::IndexType,
-              typename ViewType = typename ArrType::ViewType>
+    template <typename ArrType>
     ArrType& shuffle_(ArrType& arr) {
+      using T = typename ArrType::DataType;
+      using I = typename ArrType::IndexType;
+      using ViewType = typename ArrType::ViewType;
+
       // can only be done in contiguous view
       static_assert(std::is_same<ViewType,ContiguousView<I> >::value,
           "Shuffle can only be done with contiguous view array. Please use "
