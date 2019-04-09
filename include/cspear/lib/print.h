@@ -38,7 +38,9 @@ namespace csp {
 
   // printing array
   template <typename T, typename I, template<typename> typename View>
-  std::ostream& operator<<(std::ostream& os, const array<T,I,View>& arr) {
+  void print_array(std::ostream& os, const array<T,I,View>& arr,
+                    const char* delim, const char* newline,
+                    const char* lbracket, const char* rbracket) {
     // print the content
     auto ndim = arr.ndim();
     std::vector<I> strides(ndim);
@@ -53,7 +55,7 @@ namespace csp {
       // opening bracket
       for (auto j = 0; j < strides.size(); ++j) {
         if (i % strides[j] == 0) {
-          os << "[";
+          os << lbracket;
         }
       }
 
@@ -63,19 +65,24 @@ namespace csp {
       // closing bracket
       for (auto j = 0; j < strides.size(); ++j) {
         if (i % strides[j] == strides[j]-1) {
-          os << "]";
+          os << rbracket;
         }
       }
       // comma for in-between
       if (i < arr.size()-1) {
-        os << ",";
+        os << delim;
         for (auto j = 0; j < strides.size(); ++j) {
           if (i % strides[j] == strides[j]-1) {
-            os << std::endl;
+            os << newline;
           }
         }
       }
     }
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  std::ostream& operator<<(std::ostream& os, const array<T,I,View>& arr) {
+    print_array(os, arr, ",", "\n", "[]", "]");
 
     // print the info
     os << std::endl;

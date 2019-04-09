@@ -8,6 +8,7 @@
 #include <cspear/lib/interp.h>
 #include <cspear/lib/hist.h>
 #include <cspear/lib/grad.h>
+#include <cspear/lib/io.h>
 #include <cspear/random/init.h>
 #include <cspear/random/shuffle.h>
 using csp::operator<<;

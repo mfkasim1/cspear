@@ -19,6 +19,7 @@ int testaccum() {
   std::cout << a.cumsum_() << std::endl;
   std::cout << a.cumsum(0) << std::endl;
   std::cout << a.cumsum(1) << std::endl;
+  csp::savetxt(a, "test.txt");
   return 0;
 }
 
@@ -111,8 +112,8 @@ int test_bcast() {
 
 int main() {
   // return test1();
-  // return testaccum();
-  return testslice();
+  return testaccum();
+  // return testslice();
   // return test_bcast();
 }
 
