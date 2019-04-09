@@ -165,6 +165,9 @@ namespace csp {
     CSPEAR_UNARY_OP_NOT_INPLACE_TO_BOOL(operator!,ufunc::logical_not);
     CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator&&,ufunc::logical_and);
     CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(operator||,ufunc::logical_or);
+    CSPEAR_UNARY_OP_NOT_INPLACE_TO_BOOL(logical_not,ufunc::logical_not);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(logical_and,ufunc::logical_and);
+    CSPEAR_BINARY_OP_NOT_INPLACE_TO_BOOL(logical_or,ufunc::logical_or);
 
     // clip operations
     CSPEAR_TERNARY_OP(clip,ufunc::clip);
