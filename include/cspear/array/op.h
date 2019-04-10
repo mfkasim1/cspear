@@ -50,10 +50,8 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
-      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(),
-                                 res.view());
-      // auto itr = EWiseIterator<TR,IR,ResView>((TR*)res.data(), res.view());
+      auto it1 = arr.iterator();
+      auto itr = res.iterator();
       for (; it1; ++it1, ++itr) {
         *itr = f::unary(*it1);
       }
@@ -67,8 +65,7 @@ namespace csp {
     using I = typename InpType::IndexType;
     using View = typename InpType::ViewType;
 
-    auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
-    for (; it1; ++it1) {
+    for (auto it1 = arr.iterator(); it1; ++it1) {
       *it1 = f::unary(*it1);
     }
     return arr;
@@ -101,8 +98,8 @@ namespace csp {
       }
     }
     else {
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
-      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      auto it1 = arr.iterator();
+      auto itr = res.iterator();
       for (; it1; ++it1, ++itr) {
         *itr = f::binary(*it1, val);
       }
@@ -129,8 +126,7 @@ namespace csp {
       }
     }
     else {
-      auto it = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
-      for (; it; ++it) {
+      for (auto it = arr.iterator(); it; ++it) {
         *it = f::binary(*it, val);
       }
     }
@@ -169,9 +165,9 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
-      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      auto it1 = arr1.iterator();
+      auto it2 = arr2.iterator();
+      auto itr = res.iterator();
       for (; it1; ++it1, ++it2, ++itr) {
         *itr = f::binary(*it1, *it2);
       }
@@ -206,8 +202,8 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
+      auto it1 = arr1.iterator();
+      auto it2 = arr2.iterator();
       for (; it1; ++it1, ++it2) {
         *it1 = f::binary(*it1, *it2);
       }
@@ -358,8 +354,8 @@ namespace csp {
       }
     }
     else {
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
-      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      auto it1 = arr.iterator();
+      auto itr = res.iterator();
       for (; it1; ++it1, ++itr) {
         *itr = f::ternary(*it1, a, b);
       }
@@ -386,8 +382,7 @@ namespace csp {
       }
     }
     else {
-      auto it = EWiseIterator<T1,I1,View1>((T1*)arr.data(), arr.view());
-      for (; it; ++it) {
+      for (auto it = arr.iterator(); it; ++it) {
         *it = f::ternary(*it, a, b);
       }
     }
@@ -428,9 +423,9 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
-      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      auto it1 = arr1.iterator();
+      auto it2 = arr2.iterator();
+      auto itr = res.iterator();
       for (; it1; ++it1, ++it2, ++itr) {
         *itr = f::ternary(*it1, *it2, a3);
       }
@@ -466,8 +461,8 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
+      auto it1 = arr1.iterator();
+      auto it2 = arr2.iterator();
       for (; it1; ++it1, ++it2) {
         *it1 = f::ternary(*it1, *it2, a3);
       }
@@ -509,9 +504,9 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
-      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      auto it1 = arr1.iterator();
+      auto it2 = arr2.iterator();
+      auto itr = res.iterator();
       for (; it1; ++it1, ++it2, ++itr) {
         *itr = f::ternary(*it1, a3, *it2);
       }
@@ -547,8 +542,8 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
+      auto it1 = arr1.iterator();
+      auto it2 = arr2.iterator();
       for (; it1; ++it1, ++it2) {
         *it1 = f::ternary(*it1, a3, *it2);
       }
@@ -595,10 +590,10 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
-      auto it3 = EWiseIterator<T3,I3,View2>((T3*)arr3.data(), arr3.view());
-      auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+      auto it1 = arr1.iterator();
+      auto it2 = arr2.iterator();
+      auto it3 = arr3.iterator();
+      auto itr = res.iterator();
       for (; it1; ++it1, ++it2, ++it3, ++itr) {
         *itr = f::ternary(*it1, *it2, *it3);
       }
@@ -639,9 +634,9 @@ namespace csp {
     }
     else {
       // performing the iteration
-      auto it1 = EWiseIterator<T1,I1,View1>((T1*)arr1.data(), arr1.view());
-      auto it2 = EWiseIterator<T2,I2,View2>((T2*)arr2.data(), arr2.view());
-      auto it3 = EWiseIterator<T3,I3,View3>((T3*)arr3.data(), arr3.view());
+      auto it1 = arr1.iterator();
+      auto it2 = arr2.iterator();
+      auto it3 = arr3.iterator();
       for (; it1; ++it1, ++it2, ++it3) {
         *it1 = f::ternary(*it1, *it2, *it3);
       }

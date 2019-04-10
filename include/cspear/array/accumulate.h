@@ -21,8 +21,8 @@ namespace csp {
     TR r = f::identity;
 
     // performing the iteration
-    auto it1 = EWiseIterator<T,I,View>((T*)arr.data(), arr.view());
-    auto itr = EWiseIterator<TR,IR,ViewR>((TR*)res.data(), res.view());
+    auto it1 = arr.iterator();
+    auto itr = res.iterator();
     for (; it1; ++it1, ++itr) {
       r = f::binary(r, *it1);
       *itr = r;

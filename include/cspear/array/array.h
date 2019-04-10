@@ -95,6 +95,7 @@ namespace csp {
     array<T,I,ContiguousView> copy() const;
 
     // parameters
+    inline EWiseIterator<T,I,View<I> > iterator() const { return EWiseIterator<T,I,View<I> >(data_, view_);} // element-wise iterator
     inline T* data() { return data_; }
     inline std::shared_ptr<T>& dataptr() { return dataptr_; }
     inline const std::shared_ptr<T>& dataptr() const { return dataptr_; }
