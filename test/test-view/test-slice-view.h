@@ -237,6 +237,20 @@ namespace {
     EXPECT_NEAR(b[1], (TypeParam)4, AbsTol<TypeParam>::val);
   }
 
+  TYPED_TEST(SliceViewTest,NegativeStep1) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({2,3,4});
+    auto b = a.slice({0,{2,0,-1},csp::from(2)}).copy();
+
+    std::vector<int> shape = {1,2,2};
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)11, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)7, AbsTol<TypeParam>::val);
+  }
+
   TYPED_TEST(SliceViewOutlierTest,UnmatchedDims) {
     csp::array<TypeParam> a = csp::arange<double>(24.0);
     a.reshape_({4,3,2});
