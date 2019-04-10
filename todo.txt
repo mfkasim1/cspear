@@ -4,7 +4,7 @@ array:
   * static error if inplace math op applied to array of non-real
   * matmul
   * strided views (negative stride, i.e. flip)
-  * indexed views
+  * fancy indexing
   * transpose views
   * casting
   * automatically generate lib method and array method in one typing
