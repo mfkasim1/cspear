@@ -57,8 +57,10 @@ namespace csp {
     void normalize(I sz) {
       if (step > 0)
         end = end > sz ? sz : end;
-      else if (step < 0)
+      else if (step < 0) {
+        begin = begin >= sz ? sz-1 : begin;
         end = end < -1 ? -1 : end;
+      }
 
       if ((step > 1) || (step < -1)) {
         end = ((end-begin-1) / step) * step + begin + 1;

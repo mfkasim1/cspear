@@ -113,7 +113,8 @@ namespace csp {
         auto& slice = *itslice;
         auto& shape = *itshape;
         orig_nsteps_[i] = slice.nelmt;
-        skips_[i] = (shape - (slice.end - slice.begin)) * skip_stride;
+        I a = slice.step > 0 ? 0 : 2;
+        skips_[i] = (shape - (slice.end - slice.begin) - a) * skip_stride;
         strides_[i] = slice.step;
         shapes_[i] = skip_stride;
         skip_stride *= shape;

@@ -240,7 +240,8 @@ namespace {
   TYPED_TEST(SliceViewTest,NegativeStep1) {
     csp::array<TypeParam> a = csp::arange<double>(24.0);
     a.reshape_({2,3,4});
-    auto b = a.slice({0,{2,0,-1},csp::from(2)}).copy();
+    auto b = a.slice({0,{2,0,-1},csp::from(2)});
+    auto c = b.copy();
 
     std::vector<int> shape = {1,2,2};
     EXPECT_EQ(b.size(), 4);
@@ -249,6 +250,120 @@ namespace {
     EXPECT_NEAR(b[1], (TypeParam)11, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[2], (TypeParam)6, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[3], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_EQ(c.size(), 4);
+    EXPECT_EQ(c.shape(), shape);
+    EXPECT_NEAR(c[0], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)11, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[2], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[3], (TypeParam)7, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(SliceViewTest,NegativeStep2) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({2,3,4});
+    auto b = a.slice({0,{1,3},{2,0,-1}});
+    auto c = b.copy();
+
+    std::vector<int> shape = {1,2,2};
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)9, AbsTol<TypeParam>::val);
+    EXPECT_EQ(c.size(), 4);
+    EXPECT_EQ(c.shape(), shape);
+    EXPECT_NEAR(c[0], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[2], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[3], (TypeParam)9, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(SliceViewTest,NegativeStep3) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({2,3,4});
+    auto b = a.slice({0,{2,0,-1},{2,0,-1}});
+    auto c = b.copy();
+
+    std::vector<int> shape = {1,2,2};
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)9, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_EQ(c.size(), 4);
+    EXPECT_EQ(c.shape(), shape);
+    EXPECT_NEAR(c[0], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)9, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[2], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[3], (TypeParam)5, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(SliceViewTest,NegativeStep4) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({2,3,4});
+    auto b = a.slice({{1,-1,-1},{2,0,-1},0});
+    auto c = b.copy();
+
+    std::vector<int> shape = {2,2,1};
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)20, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)16, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_EQ(c.size(), 4);
+    EXPECT_EQ(c.shape(), shape);
+    EXPECT_NEAR(c[0], (TypeParam)20, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)16, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[2], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[3], (TypeParam)4, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(SliceViewTest,NegativeStep5) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({2,3,4});
+    auto b = a.slice({{1,-1,-1},{1,3},0});
+    auto c = b.copy();
+
+    std::vector<int> shape = {2,2,1};
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)16, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)20, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_EQ(c.size(), 4);
+    EXPECT_EQ(c.shape(), shape);
+    EXPECT_NEAR(c[0], (TypeParam)16, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)20, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[2], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[3], (TypeParam)8, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(SliceViewTest,NegativeStep6) {
+    csp::array<TypeParam> a = csp::arange<double>(24.0);
+    a.reshape_({2,3,4});
+    auto b = a.slice({{1,-1,-1},{2,0,-1},{3,1,-1}});
+    auto c = b.copy();
+
+    std::vector<int> shape = {2,2,2};
+    EXPECT_EQ(b.size(), 8);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)23, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)22, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)19, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)18, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[4], (TypeParam)11, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[5], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[6], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[7], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_EQ(c.size(), 8);
+    EXPECT_EQ(c.shape(), shape);
+    EXPECT_NEAR(c[0], (TypeParam)23, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)22, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[2], (TypeParam)19, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[3], (TypeParam)18, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[4], (TypeParam)11, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[5], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[6], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[7], (TypeParam)6, AbsTol<TypeParam>::val);
   }
 
   TYPED_TEST(SliceViewOutlierTest,UnmatchedDims) {
