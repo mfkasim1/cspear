@@ -5,6 +5,7 @@
 #include <cspear/views/contiguous-view.h>
 #include <cspear/views/filter-view.h>
 #include <cspear/views/slice-view.h>
+#include <cspear/views/index-view.h>
 
 namespace csp {
   template <typename T, typename I, typename View>
@@ -138,7 +139,7 @@ namespace csp {
       return step;
     }
 
-  public:
+    public:
     // constructor
     EWiseIterator(T* data, const SliceView<I>& view) {
       it_ = data;
@@ -163,6 +164,35 @@ namespace csp {
     }
 
     operator bool() const {
+      return remaining_ > 0;
+    }
+  };
+
+  template <typename T, typename I>
+  class EWiseIterator<T,I,IndexView<I> > {
+    T* data_ = NULL;
+    I remaining_ = 0;
+    const I* idxs_ = NULL;
+
+    public:
+    EWiseIterator(T* data, const IndexView<I>& view) {
+      remaining_ = view.size();
+      data_ = data;
+      idxs_ = view.indices();
+    }
+
+    // iterator operator
+    inline T& operator*() {
+      return data_[*idxs_];
+    }
+
+    inline EWiseIterator& operator++() {
+      ++idxs_;
+      --remaining_;
+      return *this;
+    }
+
+    inline operator bool() const {
       return remaining_ > 0;
     }
   };

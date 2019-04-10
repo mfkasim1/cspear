@@ -7,6 +7,7 @@
 #include <memory>
 #include <stdexcept>
 #include <initializer_list>
+#include <cspear/array/array-forward-decl.h>
 #include <cspear/array/macro-op.h>
 #include <cspear/array/macro-reduce.h>
 #include <cspear/array/macro-accumulate.h>
@@ -19,11 +20,11 @@
 #include <cspear/views/contiguous-view.h>
 #include <cspear/views/filter-view.h>
 #include <cspear/views/slice-view.h>
+#include <cspear/views/index-view.h>
 #include <cspear/iterators/ewise-iterator.h>
 
 namespace csp {
-  template <typename T, typename I=tools::Int,
-            template<typename> typename View=ContiguousView>
+  template <typename T, typename I, template<typename> typename View>
   class array {
     T* data_ = NULL;
     View<I> view_ = View<I>();
@@ -56,6 +57,7 @@ namespace csp {
     // internal constructor that does not own the data
     // (only for different memory view)
     array(T* a, View<I>&& view, const std::shared_ptr<T>& aptr);
+    array(T* a, const View<I>& view, const std::shared_ptr<T>& aptr);
 
     // static initializers
     static array<T,I,ContiguousView> wrap(T* a, I sz);
@@ -83,6 +85,8 @@ namespace csp {
     // slice views
     template <template<typename> typename Vec=std::initializer_list>
     array<T,I,SliceView> slice(const Vec< Slice<I> >& s) const;
+    // index views
+    array<T,I,IndexView> take(const array<I>& idxs) const;
 
     // assignment operator and copy
     array<T,I,ContiguousView>& operator=(const array<T,I,View>& a);
@@ -311,6 +315,13 @@ namespace csp {
     own_ = false;
     dataptr_ = aptr;
   }
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,View>::array(T* a, const View<I>& view, const std::shared_ptr<T>& aptr) {
+    data_ = a;
+    view_ = view;
+    own_ = false;
+    dataptr_ = aptr;
+  }
 
   // static initializer
   template <typename T, typename I, template<typename> typename View>
@@ -528,6 +539,18 @@ namespace csp {
     }
 
     return array<T,I,SliceView>(data_+idx, SliceView<I>(s, sh), dataptr_);
+  }
+
+  template <typename T, typename I, template<typename> typename View>
+  array<T,I,IndexView> array<T,I,View>::take(const array<I>& idx) const {
+    // do checking here
+    static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
+      "Only array with contiguous view can do take. Please do .copy() to "
+      "get the contiguous copy of this array.");
+    _cspear_assert((idx >= 0).all(), "Index out-of-bounds");
+    _cspear_assert((idx < size()).any(), "Index out-of-bounds");
+
+    return array<T,I,IndexView>(data_, IndexView<I>(idx), dataptr_);
   }
 
   // assignment operator and copy

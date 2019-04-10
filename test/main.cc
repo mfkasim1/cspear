@@ -13,6 +13,7 @@
 #include "test-view/test-filter-view.h"
 #include "test-view/test-slice-view.h"
 #include "test-view/test-contiguous-view.h"
+#include "test-view/test-index-view.h"
 #include "test-lib/test-hist.h"
 #include "test-lib/test-interp.h"
 #include "test-lib/test-grad.h"
