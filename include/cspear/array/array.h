@@ -381,7 +381,7 @@ namespace csp {
     I sz = (I)std::ceil((end - begin) / range);
     sz = (sz < 0) ? 0 : sz;
     res.resize_(sz);
-    auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
+    auto it = res.iterator();
     for (T i = begin; it; i+=range, ++it) {
       *it = i;
     }
@@ -406,9 +406,8 @@ namespace csp {
     array<T,I,ContiguousView> res;
     res.resize_(n);
     T di = n > 1 ? (end - begin) / (n - 1) : 1;
-    auto it = EWiseIterator<T,I,ContiguousView<I> >(res.data(), res.view());
     T i = begin;
-    for (; it; ++it) {
+    for (auto it = res.iterator(); it; ++it) {
       *it = i;
       i += di;
     }
@@ -701,8 +700,8 @@ namespace csp {
 
     // copy the data
     _realloc();
-    auto itr = EWiseIterator<T,I,View<I> >(data_, view_);
-    auto ita = EWiseIterator<T,I,View2<I> >((T*)a.data(), a.view());
+    auto itr = iterator();
+    auto ita = a.iterator();
     for (; ita; ++ita, ++itr) {
       *itr = *ita;
     }
