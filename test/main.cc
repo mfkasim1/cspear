@@ -18,6 +18,7 @@
 #include "test-lib/test-interp.h"
 #include "test-lib/test-grad.h"
 #include "test-lib/test-array.h"
+#include "test-lib/test-math.h"
 #include "test-simd/test-avx.h"
 #include "test-random/test-shuffle.h"
 #include "test-cases/test-copy.h"

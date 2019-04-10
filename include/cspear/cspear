@@ -10,6 +10,7 @@
 #include <cspear/lib/grad.h>
 #include <cspear/lib/io.h>
 #include <cspear/lib/array.h>
+#include <cspear/lib/math.h>
 #include <cspear/random/init.h>
 #include <cspear/random/shuffle.h>
 using csp::operator<<;

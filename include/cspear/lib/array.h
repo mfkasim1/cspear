@@ -8,11 +8,13 @@ This file is to expose the array function to csp:: namespace.
 */
 
 #define CSPEAR_EXPOSE_ARRAY_FUNC(funcname)                                      \
-  template <typename ArrType, typename ... Args>                                \
+  template <typename ArrType, typename View=typename ArrType::ViewType,         \
+            typename ... Args>                                                  \
   auto inline funcname(ArrType& arr, Args... args) {                            \
     return arr.funcname(args...);                                               \
   }                                                                             \
-  template <typename ArrType, typename ... Args>                                \
+  template <typename ArrType, typename View=typename ArrType::ViewType,         \
+            typename ... Args>                                                  \
   auto inline funcname(const ArrType& arr, Args... args) {                      \
     return arr.funcname(args...);                                               \
   }

@@ -1,0 +1,52 @@
+#ifndef CSPEAR_LIB_MATH_H
+#define CSPEAR_LIB_MATH_H
+
+#include <cmath>
+#include <cspear/lib/array.h>
+#include <cspear/array/array.h>
+
+#define CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(funcname)                           \
+  CSPEAR_EXPOSE_ARRAY_FUNC(funcname)                                            \
+  CSPEAR_EXPOSE_ARRAY_FUNC(funcname##_)                                         \
+  template <typename ... Args>                                                  \
+  auto inline funcname(Args... args) {                                          \
+    return std::funcname(args...);                                              \
+  }
+
+namespace csp {
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(cos);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(sin);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(tan);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(acos);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(asin);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(atan);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(atan2);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(cosh);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(sinh);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(tanh);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(acosh);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(asinh);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(atanh);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(exp);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(log);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(log10);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(exp2);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(expm1);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(log1p);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(log2);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(pow);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(sqrt);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(cbrt);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(hypot);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(erf);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(erfc);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(tgamma);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(lgamma);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(ceil);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(trunc);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(floor);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(round);
+  CSPEAR_EXPOSE_MATH_FUNC_WITH_INLINE(abs);
+}
+
+#endif
