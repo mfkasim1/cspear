@@ -37,12 +37,14 @@ namespace csp {
 
   template <typename I>
   inline void FilterView<I>::reshape(const std::vector<I>& shape) {
-    ContiguousView<I>::reshape(shape);
+    // TODO: put check here
+    shape_ = shape;
   }
 
   template <typename I>
   inline void FilterView<I>::reshape(std::initializer_list<I> shape) {
-    ContiguousView<I>::reshape(shape);
+    // TODO: put check here
+    shape_ = shape;
   }
 
   template <typename I>

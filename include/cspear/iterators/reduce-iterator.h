@@ -5,27 +5,11 @@
 #include <cspear/views/contiguous-view.h>
 #include <cspear/views/filter-view.h>
 #include <cspear/iterators/stepback-iterator.h>
+#include <cspear/iterators/ewise-iterator.h>
 
 namespace csp {
   // reduce iterator
   // The result view must always be ContiguousView
-
-  template <typename T, typename I, typename View>
-  class ReduceIterator {
-    public:
-    static const bool is_implemented = false;
-
-    // constructor
-    ReduceIterator(const std::vector<I>& axes,
-                   T* data1, const View& view1,
-                   T* resdata, const ContiguousView<I>& viewr);
-
-    // iterator operator
-    T& first(); // reference to the element of the first data
-    T& result(); // reference to the element of the result data
-    ReduceIterator& operator++();
-    operator bool() const;
-  };
 
   // obtain the reduce output shape
   // (out.size() == 0) if it's invalid
@@ -82,21 +66,23 @@ namespace csp {
   }
 
   // partial template specialization for different views
-  template <typename T, typename I>
-  class ReduceIterator<T,I,ContiguousView<I> > {
+  template <typename T, typename I, typename View>
+  class ReduceIterator {
     // iterators
-    T* it1_ = NULL;
-    StepBackIterator<T,I> sbr_ = StepBackIterator<T,I>();
-    I offset_ = 0;
-    I sz_ = 0;
+    EWiseIterator<T,I,View> it1_;
+    StepBackIterator<T,I> sbr_;
+    I remaining_;
 
     public:
     static const bool is_implemented = true;
 
     // constructor
     ReduceIterator(const std::vector<I>& axes,
-                   T* data1, const ContiguousView<I>& view1,
-                   T* rdata, const ContiguousView<I>& viewr) {
+                   T* data1, const View& view1,
+                   T* rdata, const ContiguousView<I>& viewr) :
+      it1_(data1, view1),
+      remaining_(view1.size()) {
+
       // get the nsteps and nrepeats
       std::vector<I> nstepsr;
       std::vector<I> nrepeatsr;
@@ -105,19 +91,16 @@ namespace csp {
 
       // set the default parameters
       sbr_ = StepBackIterator<T,I>(nstepsr, nrepeatsr, rdata);
-      it1_ = data1;
-      offset_ = 0;
-      sz_ = view1.size();
     }
 
     inline T& first() { return *it1_; }
     inline T& result() { return *sbr_; }
     inline ReduceIterator& operator++() {
-      ++sbr_; ++it1_; ++offset_;
+      ++sbr_; ++it1_; --remaining_;
     }
 
     inline operator bool() const {
-      return offset_ < sz_;
+      return remaining_ > 0;
     }
   };
 }

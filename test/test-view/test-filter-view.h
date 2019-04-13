@@ -130,6 +130,27 @@ namespace {
     EXPECT_NEAR(a[5], (TypeParam)5, AbsTol<TypeParam>::val);
   }
 
+  // reduce
+  TYPED_TEST(FilterView,ReduceAll) {
+    csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
+                               {(TypeParam)7, (TypeParam)2, (TypeParam)5}};
+    auto b = a.filter(a <= (TypeParam)4);
+    EXPECT_NEAR(b.sum(), (TypeParam)10, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(FilterView,ReduceAxis) {
+    csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
+                               {(TypeParam)7, (TypeParam)2, (TypeParam)5}};
+    auto b = a.filter(a <= (TypeParam)4);
+    b.reshape_({2,2});
+    auto c = b.sum(0);
+    EXPECT_NEAR(c[0], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)6, AbsTol<TypeParam>::val);
+
+    auto d = b.sum(1);
+    EXPECT_NEAR(d[0], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(d[1], (TypeParam)5, AbsTol<TypeParam>::val);
+  }
+
   TYPED_TEST(FilterViewOutlierTest,InplaceAddAValueWithNoTrue) {
     csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
                                {(TypeParam)7, (TypeParam)2, (TypeParam)5}};

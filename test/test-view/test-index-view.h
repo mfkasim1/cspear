@@ -69,6 +69,27 @@ namespace {
     EXPECT_NEAR(b[2], (TypeParam)2, AbsTol<TypeParam>::val);
     EXPECT_NEAR(b[3], (TypeParam)5, AbsTol<TypeParam>::val);
   }
+
+  TYPED_TEST(IndexView,ReduceAll) {
+    csp::array<TypeParam> a = {(TypeParam)1, (TypeParam)4, (TypeParam)3,
+                               (TypeParam)7, (TypeParam)2, (TypeParam)5};
+    csp::array<int> c = {{0, 2}, {4, 5}};
+    auto b = a.take(c);
+    EXPECT_NEAR(b.sum(), (TypeParam)11, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(IndexView,ReduceAxis) {
+    csp::array<TypeParam> a = {(TypeParam)1, (TypeParam)4, (TypeParam)3,
+                               (TypeParam)7, (TypeParam)2, (TypeParam)5};
+    csp::array<int> c = {{0, 2}, {4, 5}};
+    auto b = a.take(c);
+    auto d = b.sum(0);
+    EXPECT_NEAR(d[0], (TypeParam)3, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(d[1], (TypeParam)8, AbsTol<TypeParam>::val);
+
+    auto e = b.sum(1);
+    EXPECT_NEAR(e[0], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(e[1], (TypeParam)7, AbsTol<TypeParam>::val);
+  }
 }
 
 #endif
