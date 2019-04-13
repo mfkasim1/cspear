@@ -53,6 +53,10 @@ namespace csp {
                    const std::vector<I>& nrepeats, T* data, const View& view) :
     it_(data, view) {
 
+    if (!EWiseIterator<T,I,View>::can_step_back) {
+      _cspear_assert(false, "The view does not support reduce and broadcast. "
+        "Please apply .copy() to get the contiguous copy of this view.");
+    }
     // the nsteps and nrepeats must have the same length
     _cspear_assert(nsteps.size() == nrepeats.size(),
     "The first and second argument of StepBackIterator must have the "

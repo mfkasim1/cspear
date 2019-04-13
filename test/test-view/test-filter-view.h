@@ -151,6 +151,60 @@ namespace {
     EXPECT_NEAR(d[1], (TypeParam)5, AbsTol<TypeParam>::val);
   }
 
+  // broadcast
+  TYPED_TEST(FilterView,BCast0) {
+    csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
+                               {(TypeParam)7, (TypeParam)2, (TypeParam)5}};
+    auto b = a.filter(a <= (TypeParam)3); // (3,)
+    auto c = a + b;
+    a += b; // in-place
+
+    EXPECT_EQ(c.size(), 6);
+    EXPECT_NEAR(c[0], (TypeParam)2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[2], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[3], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[4], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[5], (TypeParam)7, AbsTol<TypeParam>::val);
+
+    EXPECT_EQ(a.size(), 6);
+    EXPECT_NEAR(a[0], (TypeParam)2, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[1], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[2], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[3], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[4], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[5], (TypeParam)7, AbsTol<TypeParam>::val);
+  }
+  TYPED_TEST(FilterView,BCast1) {
+    csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
+                               {(TypeParam)7, (TypeParam)2, (TypeParam)5}};
+    auto b = a.filter(a <= (TypeParam)4); // (2,2): [[1,4],[3,2]]
+    auto c = a.filter(a >= (TypeParam)5); // (2,1): [[7],[5]]
+    b.reshape_({2,2});
+    c.reshape_({2,1});
+    auto d = b + c;
+    b += c; // in-place, changes a as well
+
+    EXPECT_EQ(d.size(), 4);
+    EXPECT_NEAR(d[0], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(d[1], (TypeParam)11, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(d[2], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(d[3], (TypeParam)7, AbsTol<TypeParam>::val);
+
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_NEAR(b[0], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)11, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_EQ(a.size(), 6);
+    EXPECT_NEAR(a[0], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[1], (TypeParam)11, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[2], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[3], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[4], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[5], (TypeParam)5, AbsTol<TypeParam>::val);
+  }
+
   TYPED_TEST(FilterViewOutlierTest,InplaceAddAValueWithNoTrue) {
     csp::array<TypeParam> a = {{(TypeParam)1, (TypeParam)4, (TypeParam)3},
                                {(TypeParam)7, (TypeParam)2, (TypeParam)5}};
