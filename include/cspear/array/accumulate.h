@@ -42,7 +42,7 @@ namespace csp {
     _cspear_assert(((ax < arr.ndim()) && (ax >= 0)), "Out-of-the bound index");
 
     // performing the iteration
-    auto it = AccumulateIterator<T,I,View>(ax, f::identity,
+    auto it = AccumulateIterator(ax, f::identity,
                       (T*)arr.data(), arr.view(),
                       (TR*)res.data(), res.view());
     for (; it; ++it) {

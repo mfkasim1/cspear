@@ -149,6 +149,54 @@ namespace {
     EXPECT_NEAR(a[4], (TypeParam)3, AbsTol<TypeParam>::val);
     EXPECT_NEAR(a[5], (TypeParam)7, AbsTol<TypeParam>::val);
   }
+
+  // accumulate
+  TYPED_TEST(IndexView,Accumulate0) {
+    csp::array<TypeParam> a = {(TypeParam)1, (TypeParam)4, (TypeParam)3,
+                               (TypeParam)7, (TypeParam)2, (TypeParam)5};
+    auto b = a.take({{0, 1}, {2, 4}}); // (2,2): [[1,3],[2,5]]
+    auto c = b.cumsum();
+    auto d = b.cumsum(0);
+    auto e = b.cumsum(1);
+    b.cumsum_(0);
+
+    std::vector<int> shape = {2,2};
+    std::vector<int> shapea = {6};
+    EXPECT_EQ(c.size(), 4);
+    EXPECT_EQ(c.shape(), shape);
+    EXPECT_NEAR(c[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[1], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[2], (TypeParam)8, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(c[3], (TypeParam)10, AbsTol<TypeParam>::val);
+    EXPECT_EQ(d.size(), 4);
+    EXPECT_EQ(d.shape(), shape);
+    EXPECT_NEAR(d[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(d[1], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(d[2], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(d[3], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_EQ(e.size(), 4);
+    EXPECT_EQ(e.shape(), shape);
+    EXPECT_NEAR(e[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(e[1], (TypeParam)5, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(e[2], (TypeParam)3, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(e[3], (TypeParam)5, AbsTol<TypeParam>::val);
+
+    // after inplace
+    EXPECT_EQ(b.size(), 4);
+    EXPECT_EQ(b.shape(), shape);
+    EXPECT_NEAR(b[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[1], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[2], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(b[3], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_EQ(a.size(), 6);
+    EXPECT_EQ(a.shape(), shapea);
+    EXPECT_NEAR(a[0], (TypeParam)1, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[1], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[2], (TypeParam)4, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[3], (TypeParam)7, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[4], (TypeParam)6, AbsTol<TypeParam>::val);
+    EXPECT_NEAR(a[5], (TypeParam)5, AbsTol<TypeParam>::val);
+  }
 }
 
 #endif

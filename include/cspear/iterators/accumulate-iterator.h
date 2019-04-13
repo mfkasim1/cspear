@@ -3,36 +3,15 @@
 
 #include <vector>
 #include <cspear/views/contiguous-view.h>
-#include <cspear/iterators/reduce-iterator.h>
+#include <cspear/iterators/ewise-iterator.h>
 
 namespace csp {
   // Accumulate iterator
-  // The result view must always be ContiguousView
-
-  template <typename T, typename I, typename View>
+  template <typename T, typename I, typename View1, typename ViewR>
   class AccumulateIterator {
-    public:
-    static const bool is_implemented = false;
-
-    // constructor
-    AccumulateIterator(I ax, T initval,
-                   T* data1, const View& view1,
-                   T* resdata, const ContiguousView<I>& viewr);
-
-    // iterator operator
-    T& first(); // reference to the element of the first data
-    T& prev(); // reference to the result array to be operated with first()
-    T& result(); // reference to the element of the result data
-    AccumulateIterator& operator++();
-    operator bool() const;
-  };
-
-  // partial template specialization for different views
-  template <typename T, typename I>
-  class AccumulateIterator<T,I,ContiguousView<I> > {
-    T* it1_ = NULL;
-    T* itr_ = NULL;
-    T* itrprev_ = NULL;
+    EWiseIterator<T,I,View1> it1_;
+    EWiseIterator<T,I,ViewR> itr_;
+    EWiseIterator<T,I,ViewR> itrprev_;
     T initval_ = 0;
     I offset_ = 0;
     I sz_ = 0;
@@ -47,11 +26,11 @@ namespace csp {
 
     // constructor
     AccumulateIterator(I ax, T initval,
-                   T* data1, const ContiguousView<I>& view1,
-                   T* rdata, const ContiguousView<I>& viewr) :
-      it1_(data1),
-      itr_(rdata),
-      itrprev_(rdata),
+                   T* data1, const View1& view1,
+                   T* rdata, const ViewR& viewr) :
+      it1_(data1, view1),
+      itr_(rdata, viewr),
+      itrprev_(rdata, viewr),
       initval_(initval) {
 
       offset_ = 0;
