@@ -70,7 +70,7 @@ namespace csp {
   class ReduceIterator {
     // iterators
     EWiseIterator<T,I,View> it1_;
-    StepBackIterator<T,I> sbr_;
+    StepBackIterator<T,I,ContiguousView<I> > sbr_;
     I remaining_;
 
     public:
@@ -90,7 +90,8 @@ namespace csp {
                                   nstepsr, nrepeatsr);
 
       // set the default parameters
-      sbr_ = StepBackIterator<T,I>(nstepsr, nrepeatsr, rdata);
+      sbr_ = StepBackIterator<T,I,ContiguousView<I> >(
+        nstepsr, nrepeatsr, rdata, viewr);
     }
 
     inline T& first() { return *it1_; }

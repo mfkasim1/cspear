@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cspear/tools/assert.h>
+#include <cspear/iterators/ewise-iterator.h>
 
 namespace csp {
   /*
@@ -23,21 +24,22 @@ namespace csp {
     0,1,0,1,0,1, 2,3,2,3,2,3, 4,5,4,5,4,5, 6,7,6,7,6,7,
     8,9,8,9,8,9, ...
   */
-  template <typename T, typename I>
+  template <typename T, typename I, typename View>
   class StepBackIterator {
     std::vector<I> nsteps_orig_ = {};
     std::vector<I> nrepeats_orig_ = {};
     std::vector<I> ncounts_ = {};
     std::vector<I> nrepeats_ = {};
     std::vector<I> move_back_ = {};
-    T* ptr_ = NULL;
+    EWiseIterator<T,I,View> it_;
 
     public:
     StepBackIterator() {}
     StepBackIterator(const std::vector<I>& nsteps,
-                     const std::vector<I>& nrepeats, T* ptr);
+                     const std::vector<I>& nrepeats,
+                     T* data, const View& view);
 
-    inline T& operator*() { return *ptr_; }
+    inline T& operator*() { return *it_; }
     StepBackIterator& operator++();
 
     private:
@@ -46,9 +48,11 @@ namespace csp {
 
   // implementations
 
-  template <typename T, typename I>
-  StepBackIterator<T,I>::StepBackIterator(const std::vector<I>& nsteps,
-                   const std::vector<I>& nrepeats, T* ptr) {
+  template <typename T, typename I, typename View>
+  StepBackIterator<T,I,View>::StepBackIterator(const std::vector<I>& nsteps,
+                   const std::vector<I>& nrepeats, T* data, const View& view) :
+    it_(data, view) {
+
     // the nsteps and nrepeats must have the same length
     _cspear_assert(nsteps.size() == nrepeats.size(),
     "The first and second argument of StepBackIterator must have the "
@@ -59,7 +63,6 @@ namespace csp {
     nrepeats_orig_ = nrepeats;
     ncounts_ = nsteps;
     nrepeats_ = nrepeats;
-    ptr_ = ptr;
     // move_back_ = cummulative product(nsteps)
     move_back_ = nsteps;
     for (I i = 1; i < move_back_.size(); ++i) {
@@ -67,17 +70,17 @@ namespace csp {
     }
   }
 
-  template <typename T, typename I>
-  StepBackIterator<T,I>& StepBackIterator<T,I>::operator++() {
-    ++ptr_;
+  template <typename T, typename I, typename View>
+  StepBackIterator<T,I,View>& StepBackIterator<T,I,View>::operator++() {
+    ++it_;
     I mb = _get_move_back();
     if (mb > 0) {
-      ptr_ -= mb;
+      it_ -= mb;
     }
   }
 
-  template <typename T, typename I>
-  I StepBackIterator<T,I>::_get_move_back() {
+  template <typename T, typename I, typename View>
+  I StepBackIterator<T,I,View>::_get_move_back() {
     I i = 0;
     while (i < ncounts_.size()) {
       --ncounts_[i];

@@ -9,35 +9,6 @@
 #include <cspear/iterators/stepback-iterator.h>
 
 namespace csp {
-  // broadcast iterator
-  // The result view must always be ContiguousView
-
-  template <typename T1, typename T2, typename TR,
-            typename I, typename View1, typename View2, typename ViewR>
-  class BCastIterator {
-    public:
-    static const bool is_implemented = false;
-
-    // constructor
-    BCastIterator(T1* data1, const View1& view1,
-                  T2* data2, const View2& view2,
-                  TR* resdata, const ViewR& viewr) {
-      std::cout << "The broadcast iteration for " << view1 << " and ";
-      std::cout << view2 << "have not been implemented. ";
-      std::cout << "Please apply the .copy() function of non-contiguous view ";
-      std::cout << "to convert it to contiguous view and put it on this ";
-      std::cout << "operation.";
-      throw std::runtime_error("The broadcast iteration is not implemented");
-    }
-
-    // iterator operator
-    T1& first() {} // reference to the element of the first data
-    T2& second() {} // reference to the element of the second data
-    TR& result() {} // reference to the element of the result data
-    BCastIterator& operator++() {}
-    operator bool() const {}
-  };
-
   // obtain the broadcast output shape
   // (out.size() == 0) if it can't be broadcasted
   template <typename I>
@@ -136,24 +107,25 @@ namespace csp {
     }
   }
 
-  // partial template specialization for different views
-  template <typename T1, typename T2, typename TR, typename I>
-  class BCastIterator<T1,T2,TR,I,
-                      ContiguousView<I>,ContiguousView<I>,ContiguousView<I> > {
+  // broadcast iterator
+  template <typename T1, typename T2, typename TR, typename I,
+            typename View1, typename View2, typename ViewR>
+  class BCastIterator {
     // iterators
-    StepBackIterator<T1,I> sb1_ = StepBackIterator<T1,I>();
-    StepBackIterator<T2,I> sb2_ = StepBackIterator<T2,I>();
-    TR* itr_ = NULL;
-    I offset_ = 0;
-    I sz_ = 0;
+    StepBackIterator<T1,I,View1> sb1_;
+    StepBackIterator<T2,I,View2> sb2_;
+    EWiseIterator<TR,I,ViewR> itr_;
+    I remaining_ = 0;
 
     public:
     static const bool is_implemented = true;
 
     // constructor
-    BCastIterator(T1* data1, const ContiguousView<I>& view1,
-                  T2* data2, const ContiguousView<I>& view2,
-                  TR* rdata, const ContiguousView<I>& viewr) {
+    BCastIterator(T1* data1, const View1& view1,
+                  T2* data2, const View2& view2,
+                  TR* rdata, const ViewR& viewr) :
+      itr_(rdata, viewr),
+      remaining_(viewr.size()) {
       // get the nsteps and nrepeats
       std::vector<I> nsteps1, nsteps2;
       std::vector<I> nrepeats1, nrepeats2;
@@ -161,22 +133,19 @@ namespace csp {
                            nsteps1, nsteps2, nrepeats1, nrepeats2);
 
       // set the default parameters
-      sb1_ = StepBackIterator<T1,I>(nsteps1, nrepeats1, data1);
-      sb2_ = StepBackIterator<T2,I>(nsteps2, nrepeats2, data2);
-      itr_ = rdata;
-      offset_ = 0;
-      sz_ = viewr.size();
+      sb1_ = StepBackIterator<T1,I,View1>(nsteps1, nrepeats1, data1, view1);
+      sb2_ = StepBackIterator<T2,I,View2>(nsteps2, nrepeats2, data2, view2);
     }
 
     inline T1& first() { return *sb1_; }
     inline T2& second() { return *sb2_; }
     inline TR& result() { return *itr_; }
     inline BCastIterator& operator++() {
-      ++sb1_; ++sb2_; ++itr_; ++offset_;
+      ++sb1_; ++sb2_; ++itr_; --remaining_;
     }
 
     inline operator bool() const {
-      return offset_ < sz_;
+      return remaining_ > 0;
     }
   };
 }

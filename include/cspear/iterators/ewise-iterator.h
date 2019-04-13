@@ -12,11 +12,13 @@ namespace csp {
   class EWiseIterator {
     public:
     // constructor
+    EWiseIterator() {}
     EWiseIterator(T* data, const View& view);
 
     // iterator operator
     T& operator*();
     EWiseIterator& operator++();
+    EWiseIterator& operator-=(I nstep);
     operator bool() const;
   };
 
@@ -28,7 +30,10 @@ namespace csp {
     I offset_ = 0;
 
     public:
+    static const bool can_step_back = true;
+
     // constructor
+    EWiseIterator() {}
     EWiseIterator(T* data, const ContiguousView<I>& view) {
       sz_ = view.size();
       data_ = data;
@@ -43,6 +48,12 @@ namespace csp {
     inline EWiseIterator& operator++() {
       data_++;
       offset_++;
+      return *this;
+    }
+
+    inline EWiseIterator& operator-=(I nstep) {
+      data_ -= nstep;
+      offset_ -= nstep;
       return *this;
     }
 
@@ -61,6 +72,9 @@ namespace csp {
     const I* idxs_ = NULL;
 
     public:
+    static const bool can_step_back = true;
+
+    EWiseIterator() {}
     EWiseIterator(T* data, const FilterView<I>& view) {
       sz_ = view.size();
       origin_data_ = data;
@@ -81,6 +95,12 @@ namespace csp {
     inline EWiseIterator& operator++() {
       idxs_++;
       offset_++;
+      return *this;
+    }
+
+    inline EWiseIterator& operator-=(I nsteps) {
+      idxs_ -= nsteps;
+      offset_ -= nsteps;
       return *this;
     }
 
@@ -141,7 +161,10 @@ namespace csp {
     }
 
     public:
+    static const bool can_step_back = false;
+
     // constructor
+    EWiseIterator() {}
     EWiseIterator(T* data, const SliceView<I>& view) {
       it_ = data;
       remaining_ = view.size();
@@ -164,6 +187,11 @@ namespace csp {
       return *this;
     }
 
+    EWiseIterator& operator-=(I nsteps) {
+      // TODO: complete this
+      return *this;
+    }
+
     operator bool() const {
       return remaining_ > 0;
     }
@@ -176,6 +204,9 @@ namespace csp {
     const I* idxs_ = NULL;
 
     public:
+    static const bool can_step_back = true;
+
+    EWiseIterator() {}
     EWiseIterator(T* data, const IndexView<I>& view) {
       remaining_ = view.size();
       data_ = data;
@@ -190,6 +221,12 @@ namespace csp {
     inline EWiseIterator& operator++() {
       ++idxs_;
       --remaining_;
+      return *this;
+    }
+
+    inline EWiseIterator& operator-=(I nsteps) {
+      idxs_ -= nsteps;
+      remaining_ += nsteps;
       return *this;
     }
 
