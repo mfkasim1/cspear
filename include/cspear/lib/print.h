@@ -35,6 +35,11 @@ namespace csp {
     os << "slice view";
     return os;
   }
+  template <typename I>
+  std::ostream& operator<<(std::ostream& os, const IndexView<I>& view) {
+    os << "index view";
+    return os;
+  }
 
   // printing array
   template <typename T, typename I, template<typename> typename View>
@@ -82,7 +87,7 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   std::ostream& operator<<(std::ostream& os, const array<T,I,View>& arr) {
-    print_array(os, arr, ",", "\n", "[]", "]");
+    print_array(os, arr, ",", "\n", "[", "]");
 
     // print the info
     os << std::endl;
