@@ -221,8 +221,6 @@ namespace csp {
     template <int n = 1> void _realloc();
     void _calloc();
     void _copy(const array<T,I,View>& a);
-    template <template<typename> typename View2>
-    void _copy_different_view(const array<T,I,View2>& a);
   };
 
   // implementations
@@ -287,8 +285,18 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,View>::array(const array<T,I,View>& a) {
+    // if the argument is an owning array, do copy operation
     // copy the array to self
-    _copy(a);
+    if (a.own_) {
+      _copy(a);
+    }
+    // otherwise (i.e. a view), then just wrap the data
+    else {
+      data_ = (T*)a.data();
+      view_ = a.view();
+      dataptr_ = a.dataptr();
+      own_ = false;
+    }
   }
 
   template <typename T, typename I, template<typename> typename View>
@@ -296,7 +304,10 @@ namespace csp {
   array<T,I,View>::array(const array<T,I,View2>& a) {
     static_assert(std::is_same<View<I>,ContiguousView<I> >::value,
         "Copy operation can only be done to an array with ContiguousView.");
-    _copy_different_view(a);
+    // set the view
+    view_.reshape(a.shape());
+    _realloc();
+    fill_(a); // copy the element in a
   }
 
   template <typename T, typename I, template<typename> typename View>
@@ -561,12 +572,7 @@ namespace csp {
     }
 
     if (own_) {
-      if (std::is_same<ContiguousView<I>,View<I> >::value) {
-        _copy(a);
-      }
-      else {
-        _copy_different_view(a);
-      }
+      _copy(a);
     }
     else {
       // if the array does not own the memory, invoke fill_ operation
@@ -583,7 +589,16 @@ namespace csp {
 
   template <typename T, typename I, template<typename> typename View>
   array<T,I,ContiguousView> array<T,I,View>::copy() const {
-    array<T,I,ContiguousView> res(*this);
+    array<T,I,ContiguousView> res = array<T,I,ContiguousView>::empty(shape());
+
+    // if the array is contiguous, just copy the data
+    if (std::is_same<View<I>,ContiguousView<I> >::value) {
+      std::copy(data_, data_+size(), res.data());
+    }
+    // if the array is not contiguous, do fill operation
+    else {
+      res.fill_(*this);
+    }
     return res;
   }
 
@@ -690,21 +705,6 @@ namespace csp {
     // copy the data
     _realloc();
     std::copy(a.data(), a.data()+sz, data_);
-  }
-
-  template <typename T, typename I, template<typename> typename View>
-  template <template<typename> typename View2>
-  void array<T,I,View>::_copy_different_view(const array<T,I,View2>& a) {
-    // set the view
-    view_.reshape(a.shape());
-
-    // copy the data
-    _realloc();
-    auto itr = iterator();
-    auto ita = a.iterator();
-    for (; ita; ++ita, ++itr) {
-      *itr = *ita;
-    }
   }
 }
 
