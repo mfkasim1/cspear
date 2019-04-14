@@ -22,6 +22,7 @@
 #include "test-simd/test-avx.h"
 #include "test-random/test-shuffle.h"
 #include "test-cases/test-copy.h"
+#include "test-cases/test-refs.h"
 
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
