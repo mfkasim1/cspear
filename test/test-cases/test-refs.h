@@ -92,6 +92,34 @@ namespace {
     EXPECT_DOUBLE_EQ(b[2], 3.1);
     EXPECT_DOUBLE_EQ(b[3], 5.2);
   }
+
+  TEST(RefsTest,InplaceOpAfterViewTakePlace) {
+    csp::array<double> a = {{7.2, 3.4, 5.6, 1.0}, {4.1, 2.1, 4.2, 1.3}};
+    auto b = a.slice({{0,2},{1,3}}).add_(1.0);
+
+    // make sure a is changed
+    std::vector<int> shapea = {2,4};
+    EXPECT_EQ(a.size(), 8);
+    EXPECT_EQ(a.shape(), shapea);
+    EXPECT_DOUBLE_EQ(a[0], 7.2);
+    EXPECT_DOUBLE_EQ(a[1], 4.4);
+    EXPECT_DOUBLE_EQ(a[2], 6.6);
+    EXPECT_DOUBLE_EQ(a[3], 1.0);
+    EXPECT_DOUBLE_EQ(a[4], 4.1);
+    EXPECT_DOUBLE_EQ(a[5], 3.1);
+    EXPECT_DOUBLE_EQ(a[6], 5.2);
+    EXPECT_DOUBLE_EQ(a[7], 1.3);
+
+    b += 1.0;
+    EXPECT_DOUBLE_EQ(a[0], 7.2);
+    EXPECT_DOUBLE_EQ(a[1], 5.4);
+    EXPECT_DOUBLE_EQ(a[2], 7.6);
+    EXPECT_DOUBLE_EQ(a[3], 1.0);
+    EXPECT_DOUBLE_EQ(a[4], 4.1);
+    EXPECT_DOUBLE_EQ(a[5], 4.1);
+    EXPECT_DOUBLE_EQ(a[6], 6.2);
+    EXPECT_DOUBLE_EQ(a[7], 1.3);
+  }
 }
 
 #endif
