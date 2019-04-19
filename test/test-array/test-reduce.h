@@ -626,38 +626,38 @@ namespace {
     EXPECT_EQ(arr1.argmax(), 2);
     EXPECT_EQ(arr1.argmin(), 3);
   }
-  // TYPED_TEST(ArgReduceTestSignedNumbers,ArgMaxMinAxis) {
-  //   csp::array<TypeParam> arr = {{(TypeParam)-1, (TypeParam)21, (TypeParam)-4},
-  //                                {(TypeParam)6, (TypeParam)-7, (TypeParam)-9}};
-  //
-  //   auto arr0 = arr.argmin(0);
-  //   std::vector<int> shape0 = {3};
-  //   EXPECT_EQ(arr0.shape(), shape0);
-  //   EXPECT_EQ(arr0.size(), 3);
-  //   EXPECT_EQ(arr0[0], 0);
-  //   EXPECT_EQ(arr0[1], 1);
-  //   EXPECT_EQ(arr0[2], 1);
-  //
-  //   auto arr1 = arr.argmin(1);
-  //   std::vector<int> shape1 = {2};
-  //   EXPECT_EQ(arr1.shape(), shape1);
-  //   EXPECT_EQ(arr1.size(), 2);
-  //   EXPECT_EQ(arr1[0], 2);
-  //   EXPECT_EQ(arr1[1], 2);
-  //
-  //   auto arr2 = arr.argmax(0);
-  //   EXPECT_EQ(arr2.shape(), shape0);
-  //   EXPECT_EQ(arr2.size(), 3);
-  //   EXPECT_EQ(arr2[0], 1);
-  //   EXPECT_EQ(arr2[1], 0);
-  //   EXPECT_EQ(arr2[2], 0);
-  //
-  //   auto arr3 = arr.argmax(1);
-  //   EXPECT_EQ(arr3.shape(), shape1);
-  //   EXPECT_EQ(arr3.size(), 2);
-  //   EXPECT_EQ(arr3[0], 1);
-  //   EXPECT_EQ(arr3[1], 0);
-  // }
+  TYPED_TEST(ArgReduceTestSignedNumbers,ArgMaxMinAxis) {
+    csp::array<TypeParam> arr = {{(TypeParam)-1, (TypeParam)21, (TypeParam)-4},
+                                 {(TypeParam)6, (TypeParam)-7, (TypeParam)-9}};
+
+    auto arr0 = arr.argmin(0);
+    std::vector<int> shape0 = {3};
+    EXPECT_EQ(arr0.shape(), shape0);
+    EXPECT_EQ(arr0.size(), 3);
+    EXPECT_EQ(arr0[0], 0);
+    EXPECT_EQ(arr0[1], 1);
+    EXPECT_EQ(arr0[2], 1);
+
+    auto arr1 = arr.argmin(1);
+    std::vector<int> shape1 = {2};
+    EXPECT_EQ(arr1.shape(), shape1);
+    EXPECT_EQ(arr1.size(), 2);
+    EXPECT_EQ(arr1[0], 2);
+    EXPECT_EQ(arr1[1], 2);
+
+    auto arr2 = arr.argmax(0);
+    EXPECT_EQ(arr2.shape(), shape0);
+    EXPECT_EQ(arr2.size(), 3);
+    EXPECT_EQ(arr2[0], 1);
+    EXPECT_EQ(arr2[1], 0);
+    EXPECT_EQ(arr2[2], 0);
+
+    auto arr3 = arr.argmax(1);
+    EXPECT_EQ(arr3.shape(), shape1);
+    EXPECT_EQ(arr3.size(), 2);
+    EXPECT_EQ(arr3[0], 1);
+    EXPECT_EQ(arr3[1], 0);
+  }
 
   TEST(ReduceOutlierTest,WrongAxis) {
     csp::array<double> arr = {{1.0, 2.0, 4.0},

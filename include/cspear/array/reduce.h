@@ -144,15 +144,15 @@ namespace csp {
     ResDataType resdata = ResDataType::full(rshape, f::identity);
     ResType res = ResType::full(rshape, f::arg_identity);
 
-    // // performing the iteration (TODO: make it correct)
-    // auto it1 = ReduceIterator<T,I,View>(axis,
-    //                   (T*)arr.data(), arr.view(),
-    //                   (TR*)resdata.data(), resdata.view());
-    // for (; it1; ++it1) {
-    //   auto& it1r = it1.result();
-    //   auto idx = it1.index();
-    //   f::binary(it1r, it1.first(), res[idx], idx);
-    // }
+    // performing the iteration (TODO: make it correct)
+    auto it1 = ReduceIterator<T,I,View,true>(axis,
+                      (T*)arr.data(), arr.view(),
+                      (TR*)resdata.data(), resdata.view());
+    for (; it1; ++it1) {
+      auto& it1r = it1.result();
+      auto ridx = it1.result_index();
+      f::binary(it1r, it1.first(), res[ridx], it1.first_index());
+    }
     return res;
   }
 

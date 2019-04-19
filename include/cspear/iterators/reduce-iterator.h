@@ -71,8 +71,15 @@ namespace csp {
   class ReduceIterator {
     // iterators
     EWiseIterator<T,I,View> it1_;
-    StepBackIterator<T,I,ContiguousView<I> > sbr_;
+    StepBackIterator<T,I,ContiguousView<I>,keep_index > sbr_;
     I remaining_;
+
+    // keep index properties
+    I idx_; // idx of it1_ at the given axis
+    I nrepeat_times_orig_;
+    I nmoveback_after_orig_;
+    I nrepeat_times_;
+    I nmoveback_after_;
 
     public:
     static const bool is_implemented = true;
@@ -84,6 +91,37 @@ namespace csp {
       it1_(data1, view1),
       remaining_(view1.size()) {
 
+      if (keep_index) {
+        _cspear_assert(axes.size() == 1,
+                       "Internal error: cannot keep index in multiple axes.");
+        I ax = axes[0];
+        auto& shape = view1.shape();
+        nrepeat_times_orig_ = 1;
+        nmoveback_after_orig_ = 1;
+        for (I sax = shape.size()-1; sax > ax; --sax) {
+          auto s = shape[sax];
+          nrepeat_times_orig_ *= s;
+          nmoveback_after_orig_ *= s;
+        }
+        nmoveback_after_orig_ *= shape[ax];
+        nmoveback_after_ = nmoveback_after_orig_;
+        nrepeat_times_ = nrepeat_times_orig_;
+        idx_ = 0;
+        // (2,3,4), ax = 0
+        // repeat 3*4=12 times, moveback after 2*3*4 times -> ({1},{12})
+        // 0,0,0,0, 0,0,0,0, 0,0,0,0,
+        // 1,1,1,1, 1,1,1,1, 1,1,1,1, ...
+        //
+        // (2,3,4), ax = 1
+        // repeat 4 times, moveback after 3*4 times
+        // 0,0,0,0, 1,1,1,1, 2,2,2,2,
+        // 0,0,0,0, 1,1,1,1, 2,2,2,2, ...
+        //
+        // (2,3,4), ax = 2
+        // repeat 1 time, moveback after 4 times
+        // 0,1,2,3, 0,1,2,3, 0,1,2,3, ... -> ({4} , {})
+      }
+
       // get the nsteps and nrepeats
       std::vector<I> nstepsr;
       std::vector<I> nrepeatsr;
@@ -91,15 +129,30 @@ namespace csp {
                                   nstepsr, nrepeatsr);
 
       // set the default parameters
-      sbr_ = StepBackIterator<T,I,ContiguousView<I> >(
+      sbr_ = StepBackIterator<T,I,ContiguousView<I>,keep_index >(
         nstepsr, nrepeatsr, rdata, viewr);
     }
 
     inline T& first() { return *it1_; }
     inline T& result() { return *sbr_; }
-    inline I index() { return sbr_.index(); }
+    inline I result_index() { return sbr_.index(); }
+    inline I first_index() { return idx_; }
     inline ReduceIterator& operator++() {
       ++sbr_; ++it1_; --remaining_;
+
+      // update the index, if needed
+      if (keep_index) {
+        --nrepeat_times_;
+        --nmoveback_after_;
+        if (nrepeat_times_ == 0) {
+          ++idx_;
+          nrepeat_times_ = nrepeat_times_orig_;
+        }
+        if (nmoveback_after_ == 0) {
+          idx_ = 0;
+          nmoveback_after_ = nmoveback_after_orig_;
+        }
+      }
     }
 
     inline operator bool() const {

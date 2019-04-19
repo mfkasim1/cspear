@@ -24,7 +24,7 @@ namespace csp {
     0,1,0,1,0,1, 2,3,2,3,2,3, 4,5,4,5,4,5, 6,7,6,7,6,7,
     8,9,8,9,8,9, ...
   */
-  template <typename T, typename I, typename View>
+  template <typename T, typename I, typename View, bool keep_index=false>
   class StepBackIterator {
     std::vector<I> nsteps_orig_ = {};
     std::vector<I> nrepeats_orig_ = {};
@@ -32,6 +32,7 @@ namespace csp {
     std::vector<I> nrepeats_ = {};
     std::vector<I> move_back_ = {};
     EWiseIterator<T,I,View> it_;
+    I idx_ = 0;
 
     public:
     StepBackIterator() {}
@@ -40,6 +41,7 @@ namespace csp {
                      T* data, const View& view);
 
     inline T& operator*() { return *it_; }
+    inline I index() { return idx_; }
     StepBackIterator& operator++();
 
     private:
@@ -48,8 +50,8 @@ namespace csp {
 
   // implementations
 
-  template <typename T, typename I, typename View>
-  StepBackIterator<T,I,View>::StepBackIterator(const std::vector<I>& nsteps,
+  template <typename T, typename I, typename View, bool keep_index>
+  StepBackIterator<T,I,View,keep_index>::StepBackIterator(const std::vector<I>& nsteps,
                    const std::vector<I>& nrepeats, T* data, const View& view) :
     it_(data, view) {
 
@@ -74,17 +76,19 @@ namespace csp {
     }
   }
 
-  template <typename T, typename I, typename View>
-  StepBackIterator<T,I,View>& StepBackIterator<T,I,View>::operator++() {
+  template <typename T, typename I, typename View, bool keep_index>
+  StepBackIterator<T,I,View,keep_index>& StepBackIterator<T,I,View,keep_index>::operator++() {
     ++it_;
+    if (keep_index) ++idx_;
     I mb = _get_move_back();
     if (mb > 0) {
       it_ -= mb;
+      if (keep_index) idx_ -= mb;
     }
   }
 
-  template <typename T, typename I, typename View>
-  I StepBackIterator<T,I,View>::_get_move_back() {
+  template <typename T, typename I, typename View, bool keep_index>
+  I StepBackIterator<T,I,View,keep_index>::_get_move_back() {
     I i = 0;
     while (i < ncounts_.size()) {
       --ncounts_[i];
