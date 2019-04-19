@@ -62,6 +62,8 @@ namespace {
     auto m = csp::min(a);
     auto n = csp::all(a);
     auto o = csp::any(a);
+    auto l1 = csp::argmax(a);
+    auto m1 = csp::argmin(a);
 
     // accumulate
     auto p = csp::cumsum(a);
