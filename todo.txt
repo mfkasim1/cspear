@@ -1,8 +1,6 @@
 shape
 array:
   * sort, argsort
-  * stepback iterator with integer instead of vectors
-  * static_assert on reduce_iterator and StepBackIterator with keep_index
   * static error if inplace math op applied to array of non-real
   * matmul
   * fancy indexing

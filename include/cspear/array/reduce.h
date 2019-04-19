@@ -3,6 +3,8 @@
 
 #include <stdexcept>
 #include <algorithm>
+#include <array>
+#include <vector>
 #include <type_traits>
 #include <cspear/tools/assert.h>
 #include <cspear/iterators/ewise-iterator.h>
@@ -52,12 +54,12 @@ namespace csp {
     _cspear_assert(((ax < arr.ndim()) && (ax >= 0)), "Out-of-the bound index");
 
     // get the shape of the result
-    std::vector<IAx> axis = {ax};
+    std::array<IAx,1> axis = {ax};
     auto rshape = reduce_output_shape(axis, arr.shape());
     ResType res = ResType::full(rshape, f::identity);
 
     // performing the iteration
-    auto it1 = ReduceIterator<T,I,View>(axis,
+    auto it1 = ReduceIterator<T,I,View,false,std::array<IAx,1> >(axis,
                       (T*)arr.data(), arr.view(),
                       (TR*)res.data(), res.view());
     for (; it1; ++it1) {
@@ -139,13 +141,13 @@ namespace csp {
     _cspear_assert(((ax < arr.ndim()) && (ax >= 0)), "Out-of-the bound index");
 
     // get the shape of the result and initialize the result array
-    std::vector<IAx> axis = {ax};
+    std::array<IAx,1> axis = {ax};
     auto rshape = reduce_output_shape(axis, arr.shape());
     ResDataType resdata = ResDataType::full(rshape, f::identity);
     ResType res = ResType::full(rshape, f::arg_identity);
 
     // performing the iteration (TODO: make it correct)
-    auto it1 = ReduceIterator<T,I,View,true>(axis,
+    auto it1 = ReduceIterator<T,I,View,true,std::array<IAx,1> >(axis,
                       (T*)arr.data(), arr.view(),
                       (TR*)resdata.data(), resdata.view());
     for (; it1; ++it1) {
