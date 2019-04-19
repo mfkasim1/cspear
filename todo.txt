@@ -1,5 +1,6 @@
 shape
 array:
+  * operator-= for element wise iterator of slice view
   * sort, argsort
   * static error if inplace math op applied to array of non-real
   * matmul
@@ -16,5 +17,4 @@ SIMD:
 
 optimize:
 * optimize filter view (not constructing the indices until it is necessary)
-* save a contiguous copy for non-contiguous view
 * SIMD!
