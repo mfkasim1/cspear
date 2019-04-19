@@ -66,7 +66,8 @@ namespace csp {
   }
 
   // partial template specialization for different views
-  template <typename T, typename I, typename View>
+  template <typename T, typename I, typename View,
+            bool keep_index=false> // to keep the index of the given axis
   class ReduceIterator {
     // iterators
     EWiseIterator<T,I,View> it1_;
@@ -96,6 +97,7 @@ namespace csp {
 
     inline T& first() { return *it1_; }
     inline T& result() { return *sbr_; }
+    inline I index() { return sbr_.index(); }
     inline ReduceIterator& operator++() {
       ++sbr_; ++it1_; --remaining_;
     }

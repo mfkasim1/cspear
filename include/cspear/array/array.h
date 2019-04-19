@@ -127,6 +127,8 @@ namespace csp {
     CSPEAR_REDUCE(min,ufunc::min,true);
     CSPEAR_REDUCE(all,ufunc::logical_and,false);
     CSPEAR_REDUCE(any,ufunc::logical_or,false);
+    CSPEAR_ARG_REDUCE(argmax,ufunc::argmax);
+    CSPEAR_ARG_REDUCE(argmin,ufunc::argmin);
 
     /**************** ACCUMULATE ****************/
     CSPEAR_ACCUMULATE(cumsum,ufunc::add);

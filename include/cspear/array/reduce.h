@@ -102,6 +102,60 @@ namespace csp {
     }
     return res;
   }
+
+  // arg reduce
+  template <typename f, typename InpType>
+  auto arg_reduce_all(const InpType& arr) -> typename std::remove_const<decltype(f::arg_identity)>::type {
+
+    using IR = typename std::remove_const<decltype(f::arg_identity)>::type;
+    using TR = typename std::remove_const<decltype(f::identity)>::type;
+
+    // the array must not be empty
+    _cspear_assert(arr.size() > 0, "Arg reduce cannot be done with empty array.");
+
+    IR ir = f::arg_identity;
+    TR r = f::identity;
+
+    // do the iteration
+    IR ib = 0;
+    for (auto it1 = arr.iterator(); it1; ++it1, ++ib) {
+      f::binary(r, *it1, ir, ib);
+    }
+    return ir;
+  }
+  template <typename ResType, typename f, typename InpType, typename IAx>
+  ResType arg_reduce_axis(const InpType& arr, const IAx& ax) {
+    using T = typename InpType::DataType;
+    using I = typename InpType::IndexType;
+    using View = typename InpType::ViewType;
+    using TR = typename std::remove_const<decltype(f::identity)>::type;
+    using IR = typename std::remove_const<decltype(f::arg_identity)>::type;
+    typedef decltype(arr.copy()) ResDataType;
+
+    // the array must not be empty
+    _cspear_assert(arr.size() > 0, "Arg reduce cannot be done with empty array.");
+
+    // check the axis
+    _cspear_assert(((ax < arr.ndim()) && (ax >= 0)), "Out-of-the bound index");
+
+    // get the shape of the result and initialize the result array
+    std::vector<IAx> axis = {ax};
+    auto rshape = reduce_output_shape(axis, arr.shape());
+    ResDataType resdata = ResDataType::full(rshape, f::identity);
+    ResType res = ResType::full(rshape, f::arg_identity);
+
+    // // performing the iteration (TODO: make it correct)
+    // auto it1 = ReduceIterator<T,I,View>(axis,
+    //                   (T*)arr.data(), arr.view(),
+    //                   (TR*)resdata.data(), resdata.view());
+    // for (; it1; ++it1) {
+    //   auto& it1r = it1.result();
+    //   auto idx = it1.index();
+    //   f::binary(it1r, it1.first(), res[idx], idx);
+    // }
+    return res;
+  }
+
 }
 
 #endif

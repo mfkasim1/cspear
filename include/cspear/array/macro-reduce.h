@@ -53,9 +53,25 @@ T is the array's data type, View is the array's view.
       *this, axvec);                                                            \
   }
 
+#define CSPEAR_ARG_REDUCE_ALL(opname,ufuncname)                                 \
+  I opname() const {                                                            \
+    return arg_reduce_all<ufuncname<T,I> >(*this);                                \
+  }
+#define CSPEAR_ARG_REDUCE_AXIS(opname,ufuncname)                                \
+  template <typename TI=tools::Int>                                             \
+  array<I,I,ContiguousView> opname(TI ax) const {                               \
+    static_assert(std::is_integral<TI>::value,                                  \
+      "The axis of reduce operation must be an integral type.");                \
+    return arg_reduce_axis<array<I,I,ContiguousView>,ufuncname<T,I> >(*this, ax); \
+  }
+
 #define CSPEAR_REDUCE(opname,ufuncname,error_if_empty)                          \
   CSPEAR_REDUCE_ALL(opname,ufuncname,error_if_empty);                           \
   CSPEAR_REDUCE_AXIS(opname,ufuncname,error_if_empty);                          \
   CSPEAR_REDUCE_AXES(opname,ufuncname,error_if_empty);
+
+#define CSPEAR_ARG_REDUCE(opname,ufuncname)                                     \
+  CSPEAR_ARG_REDUCE_ALL(opname,ufuncname);                                      \
+  CSPEAR_ARG_REDUCE_AXIS(opname,ufuncname);
 
 #endif

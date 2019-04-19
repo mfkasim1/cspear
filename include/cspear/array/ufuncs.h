@@ -154,6 +154,32 @@ namespace csp {
         const simd::Vector<T>& b,
         const simd::Vector<T>& c) {}
     };
+
+    // arg binary operations
+    template <typename T, typename I>
+    struct argmax {
+      static const I arg_identity = 0;
+      static constexpr T identity = std::numeric_limits<T>::lowest();
+      static inline void binary(T& r, const T& b,
+          I& ir, const I& ib) {
+        if (b > r) {
+          r = b;
+          ir = ib;
+        }
+      }
+    };
+    template <typename T, typename I>
+    struct argmin {
+      static const I arg_identity = 0;
+      static constexpr T identity = std::numeric_limits<T>::max();
+      static inline void binary(T& r, const T& b,
+          I& ir, const I& ib) {
+        if (b < r) {
+          r = b;
+          ir = ib;
+        }
+      }
+    };
   }
 }
 
