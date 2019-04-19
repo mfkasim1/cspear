@@ -1,6 +1,7 @@
 #ifndef CSPEAR_ITERATORS_REDUCE_ITERATOR_H
 #define CSPEAR_ITERATORS_REDUCE_ITERATOR_H
 
+#include <type_traits>
 #include <vector>
 #include <cspear/views/contiguous-view.h>
 #include <cspear/views/filter-view.h>
@@ -135,8 +136,16 @@ namespace csp {
 
     inline T& first() { return *it1_; }
     inline T& result() { return *sbr_; }
-    inline I result_index() { return sbr_.index(); }
-    inline I first_index() { return idx_; }
+    inline I result_index() {
+      static_assert(keep_index,
+        "Internal error: obtaining index only available if keep_index is true");
+      return sbr_.index();
+    }
+    inline I first_index() {
+      static_assert(keep_index,
+        "Internal error: obtaining index only available if keep_index is true");
+      return idx_;
+    }
     inline ReduceIterator& operator++() {
       ++sbr_; ++it1_; --remaining_;
 

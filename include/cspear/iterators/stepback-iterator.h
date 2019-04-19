@@ -1,6 +1,7 @@
 #ifndef CSPEAR_ITERATORS_STEPBACK_ITERATOR_H
 #define CSPEAR_ITERATORS_STEPBACK_ITERATOR_H
 
+#include <type_traits>
 #include <vector>
 #include <cspear/tools/assert.h>
 #include <cspear/iterators/ewise-iterator.h>
@@ -41,7 +42,11 @@ namespace csp {
                      T* data, const View& view);
 
     inline T& operator*() { return *it_; }
-    inline I index() { return idx_; }
+    inline I index() {
+      static_assert(keep_index,
+        "Internal error: obtaining index only available if keep_index is true");
+      return idx_;
+    }
     StepBackIterator& operator++();
 
     private:
